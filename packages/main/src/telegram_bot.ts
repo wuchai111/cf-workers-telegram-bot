@@ -193,7 +193,7 @@ export default class TelegramBot extends TelegramApi {
 		const p = system_prompt + "[INST]" + _prompt + "[/INST]";
 		const prompt = p.slice(p.length - 4096, p.length);
 		const response = await ai
-			.run("@hf/thebloke/orca-2-13b-awq", {
+			.run("@hf/thebloke/neural-chat-7b-v3-1-awq", {
 				prompt,
 				max_tokens: 596,
 			})
@@ -301,7 +301,7 @@ export default class TelegramBot extends TelegramApi {
 		const prompt = p.slice(p.length - 4096, p.length);
 
 		const response = await ai
-			.run("@hf/thebloke/orca-2-13b-awq", {
+			.run("@hf/thebloke/neural-chat-7b-v3-1-awq", {
 				prompt,
 				max_tokens: 596,
 			})
