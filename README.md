@@ -22,8 +22,8 @@ To use the deploy button:
 - Navigate to your new **GitHub repository &gt; Settings &gt; Secrets** and add the following secrets:
 
   ```yaml
-  - Name: CF_API_TOKEN (should be added automatically)
-  - Name: CF_ACCOUNT_ID (should be added automatically)
+  - Name: CLOUDFLARE_API_TOKEN  (should be added automatically)
+  - Name: CLOUDFLARE_ACCOUNT_ID (should be added automatically)
 
   - Name: SECRET_TELEGRAM_API_TOKEN
   - Value: your-telegram-bot-token
@@ -39,7 +39,7 @@ To fork this repo and use wrangler:
   bot token
 - `wrangler d1 create llama2`
 - put the database block from the command in your wrangler.toml
-- `wrangler d1 execute llama2 --file ./schema.sql`
+- `wrangler d1 execute --remote llama2 --file ./schema.sql`
 - `wrangler deploy`
 - Done!
 
@@ -48,7 +48,7 @@ To fork this repo and use wrangler:
 Once you've deployed the bot you can get your Webhook command URL by doing any
 of the following.
 
-- sha256sum(YourTelegramSecretKey) is the path to your webhook commands and
+- sha256sum(SECRET_TELEGRAM_API_TOKEN) is the path to your webhook commands and
   should be put at the end of your worker URL to access commands such as
   setting your webhook
 - Use `echo -n yoursecretkey | sha256sum` to get the path
