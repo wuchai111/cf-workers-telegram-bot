@@ -24,6 +24,8 @@ interface Environment {
 	DB: D1Database;
 
 	R2: R2Bucket;
+
+	CHAT_MODEL: string;
 }
 
 export default {
@@ -63,6 +65,7 @@ export default {
 				ai: env.AI,
 				db: env.DB,
 				r2: env.R2,
+				chat_model: env.CHAT_MODEL,
 			},
 			{
 				bot_name: "@duckduckbot",
