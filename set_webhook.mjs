@@ -12,5 +12,6 @@ const sha256 = async (text) =>
 const base_url = process.argv[2];
 const token = process.argv[3];
 const path = await sha256(token);
-
-console.log(base_url + path);
+const url = base_url + path;
+console.log(url);
+fetch(url + '?command=set').then((response) => response.json()).then(console.log);
