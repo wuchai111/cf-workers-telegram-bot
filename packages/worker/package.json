@@ -15,6 +15,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.24.5",
     "@cloudflare/workers-types": "^4.20240502.0",
+    "@eslint/js": "^9.1.1",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
     "esbuild": "^0.20.2",
@@ -22,9 +23,11 @@
     "esbuild-plugin-glob": "^2.2.3",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
+    "globals": "^15.1.0",
     "lerna": "^8.1.2",
     "prettier": "^3.2.5",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.8.0"
   },
   "dependencies": {
     "@cloudflare/ai": "1.0.53"

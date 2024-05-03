@@ -195,7 +195,7 @@ export default class TelegramBot extends TelegramApi {
     const p = system_prompt + "[INST]" + _prompt + "[/INST]";
     const prompt = p.slice(p.length - 4096, p.length);
     const response = await ai
-      // @ts-ignore
+      // @ts-expect-error ModelName doesn't need to be verified at build time
       .run(this.chat_model, {
         prompt,
         max_tokens: 596,
@@ -304,7 +304,7 @@ export default class TelegramBot extends TelegramApi {
     const prompt = p.slice(p.length - 4096, p.length);
 
     const response = await ai
-      // @ts-ignore
+      // @ts-expect-error ModelName doesn't need to be verified at build time
       .run(this.chat_model, {
         prompt,
         max_tokens: 596,
