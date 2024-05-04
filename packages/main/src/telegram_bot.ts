@@ -18,7 +18,6 @@ import {
   Commands,
   Kv,
 } from "./types";
-import { Ai } from "@cloudflare/ai";
 
 export default class TelegramBot extends TelegramApi {
   url: URL;
@@ -55,7 +54,6 @@ export default class TelegramBot extends TelegramApi {
     if (this.ai === undefined) {
       return new Response("ok");
     }
-    const ai = new Ai(this.ai);
     let _prompt: string;
     if (args[0][0] === "/") {
       _prompt = args.slice(1).join(" ");
@@ -68,7 +66,7 @@ export default class TelegramBot extends TelegramApi {
     const langs = ["french", "arabic", "german", "spanish", "russian"];
     const inline_articles = await Promise.all(
       langs.map(async (lang) => {
-        const response = await ai.run("@cf/meta/m2m100-1.2b", {
+        const response = await this.ai.run("@cf/meta/m2m100-1.2b", {
           text: _prompt,
           source_lang: lang,
           target_lang: "english",
@@ -109,7 +107,6 @@ export default class TelegramBot extends TelegramApi {
 
   // bot command: /image
   image = async (update: TelegramUpdate, args: string[]): Promise<Response> => {
-    const ai = new Ai(this.ai);
     let _prompt: string;
     if (args[0][0] === "/") {
       _prompt = args.slice(1).join(" ");
@@ -124,7 +121,7 @@ export default class TelegramBot extends TelegramApi {
       update.message?.chat.id ?? 0,
       "image is processing. please wait..."
     );
-    const response = await ai.run(
+    const response = await this.ai.run(
       "@cf/stabilityai/stable-diffusion-xl-base-1.0",
       inputs
     );
@@ -142,7 +139,6 @@ export default class TelegramBot extends TelegramApi {
     if (this.ai === undefined) {
       return new Response("ok");
     }
-    const ai = new Ai(this.ai);
     let _prompt: string;
     if (args[0][0] === "/") {
       _prompt = args.slice(1).join(" ");
@@ -194,13 +190,12 @@ export default class TelegramBot extends TelegramApi {
 
     const p = system_prompt + "[INST]" + _prompt + "[/INST]";
     const prompt = p.slice(p.length - 4096, p.length);
-    const response = await ai
-      // @ts-expect-error ModelName doesn't need to be verified at build time
+    const response = await this.ai
       .run(this.chat_model, {
         prompt,
         max_tokens: 596,
       })
-      .then(({ response }) =>
+      .then(({ response }: { response: string }) =>
         response
           .replace(/(\[|)(\/|)INST(S|)(s|)(\]|)/, "")
           .replace(/<<(\/|)SYS>>/, "")
@@ -247,7 +242,6 @@ export default class TelegramBot extends TelegramApi {
     if (this.ai === undefined) {
       return new Response("ok");
     }
-    const ai = new Ai(this.ai);
     let _prompt: string;
     if (args[0][0] === "/") {
       _prompt = args.slice(1).join(" ");
@@ -303,13 +297,12 @@ export default class TelegramBot extends TelegramApi {
     const p = system_prompt + "[INST]" + _prompt + "[/INST]";
     const prompt = p.slice(p.length - 4096, p.length);
 
-    const response = await ai
-      // @ts-expect-error ModelName doesn't need to be verified at build time
+    const response = await this.ai
       .run(this.chat_model, {
         prompt,
         max_tokens: 596,
       })
-      .then(({ response }) =>
+      .then(({ response }: { response: string }) =>
         response
           .replace(/(\[|)(\/|)INST(S|)(s|)(\]|)/, "")
           .replace(/<<(\/|)SYS>>/, "")

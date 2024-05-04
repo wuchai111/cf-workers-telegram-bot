@@ -19,4 +19,4 @@ binding = "R2"
 bucket_name = "share"
 
 [vars]
-CHAT_MODEL = "@hf/thebloke/neural-chat-7b-v3-1-awq"
+CHAT_MODEL = "@cf/meta/llama-3-8b-instruct"
