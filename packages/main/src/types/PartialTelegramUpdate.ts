@@ -1,7 +1,7 @@
-import { TelegramInlineQuery } from './TelegramInlineQuery';
-import { TelegramMessage } from './TelegramMessage';
+import TelegramInlineQuery from './TelegramInlineQuery';
+import TelegramMessage from './TelegramMessage';
 
-export type PartialTelegramUpdate = {
+type PartialTelegramUpdate = {
 	update_id?: number;
 	message?: TelegramMessage;
 	edited_message?: TelegramMessage;
@@ -9,3 +9,4 @@ export type PartialTelegramUpdate = {
 	edited_channel_post?: TelegramMessage;
 	inline_query?: TelegramInlineQuery;
 };
+export default PartialTelegramUpdate;

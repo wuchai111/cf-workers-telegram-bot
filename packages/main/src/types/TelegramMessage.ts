@@ -1,10 +1,10 @@
-import { TelegramChat } from './TelegramChat';
-import { TelegramFrom } from './TelegramFrom';
-import { TelegramMessageEntity } from './TelegramMessageEntity';
-import { TelegramPhotoSize } from './TelegramPhotoSize';
-import { TelegramUser } from './TelegramUser';
+import TelegramChat from './TelegramChat';
+import TelegramFrom from './TelegramFrom';
+import TelegramMessageEntity from './TelegramMessageEntity';
+import TelegramPhotoSize from './TelegramPhotoSize';
+import TelegramUser from './TelegramUser';
 
-export type TelegramMessage = {
+type TelegramMessage = {
 	message_id: number;
 	from: TelegramFrom;
 	sender_chat?: TelegramChat;
@@ -56,3 +56,4 @@ export type TelegramMessage = {
 	// successful_payment?: TelegramSuccessfulPayment;
 	connected_website?: string;
 };
+export default TelegramMessage;

@@ -1,4 +1,4 @@
-export type Bored = {
+type Bored = {
 	activity: string;
 	type: string;
 	participants: number;
@@ -7,3 +7,4 @@ export type Bored = {
 	key: string;
 	accessibility: 0;
 };
+export default Bored;

@@ -1,6 +1,6 @@
-import { TelegramMessage } from './TelegramMessage';
+import TelegramMessage from './TelegramMessage';
 
-export type TelegramChat = {
+type TelegramChat = {
 	id: number;
 	type: string;
 	title?: string;
@@ -21,3 +21,4 @@ export type TelegramChat = {
 	can_set_sticker_set?: boolean;
 	linked_chat_id?: number;
 };
+export default TelegramChat;

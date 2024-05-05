@@ -1,6 +1,6 @@
-import { TelegramUser } from './TelegramUser';
+import TelegramUser from './TelegramUser';
 
-export type TelegramMessageEntity = {
+type TelegramMessageEntity = {
 	type: string;
 	offset: number;
 	length: number;
@@ -8,3 +8,4 @@ export type TelegramMessageEntity = {
 	user?: TelegramUser;
 	language?: string;
 };
+export default TelegramMessageEntity;

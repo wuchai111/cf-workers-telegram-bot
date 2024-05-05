@@ -1,4 +1,4 @@
-export type TelegramUser = {
+type TelegramUser = {
 	id: number;
 	is_bot: boolean;
 	first_name: string;
@@ -9,3 +9,4 @@ export type TelegramUser = {
 	can_read_all_group_messages?: boolean;
 	supports_inline_queries: boolean;
 };
+export default TelegramUser;

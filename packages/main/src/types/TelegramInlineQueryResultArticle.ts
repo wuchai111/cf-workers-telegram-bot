@@ -1,7 +1,7 @@
-import { TelegramInlineQueryResult } from './TelegramInlineQueryResult';
-import { TelegramInputMessageContent } from './TelegramInputMessageContent';
+import TelegramInlineQueryResult from './TelegramInlineQueryResult';
+import TelegramInputMessageContent from './TelegramInputMessageContent';
 
-export class TelegramInlineQueryResultArticle extends TelegramInlineQueryResult {
+export default class TelegramInlineQueryResultArticle extends TelegramInlineQueryResult {
 	title: string;
 	input_message_content: TelegramInputMessageContent;
 	thumb_url: string;

@@ -1,6 +1,6 @@
-import { TelegramInlineQueryResult } from './TelegramInlineQueryResult';
+import TelegramInlineQueryResult from './TelegramInlineQueryResult';
 
-export class TelegramInlineQueryResultPhoto extends TelegramInlineQueryResult {
+export default class TelegramInlineQueryResultPhoto extends TelegramInlineQueryResult {
 	photo_url: string; // must be a jpg
 	thumb_url: string;
 	photo_width?: number;

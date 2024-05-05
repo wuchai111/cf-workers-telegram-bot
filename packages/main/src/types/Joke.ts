@@ -1,4 +1,4 @@
-export type Joke = {
+type Joke = {
 	error: boolean;
 	category: string;
 	type: string;
@@ -17,3 +17,4 @@ export type Joke = {
 	safe: boolean;
 	lang: string;
 };
+export default Joke;

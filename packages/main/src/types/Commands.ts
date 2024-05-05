@@ -1,3 +1,4 @@
-import { Command } from './Command';
+import Command from './Command';
 
-export type Commands = Record<string, Command>;
+type Commands = Record<string, Command>;
+export default Commands;

@@ -1,3 +1,3 @@
-export class Update {
+export default class Update {
 	[key: string]: unknown;
 }

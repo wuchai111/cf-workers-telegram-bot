@@ -1,9 +1,9 @@
-import { TelegramInlineQuery } from './TelegramInlineQuery';
-import { TelegramMessage } from './TelegramMessage';
-import { Update } from './Update';
-import { PartialTelegramUpdate } from './PartialTelegramUpdate';
+import TelegramInlineQuery from './TelegramInlineQuery';
+import TelegramMessage from './TelegramMessage';
+import Update from './Update';
+import PartialTelegramUpdate from './PartialTelegramUpdate';
 
-export class TelegramUpdate extends Update {
+export default class TelegramUpdate extends Update {
 	update_id: number;
 	message?: TelegramMessage;
 	edited_message?: TelegramMessage;

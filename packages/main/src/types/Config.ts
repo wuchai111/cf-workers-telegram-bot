@@ -1,11 +1,11 @@
-import { Command } from './Command';
-import { Kv } from './Kv';
+import Command from './Command';
+import Kv from './Kv';
 import BotApi from '../bot_api';
 import Handler from '../handler';
 import Webhook from '../webhook';
-import { localhost } from './localhost';
+import localhost from './localhost';
 
-export class Config {
+export default class Config {
 	bot_name: string;
 	api: typeof BotApi;
 	webhook: Webhook;

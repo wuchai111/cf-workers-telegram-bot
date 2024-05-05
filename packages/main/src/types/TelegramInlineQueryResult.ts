@@ -1,6 +1,6 @@
-import { TelegramInlineQueryType } from './TelegramInlineQueryType';
+import TelegramInlineQueryType from './TelegramInlineQueryType';
 
-export class TelegramInlineQueryResult {
+export default class TelegramInlineQueryResult {
 	type: TelegramInlineQueryType;
 	id: string;
 	constructor(type: TelegramInlineQueryType) {

@@ -1,4 +1,4 @@
-export type TelegramInlineQueryType =
+type TelegramInlineQueryType =
 	| 'article'
 	| 'photo'
 	| 'gif'
@@ -12,3 +12,4 @@ export type TelegramInlineQueryType =
 	| 'contact'
 	| 'game'
 	| 'sticker';
+export default TelegramInlineQueryType;
