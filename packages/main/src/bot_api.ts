@@ -1,9 +1,9 @@
-import Handler from "./handler";
-import { Commands, Config, Update, Webhook } from "./types";
+import Handler from './handler';
+import { Commands, Config, Update, Webhook } from './types';
 
 export default class BotApi {
 	commands: Commands;
-	webhook: Config["webhook"];
+	webhook: Config['webhook'];
 	handler: Handler;
 	update!: (update: Update) => Promise<Response>;
 
