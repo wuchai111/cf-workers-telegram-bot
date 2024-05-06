@@ -70,8 +70,8 @@ export default async (self: TelegramBot, update: TelegramUpdate, args: string[])
 		}
 	}
 	if (response === '') {
-		self.clear(update);
-		return self.question(update, args);
+		self.clear(self, update);
+		return self.question(self, update, args);
 	} // sometimes llama2 doesn't respond when given lots of system prompts
 	if (update.inline_query) {
 		return self.answerInlineQuery(update.inline_query.id, [new TelegramInlineQueryResultArticle(response)]);
