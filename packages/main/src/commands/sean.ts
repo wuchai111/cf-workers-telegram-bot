@@ -57,6 +57,7 @@ export default async (self: TelegramBot, update: TelegramUpdate, args: string[])
 			prompt,
 			max_tokens: 596,
 		})
+		/* eslint-disable  @typescript-eslint/no-explicit-any */
 		.then(({ response }: any) =>
 			response
 				.replace(/(\[|)(\/|)INST(S|)(s|)(\]|)/, '')
