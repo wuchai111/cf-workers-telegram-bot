@@ -18,6 +18,7 @@ import commandlist from './commands/commandlist';
 import toss from './commands/toss';
 import ping from './commands/ping';
 import getchatinfo from './commands/getchatinfo';
+import start from './commands/start';
 
 export default class TelegramBot extends TelegramApi {
 	translate: (self: TelegramBot, update: TelegramUpdate, args: string[]) => Promise<Response>;
@@ -37,6 +38,7 @@ export default class TelegramBot extends TelegramApi {
 	toss: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
 	ping: (self: TelegramBot, update: TelegramUpdate, args: string[]) => Promise<Response>;
 	getChatInfo: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
+	start: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
 	url: URL;
 	kv: Kv;
 	get_set: KVNamespace;
@@ -65,6 +67,7 @@ export default class TelegramBot extends TelegramApi {
 		this.toss = toss;
 		this.ping = ping;
 		this.getChatInfo = getchatinfo;
+		this.start = start;
 		this.url = config.url;
 		this.kv = config.kv as Kv;
 		this.get_set = config.kv?.get_set as KVNamespace;
