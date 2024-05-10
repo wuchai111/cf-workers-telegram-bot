@@ -41,8 +41,8 @@ export default class TelegramBot extends TelegramApi {
 	ping: (self: TelegramBot, update: TelegramUpdate, args: string[]) => Promise<Response>;
 	getChatInfo: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
 	start: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
-	ban: (self: TelegramBot, update: TelegramUpdate, args: string[]) => Promise<Response>;
-	mute: (self: TelegramBot, update: TelegramUpdate, args: string[]) => Promise<Response>;
+	ban: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
+	mute: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
 	url: URL;
 	kv: Kv;
 	get_set: KVNamespace;

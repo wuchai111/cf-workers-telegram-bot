@@ -18,6 +18,6 @@ export default class TelegramCommands {
 	static image: TelegramCommand = async (bot, update, args) => bot.image(bot, update, args);
 	static translate: TelegramCommand = async (bot, update, args) => bot.translate(bot, update, args);
 	static start: TelegramCommand = async (bot, update) => bot.start(bot, update);
-	static ban: TelegramCommand = async (bot, update, args) => bot.ban(bot, update, args);
-	static mute: TelegramCommand = async (bot, update, args) => bot.mute(bot, update, args);
+	static ban: TelegramCommand = async (bot, update) => bot.ban(bot, update);
+	static mute: TelegramCommand = async (bot, update) => bot.mute(bot, update);
 }
