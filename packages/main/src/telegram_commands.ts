@@ -19,4 +19,5 @@ export default class TelegramCommands {
 	static translate: TelegramCommand = async (bot, update, args) => bot.translate(bot, update, args);
 	static start: TelegramCommand = async (bot, update) => bot.start(bot, update);
 	static ban: TelegramCommand = async (bot, update, args) => bot.ban(bot, update, args);
+	static mute: TelegramCommand = async (bot, update, args) => bot.mute(bot, update, args);
 }

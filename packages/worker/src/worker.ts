@@ -54,6 +54,7 @@ export default {
 					'/image': TelegramCommands.image as Command,
 					'/start': TelegramCommands.start as Command,
 					'/ban': TelegramCommands.ban as Command,
+					'/mute': TelegramCommands.mute as Command,
 				},
 				kv: { get_set: env.KV_GET_SET, uid_data: env.KV_UID_DATA },
 				ai: env.AI,

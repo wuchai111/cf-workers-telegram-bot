@@ -1,5 +1,5 @@
 import BotApi from './bot_api';
-import { Commands, TelegramInlineQueryResult, TelegramUpdate, Webhook, Update } from './types';
+import { Commands, TelegramInlineQueryResult, TelegramUpdate, Webhook, Update, ChatPermissions } from './types';
 import { addSearchParams, log } from './libs';
 import Handler from './handler';
 
@@ -341,6 +341,25 @@ export default class TelegramApi extends BotApi {
 					user_id: user_id.toString(),
 					until_date: until_date.toString(),
 					revoke_messages: revoke_messages.toString(),
+				}).href,
+			),
+		);
+
+	restrictChatMember = async (
+		chat_id: number | string,
+		user_id: number,
+		permissions: ChatPermissions,
+		use_independent_chat_permissions: boolean,
+		until_date: number,
+	) =>
+		fetch(
+			log(
+				addSearchParams(new URL(`${this.webhook.api.origin}${this.webhook.api.pathname}/restrictChatMember`), {
+					chat_id: chat_id.toString(),
+					user_id: user_id.toString(),
+					permissions: JSON.stringify(permissions),
+					use_independent_chat_permissions: use_independent_chat_permissions.toString(),
+					until_date: until_date.toString(),
 				}).href,
 			),
 		);
