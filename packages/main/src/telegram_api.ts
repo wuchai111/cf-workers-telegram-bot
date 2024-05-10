@@ -332,4 +332,16 @@ export default class TelegramApi extends BotApi {
 				}).href,
 			),
 		);
+
+	banChatMember = async (chat_id: number | string, user_id: number, until_date = 0, revoke_messages = false) =>
+		fetch(
+			log(
+				addSearchParams(new URL(`${this.webhook.api.origin}${this.webhook.api.pathname}/banChatMember`), {
+					chat_id: chat_id.toString(),
+					user_id: user_id.toString(),
+					until_date: until_date.toString(),
+					revoke_messages: revoke_messages.toString(),
+				}).href,
+			),
+		);
 }
