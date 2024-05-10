@@ -41,6 +41,7 @@ type TelegramMessage = {
 	// venue?: TelegramVenue;
 	// location?: TelegramLocation;
 	new_chat_members?: TelegramUser[];
+	new_chat_member?: TelegramUser;
 	left_chat_member?: TelegramUser;
 	new_chat_title?: string;
 	// new_chat_photo?: TelegramPhotoSize[];

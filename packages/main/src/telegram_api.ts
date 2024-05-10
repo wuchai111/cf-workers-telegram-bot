@@ -10,8 +10,13 @@ export default class TelegramApi extends BotApi {
 
 	inlineQueryUpdate = async (update: TelegramUpdate): Promise<Response> => this.executeInlineCommand(update);
 
-	messageUpdate = async (update: TelegramUpdate): Promise<Response> =>
-		typeof update.message?.text === 'string' ? this.executeCommand(update).then(async () => this.greetUsers(update)) : this.updates.default;
+	messageUpdate = async (update: TelegramUpdate): Promise<Response> => {
+		if (update.message) {
+			await this.greetUsers(update);
+			await this.executeCommand(update);
+		}
+		return this.updates.default;
+	};
 
 	updates = {
 		inline_query: this.inlineQueryUpdate,
@@ -38,7 +43,7 @@ export default class TelegramApi extends BotApi {
 	// greet new users who join
 	greetUsers = async (update: TelegramUpdate): Promise<Response> =>
 		update.message?.new_chat_members
-			? this.sendMessage(update.message.chat.id, `Welcome to ${update.message.chat.title}, ${update.message.from.username}`)
+			? this.sendMessage(update.message.chat.id, `Welcome to ${update.message.chat.title}, @${update.message.new_chat_member?.username}`)
 			: this.updates.default;
 
 	getCommand = (args: string[]): string => args[0]?.split('@')[0];
