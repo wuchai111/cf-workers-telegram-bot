@@ -1,10 +1,9 @@
-import { responseToJSON } from '../libs';
 import TelegramBot from '../telegram_bot';
 import { TelegramUpdate, Joke, TelegramInlineQueryResultArticle } from '../types';
 
 export default async (self: TelegramBot, update: TelegramUpdate): Promise<Response> =>
 	fetch('https://v2.jokeapi.dev/joke/Any?safe-mode')
-		.then((response) => responseToJSON(response))
+		.then((response) => response.json())
 		.then((joke) => joke as Joke)
 		.then((joke_response) =>
 			((message) =>

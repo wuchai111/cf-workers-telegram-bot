@@ -26,6 +26,7 @@ import TelegramInlineQueryResultPhoto from './types/TelegramInlineQueryResultPho
 import TelegramInlineQueryResultArticle from './types/TelegramInlineQueryResultArticle';
 import DDGQueryResponse from './types/DDGQueryResponse';
 import ChatPermissions from './types/ChatPermissions';
+import Kanye from './types/Kanye';
 export {
 	Webhook,
 	Command,
@@ -55,4 +56,5 @@ export {
 	TelegramInlineQueryResultArticle,
 	DDGQueryResponse,
 	ChatPermissions,
+	Kanye,
 };

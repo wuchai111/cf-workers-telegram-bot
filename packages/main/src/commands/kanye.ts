@@ -1,10 +1,11 @@
-import { responseToJSON } from '../libs';
 import TelegramBot from '../telegram_bot';
 import { TelegramUpdate, TelegramInlineQueryResultArticle } from '../types';
+import Kanye from '../types/Kanye';
 
 export default async (self: TelegramBot, update: TelegramUpdate): Promise<Response> =>
 	fetch('https://api.kanye.rest')
-		.then((response) => responseToJSON(response))
+		.then((response) => response.json())
+		.then((json) => json as Kanye)
 		.then((json) =>
 			((message) =>
 				update.inline_query
