@@ -1,5 +1,4 @@
 import { WebhookCommands } from './types';
-import { JSONResponse } from './libs';
 
 export default class Webhook {
 	api: URL;
@@ -12,7 +11,7 @@ export default class Webhook {
 		this.token = token;
 		this.url = url;
 		this.commands = {
-			default: () => new Promise<Response>(() => JSONResponse({ error: 'Invalid command' }, 400)),
+			default: async () => new Response('Invalid command'),
 		};
 	}
 
