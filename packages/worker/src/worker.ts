@@ -23,5 +23,16 @@ interface Environment {
 }
 
 export default {
-	fetch: async (request: Request, env: Environment) => new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN).handle(request),
+	fetch: async (request: Request, env: Environment) => {
+		const bot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN);
+		return bot
+			.on('default', async () => {
+				await bot.reply('ok');
+				return new Response('ok');
+			})
+			.on('b', async () => new Response('ok'))
+			.on('c', async () => new Response('ok'))
+			.on('d', async () => new Response('ok'))
+			.handle(request);
+	},
 };
