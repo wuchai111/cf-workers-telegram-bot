@@ -16,5 +16,5 @@ export default class Webhook {
 		};
 	}
 
-	process = async (url: URL): Promise<Response> => this.commands[url.searchParams.get('command') ?? '']?.() ?? this.commands.default;
+	process = async (url: URL): Promise<Response> => this.commands[url.searchParams.get('command') ?? '']?.() ?? this.commands.default();
 }
