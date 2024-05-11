@@ -15,14 +15,14 @@ export default class TelegramBot {
 		this.update_type = '';
 	}
 
-	on = (event: string, callback: () => Promise<Response>) => {
+	on(event: string, callback: () => Promise<Response>) {
 		// eslint-disable-next-line
 		// @ts-ignore TS7053
 		this[event] = callback;
 		return this;
-	};
+	}
 
-	handle = async (request: Request) => {
+	async handle(request: Request) {
 		this.webhook = new Webhook(this.token, request);
 		this.update = await request.json();
 		const url = new URL(request.url);
@@ -62,9 +62,9 @@ export default class TelegramBot {
 			return this[command]?.();
 		}
 		return new Response('ok');
-	};
+	}
 
-	reply = async (message: string) => {
+	async reply(message: string) {
 		switch (this.update_type) {
 			case 'message':
 				const request = new URL(this.api + '/sendMessage');
@@ -86,7 +86,7 @@ export default class TelegramBot {
 			default:
 				break;
 		}
-	};
+	}
 }
 
 class Webhook {
@@ -98,7 +98,7 @@ class Webhook {
 		this.webhook = new URL(new URL(request.url).origin + `/${token}`);
 	}
 
-	set = async () => {
+	async set() {
 		const url = new URL(`${this.api.origin}${this.api.pathname}/setWebhook`);
 		const params = url.searchParams;
 		params.append('url', this.webhook.toString());
@@ -106,5 +106,5 @@ class Webhook {
 		params.append('allowed_updates', JSON.stringify(['message', 'inline_query']));
 		params.append('drop_pending_updates', 'true');
 		return await fetch(`${url}?${params}`);
-	};
+	}
 }
