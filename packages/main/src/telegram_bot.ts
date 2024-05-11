@@ -1,86 +1,44 @@
-import Handler from './handler';
-import TelegramApi from './telegram_api';
-import { Config, Webhook, Commands, Kv, TelegramUpdate } from './types';
-import translate from './commands/translate';
-import clear from './commands/clear';
-import image from './commands/image';
-import question from './commands/question';
-import sean from './commands/sean';
-import code from './commands/code';
-import duckduckgo from './commands/duckduckgo';
-import kanye from './commands/kanye';
-import joke from './commands/joke';
-import dog from './commands/dog';
-import bored from './commands/bored';
-import epoch from './commands/epoch';
-import roll from './commands/roll';
-import commandlist from './commands/commandlist';
-import toss from './commands/toss';
-import ping from './commands/ping';
-import getchatinfo from './commands/getchatinfo';
-import start from './commands/start';
-import ban from './commands/ban';
-import mute from './commands/mute';
+export default class TelegramBot {
+	token: string;
+	webhook: Webhook;
 
-export default class TelegramBot extends TelegramApi {
-	translate: (self: TelegramBot, update: TelegramUpdate, args: string[]) => Promise<Response>;
-	clear: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
-	image: (self: TelegramBot, update: TelegramUpdate, args: string[]) => Promise<Response>;
-	question: (self: TelegramBot, update: TelegramUpdate, args: string[]) => Promise<Response>;
-	sean: (self: TelegramBot, update: TelegramUpdate, args: string[]) => Promise<Response>;
-	code: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
-	duckduckgo: (self: TelegramBot, update: TelegramUpdate, args: string[]) => Promise<Response>;
-	kanye: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
-	joke: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
-	dog: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
-	bored: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
-	epoch: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
-	roll: (self: TelegramBot, update: TelegramUpdate, args: string[]) => Promise<Response>;
-	commandList: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
-	toss: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
-	ping: (self: TelegramBot, update: TelegramUpdate, args: string[]) => Promise<Response>;
-	getChatInfo: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
-	start: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
-	ban: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
-	mute: (self: TelegramBot, update: TelegramUpdate) => Promise<Response>;
-	url: URL;
-	kv: Kv;
-	get_set: KVNamespace;
-	ai: Ai;
-	db: D1Database;
-	r2: R2Bucket;
-	bot_name: string;
-	chat_model: string;
-
-	constructor(config: Config) {
-		super(config.commands as Commands, config.webhook as Webhook, config.handler as Handler);
-		this.translate = translate;
-		this.clear = clear;
-		this.image = image;
-		this.question = question;
-		this.sean = sean;
-		this.code = code;
-		this.duckduckgo = duckduckgo;
-		this.kanye = kanye;
-		this.joke = joke;
-		this.dog = dog;
-		this.bored = bored;
-		this.epoch = epoch;
-		this.roll = roll;
-		this.commandList = commandlist;
-		this.toss = toss;
-		this.ping = ping;
-		this.getChatInfo = getchatinfo;
-		this.start = start;
-		this.ban = ban;
-		this.mute = mute;
-		this.url = config.url;
-		this.kv = config.kv as Kv;
-		this.get_set = config.kv?.get_set as KVNamespace;
-		this.ai = config.ai;
-		this.db = config.db;
-		this.r2 = config.r2;
-		this.bot_name = config.bot_name;
-		this.chat_model = config.chat_model;
+	constructor(token: string) {
+		this.token = token;
+		this.webhook = new Webhook('', new Request('http://127.0.0.1'));
 	}
+
+	on = (event: string, callback: BotCallback) => {
+		// this[event] = callback;
+		return this;
+	};
+
+	handle = (request: Request) => {
+		this.webhook = new Webhook(this.token, request);
+		const url = new URL(request.url);
+		if (`/${this.token}` === url.pathname && url.searchParams.get('command') === 'set') {
+			return this.webhook.set();
+		}
+		return new Response('ok');
+	};
+}
+type BotCallback = () => Response;
+
+class Webhook {
+	api: URL;
+	webhook: URL;
+
+	constructor(token: string, request: Request) {
+		this.api = new URL('https://api.telegram.org/bot' + token);
+		this.webhook = new URL(new URL(request.url).origin + `/${token}`);
+	}
+
+	set = async () => {
+		const url = new URL(`${this.api.origin}${this.api.pathname}/setWebhook`);
+		const params = url.searchParams;
+		params.append('url', this.webhook.toString());
+		params.append('max_connections', '100');
+		params.append('allowed_updates', JSON.stringify(['message', 'inline_query']));
+		params.append('drop_pending_updates', 'true');
+		return await fetch(`${url}?${params}`);
+	};
 }
