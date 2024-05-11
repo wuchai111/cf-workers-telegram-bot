@@ -59,6 +59,11 @@ export default class TelegramBot {
 			}
 			// eslint-disable-next-line
 			// @ts-ignore
+			if (!this[command]) {
+				command = 'default';
+			}
+			// eslint-disable-next-line
+			// @ts-ignore
 			return this[command]?.();
 		}
 		return new Response('ok');
