@@ -52,7 +52,7 @@ export default async (self: TelegramBot, update: TelegramUpdate, args: string[])
 		// @ts-expect-error chat model might not match
 		.run(self.chat_model, {
 			prompt,
-			max_tokens: 596,
+			max_tokens: update.inline_query ? 50 : 596,
 		})
 		/* eslint-disable  @typescript-eslint/no-explicit-any */
 		.then(({ response }: any) => response.replace(/(\[|)(\/|)INST(S|)(s|)(\]|)/, '').replace(/<<(\/|)SYS>>/, ''));
