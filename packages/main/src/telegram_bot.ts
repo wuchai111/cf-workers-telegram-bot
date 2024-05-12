@@ -16,9 +16,9 @@ export default class TelegramBot {
 	}
 
 	on(event: string, callback: () => Promise<Response>) {
-		// eslint-disable-next-line
-		// @ts-ignore TS7053
 		if (event !== 'on') {
+			// eslint-disable-next-line
+			// @ts-ignore TS7053
 			this[event] = callback;
 		}
 		return this;
