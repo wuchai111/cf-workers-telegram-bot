@@ -1,4 +1,3 @@
-import API from './api';
 import { TelegramInlineQueryResultArticle, TelegramUpdate } from './types';
 
 export default class TelegramBot {
@@ -79,18 +78,22 @@ export default class TelegramBot {
 	async reply(message: string) {
 		switch (this.update_type) {
 			case 'message': {
-				await API.sendMessage(this.api.toString(), {
-					chat_id: this.update.message?.chat.id.toString() ?? '',
-					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
-					text: message,
-				});
+				const request = new URL(this.api + '/sendMessage');
+				const params = new URLSearchParams();
+				params.append('chat_id', this.update.message?.chat.id.toString() ?? '');
+				params.append('reply_to_message_id', this.update.message?.message_id.toString() ?? '');
+				params.append('text', message);
+				console.log(`${request}?${params}`);
+				await fetch(`${request}?${params}`);
 				break;
 			}
 			case 'inline': {
-				await API.answerInline(this.api.toString(), {
-					inline_query_id: this.update.inline_query?.id.toString() ?? '',
-					results: new TelegramInlineQueryResultArticle(message),
-				});
+				const inline_request = new URL(this.api + '/answerInlineQuery');
+				const inline_params = new URLSearchParams();
+				inline_params.append('inline_query_id', this.update.inline_query?.id.toString() ?? '');
+				inline_params.append('results', JSON.stringify([new TelegramInlineQueryResultArticle(message)]));
+				console.log(`${inline_request}?${inline_params}`);
+				await fetch(`${inline_request}?${inline_params}`);
 				break;
 			}
 			default:
