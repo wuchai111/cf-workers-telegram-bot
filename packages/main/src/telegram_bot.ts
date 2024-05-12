@@ -18,7 +18,9 @@ export default class TelegramBot {
 	on(event: string, callback: () => Promise<Response>) {
 		// eslint-disable-next-line
 		// @ts-ignore TS7053
-		this[event] = callback;
+		if (event !== 'on') {
+			this[event] = callback;
+		}
 		return this;
 	}
 
@@ -66,9 +68,11 @@ export default class TelegramBot {
 			if (!this[command]) {
 				command = 'default';
 			}
-			// eslint-disable-next-line
-			// @ts-ignore
-			return this[command]?.();
+			if (command !== 'on') {
+				// eslint-disable-next-line
+				// @ts-ignore
+				return this[command]?.();
+			}
 		}
 		return new Response('ok');
 	}
