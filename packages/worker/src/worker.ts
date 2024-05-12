@@ -28,7 +28,7 @@ export default {
 		await bot
 			.on('default', async function () {
 				switch (bot.update_type) {
-					case 'message':
+					case 'message': {
 						const messages = [
 							{ role: 'system', content: 'You are a friendly assistant' },
 							{
@@ -41,7 +41,8 @@ export default {
 							await bot.reply(response.response ?? '');
 						}
 						break;
-					case 'inline':
+					}
+					case 'inline': {
 						const inline_messages = [
 							{ role: 'system', content: 'You are a friendly assistant' },
 							{
@@ -53,6 +54,8 @@ export default {
 						if ('response' in inline_response) {
 							await bot.reply(inline_response.response ?? '');
 						}
+						break;
+					}
 
 					default:
 						break;
@@ -64,12 +67,14 @@ export default {
 		await bot2
 			.on('default', async function () {
 				switch (bot2.update_type) {
-					case 'message':
+					case 'message': {
 						await bot2.reply('https://duckduckgo.com/?q=' + encodeURIComponent(bot.update.message?.text?.toString() ?? ''));
 						break;
-					case 'inline':
+					}
+					case 'inline': {
 						await bot2.reply('https://duckduckgo.com/?q=' + encodeURIComponent(bot.update.inline_query?.query ?? ''));
 						break;
+					}
 
 					default:
 						break;
@@ -81,7 +86,7 @@ export default {
 		await bot3
 			.on('default', async function () {
 				switch (bot3.update_type) {
-					case 'inline':
+					case 'inline': {
 						const { translated_text } = await env.AI.run('@cf/meta/m2m100-1.2b', {
 							text: bot3.update.inline_query?.query.toString() ?? '',
 							source_lang: 'french',
@@ -89,6 +94,7 @@ export default {
 						});
 						await bot3.reply(translated_text ?? '');
 						break;
+					}
 
 					default:
 						break;

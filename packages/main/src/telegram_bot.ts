@@ -44,14 +44,16 @@ export default class TelegramBot {
 			let command = 'default';
 			let args: string[] = [];
 			switch (this.update_type) {
-				case 'message':
+				case 'message': {
 					// @ts-expect-error already checked above
 					args = this.update.message.text.split(' ');
 					break;
-				case 'inline':
+				}
+				case 'inline': {
 					// @ts-expect-error already checked above
 					args = this.update.inline_query.query.split(' ');
 					break;
+				}
 				default:
 					break;
 			}
@@ -73,7 +75,7 @@ export default class TelegramBot {
 
 	async reply(message: string) {
 		switch (this.update_type) {
-			case 'message':
+			case 'message': {
 				const request = new URL(this.api + '/sendMessage');
 				const params = new URLSearchParams();
 				params.append('chat_id', this.update.message?.chat.id.toString() ?? '');
@@ -82,7 +84,8 @@ export default class TelegramBot {
 				console.log(`${request}?${params}`);
 				await fetch(`${request}?${params}`);
 				break;
-			case 'inline':
+			}
+			case 'inline': {
 				const inline_request = new URL(this.api + '/answerInlineQuery');
 				const inline_params = new URLSearchParams();
 				inline_params.append('inline_query_id', this.update.inline_query?.id.toString() ?? '');
@@ -90,6 +93,7 @@ export default class TelegramBot {
 				console.log(`${inline_request}?${inline_params}`);
 				await fetch(`${inline_request}?${inline_params}`);
 				break;
+			}
 			default:
 				break;
 		}
