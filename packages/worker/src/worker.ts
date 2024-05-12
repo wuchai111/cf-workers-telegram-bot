@@ -25,7 +25,7 @@ interface Environment {
 export default {
 	fetch: async (request: Request, env: Environment) => {
 		const bot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN);
-		return bot
+		await bot
 			.on('default', async function () {
 				switch (bot.update_type) {
 					case 'message':
@@ -49,7 +49,7 @@ export default {
 								content: bot.update.inline_query?.query.toString() ?? '',
 							},
 						];
-						const inline_response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages: inline_messages });
+						const inline_response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages: inline_messages, max_tokens: 50 });
 						if ('response' in inline_response) {
 							await bot.reply(inline_response.response ?? '');
 						}
@@ -59,6 +59,25 @@ export default {
 				}
 				return new Response('ok');
 			})
-			.handle(request);
+			.handle(request.clone());
+		const bot2 = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN2);
+		await bot2
+			.on('default', async function () {
+				switch (bot2.update_type) {
+					case 'message':
+						await bot2.reply('https://duckduckgo.com/?q=' + encodeURIComponent(bot.update.message?.text?.toString() ?? ''));
+						break;
+					case 'inline':
+						await bot2.reply('https://duckduckgo.com/?q=' + encodeURIComponent(bot.update.inline_query?.query ?? ''));
+						break;
+
+					default:
+						break;
+				}
+				return new Response('ok');
+			})
+			.handle(request.clone());
+
+		return new Response('ok');
 	},
 };
