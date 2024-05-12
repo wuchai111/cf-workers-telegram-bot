@@ -1,9 +1,5 @@
-import Webhook from './webhook';
-import Command from './types/Command';
 import TelegramCommand from './types/TelegramCommand';
-import Commands from './types/Commands';
 import Kv from './types/Kv';
-import Config from './types/Config';
 import localhost from './types/localhost';
 import WebhookCommands from './types/WebhookCommands';
 import Joke from './types/Joke';
@@ -28,12 +24,8 @@ import DDGQueryResponse from './types/DDGQueryResponse';
 import ChatPermissions from './types/ChatPermissions';
 import Kanye from './types/Kanye';
 export {
-	Webhook,
-	Command,
 	TelegramCommand,
-	Commands,
 	Kv,
-	Config,
 	localhost,
 	WebhookCommands,
 	Joke,
