@@ -82,14 +82,14 @@ export default class TelegramBot {
 				await API.sendMessage(this.api.toString(), {
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
-					text: message
+					text: message,
 				});
 				break;
 			}
 			case 'inline': {
 				await API.answerInline(this.api.toString(), {
 					inline_query_id: this.update.inline_query?.id.toString() ?? '',
-					results: new TelegramInlineQueryResultArticle(message)
+					results: new TelegramInlineQueryResultArticle(message),
 				});
 				break;
 			}
