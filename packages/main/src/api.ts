@@ -24,7 +24,7 @@ export default class API {
 
   static async answerInline(botApi: string, data: {
     inline_query_id: number | string,
-    results: TelegramInlineQueryResultArticle
+    results: TelegramInlineQueryResultArticle[]
   }){
     const url = this.getApiUrl(botApi, 'answerInlineQuery', {
       inline_query_id: data.inline_query_id,
