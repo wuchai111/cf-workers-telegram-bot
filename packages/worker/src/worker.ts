@@ -77,6 +77,26 @@ export default {
 				return new Response('ok');
 			})
 			.handle(request.clone());
+		const bot3 = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN3);
+		await bot3
+			.on('default', async function () {
+				switch (bot3.update_type) {
+					case 'inline':
+						const { translated_text } = await env.AI.run('@cf/meta/m2m100-1.2b', {
+							text: bot3.update.inline_query?.query.toString() ?? '',
+							source_lang: 'french',
+							target_lang: 'english',
+						});
+						await bot3.reply(translated_text ?? '');
+						break;
+
+					default:
+						break;
+				}
+
+				return new Response('ok');
+			})
+			.handle(request.clone());
 
 		return new Response('ok');
 	},
