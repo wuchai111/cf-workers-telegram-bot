@@ -1,5 +1,5 @@
 <h3 align="center">
-<img src="https://raw.githubusercontent.com/codebam/cf-workers-telegram-bot/main/assets/logo.png" width="100" />
+<img src="https://raw.githubusercontent.com/codebam/cf-workers-telegram-bot/master/assets/logo.png" width="100" />
 <br/>
 CF workers telegram bot
 <br/>
@@ -16,7 +16,7 @@ CF workers telegram bot
 <a href="https://github.com/codebam/cf-workers-telegram-bot/issues">
   <img src="https://img.shields.io/github/issues/codebam/cf-workers-telegram-bot?style=for-the-badge&logo=gitbook&color=111111&logoColor=ffffff&labelColor=000000" alt="GitHub issues"/></a>
 <a href="https://github.com/codebam/cf-workers-telegram-bot">  <img src="https://img.shields.io/github/forks/codebam/cf-workers-telegram-bot?style=for-the-badge&logo=git&color=111111&logoColor=ffffff&labelColor=000000" alt="GitHub forks"/></a>
-<a href="https://www.npmjs.com/package/rayous">  <img src="https://img.shields.io/npm/v/rayous?style=for-the-badge&logo=npm&color=111111&logoColor=ffffff&labelColor=000000" alt="npm version" /></a>
+<a href="https://www.npmjs.com/package/@codebam/cf-workers-telegram-bot">  <img src="https://img.shields.io/npm/v/@codebam/cf-workers-telegram-bot?style=for-the-badge&logo=npm&color=111111&logoColor=ffffff&labelColor=000000" alt="npm version" /></a>
 </p>
 
 [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/codebam/cf-workers-telegram-bot)
