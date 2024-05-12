@@ -24,7 +24,9 @@ export default class TelegramBot {
 
 	async handle(request: Request) {
 		this.webhook = new Webhook(this.token, request);
-		this.update = await request.json();
+		if (request.method === 'POST') {
+			this.update = await request.json();
+		}
 		const url = new URL(request.url);
 		if (`/${this.token}` === url.pathname) {
 			switch (url.searchParams.get('command')) {
