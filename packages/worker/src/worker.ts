@@ -23,6 +23,7 @@ export interface Environment {
 }
 
 export default {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	fetch: async (request: Request, env: Environment, ctx: ExecutionContext) => {
 		const bot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN);
 		await bot
