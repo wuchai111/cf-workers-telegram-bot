@@ -92,7 +92,7 @@ export default {
 								encodeURIComponent(bot3.update.inline_query?.query.toString() ?? ''),
 						)
 							.then((r) => r.json())
-							.then((json) => (json as [string[]])[0].join(' '));
+							.then((json) => (json as [string[]])[0].slice(0, -1).join(' '));
 						await bot3.reply(translated_text ?? '');
 						break;
 					}
