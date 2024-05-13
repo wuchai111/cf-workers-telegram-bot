@@ -31,20 +31,46 @@ export default {
 		const bot3 = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN3);
 		await Promise.all([
 			bot
+				.on('clear', async function (ctx: TelegramExecutionContext) {
+					switch (ctx.update_type) {
+						case 'message':
+							await env.DB.prepare('DELETE FROM Messages WHERE userId=?')
+								.bind(ctx.update.inline_query ? ctx.update.inline_query.from.id : ctx.update.message?.from.id)
+								.run();
+							await ctx.reply('history cleared');
+							break;
+
+						default:
+							break;
+					}
+					return new Response('ok');
+				})
 				.on('default', async function (ctx: TelegramExecutionContext) {
 					switch (ctx.update_type) {
 						case 'message': {
+							const prompt = ctx.update.message?.text?.toString() ?? '';
+							const { results } = await env.DB.prepare('SELECT * FROM Messages WHERE userId=?')
+								.bind(ctx.update.inline_query ? ctx.update.inline_query.from.id : ctx.update.message?.from.id)
+								.all();
+							const message_history = results.map((col) => ({ role: 'system', content: col.content as string }));
 							const messages = [
-								{ role: 'system', content: 'You are a friendly assistant' },
+								...message_history,
 								{
 									role: 'user',
-									content: ctx.update.message?.text?.toString() ?? '',
+									content: prompt,
 								},
 							];
 							const response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages });
 							if ('response' in response) {
 								await ctx.reply(response.response ?? '');
 							}
+							await env.DB.prepare('INSERT INTO Messages (id, userId, content) VALUES (?, ?, ?)')
+								.bind(
+									crypto.randomUUID(),
+									ctx.update.inline_query ? ctx.update.inline_query.from.id : ctx.update.message?.from.id,
+									'[INST] ' + prompt + ' [/INST]' + '\n' + response,
+								)
+								.run();
 							break;
 						}
 						case 'inline': {
