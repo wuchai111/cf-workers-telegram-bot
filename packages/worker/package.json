@@ -9,7 +9,7 @@
 	"scripts": {
 		"build": "tsc --project tsconfig.json && node esbuild.config.js",
 		"lint": "eslint src",
-		"test": "vitest --config vitest.config.js --reporter basic"
+		"test": "vitest --config vitest.config.js"
 	},
 	"author": "codebam",
 	"license": "Apache-2.0",
