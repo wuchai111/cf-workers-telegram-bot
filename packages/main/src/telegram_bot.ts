@@ -6,6 +6,7 @@ export default class TelegramBot {
 	token: string;
 	webhook: Webhook;
 	api: URL;
+	update: TelegramUpdate;
 	update_type: string;
 
 	commands: Record<string, (ctx: ExecutionContext) => Promise<Response>> = {};
@@ -14,6 +15,7 @@ export default class TelegramBot {
 		this.token = token;
 		this.webhook = new Webhook('', new Request('http://127.0.0.1'));
 		this.api = new URL('https://api.telegram.org/bot' + token);
+		this.update = new TelegramUpdate({});
 		this.update_type = '';
 	}
 
@@ -26,13 +28,38 @@ export default class TelegramBot {
 		return this;
 	}
 
+	async reply(message: string) {
+		switch (this.update_type) {
+			case 'message': {
+				const request = new URL(this.api + '/sendMessage');
+				const params = new URLSearchParams();
+				params.append('chat_id', this.update.message?.chat.id.toString() ?? '');
+				params.append('reply_to_message_id', this.update.message?.message_id.toString() ?? '');
+				params.append('text', message);
+				console.log(`${request}?${params}`);
+				await fetch(`${request}?${params}`);
+				break;
+			}
+			case 'inline': {
+				const inline_request = new URL(this.api + '/answerInlineQuery');
+				const inline_params = new URLSearchParams();
+				inline_params.append('inline_query_id', this.update.inline_query?.id.toString() ?? '');
+				inline_params.append('results', JSON.stringify([new TelegramInlineQueryResultArticle(message)]));
+				console.log(`${inline_request}?${inline_params}`);
+				await fetch(`${inline_request}?${inline_params}`);
+				break;
+			}
+			default:
+				break;
+		}
+	}
+
 	async handle(request: Request): Promise<Response> {
 		this.webhook = new Webhook(this.token, request);
-		let update: TelegramUpdate;
 		if (request.method === 'POST') {
-			update = await request.json();
+			this.update = await request.json();
 		} else {
-			update = new TelegramUpdate({});
+			this.update = new TelegramUpdate({});
 		}
 		const url = new URL(request.url);
 		if (`/${this.token}` === url.pathname) {
@@ -42,19 +69,19 @@ export default class TelegramBot {
 				default:
 					break;
 			}
-			console.log(update);
+			console.log(this.update);
 			let command = 'default';
 			let args: string[] = [];
-			const ctx = new ExecutionContext(this, update);
+			const ctx = new ExecutionContext(this, this.update);
 			switch (ctx.update_type) {
 				case 'message': {
 					// @ts-expect-error already checked above
-					args = update.message.text.split(' ');
+					args = this.update.message.text.split(' ');
 					break;
 				}
 				case 'inline': {
 					// @ts-expect-error already checked above
-					args = update.inline_query.query.split(' ');
+					args = this.update.inline_query.query.split(' ');
 					break;
 				}
 				default:

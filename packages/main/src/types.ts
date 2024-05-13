@@ -23,6 +23,7 @@ import TelegramInlineQueryResultArticle from './types/TelegramInlineQueryResultA
 import DDGQueryResponse from './types/DDGQueryResponse';
 import ChatPermissions from './types/ChatPermissions';
 import Kanye from './types/Kanye';
+import SerializableData from './types/SerializableData';
 
 export {
 	TelegramCommand,
@@ -50,4 +51,5 @@ export {
 	DDGQueryResponse,
 	ChatPermissions,
 	Kanye,
+	SerializableData,
 };
