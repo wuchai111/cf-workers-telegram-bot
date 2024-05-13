@@ -87,11 +87,12 @@ export default {
 			.on('default', async function () {
 				switch (bot3.update_type) {
 					case 'inline': {
-						const { translated_text } = await env.AI.run('@cf/meta/m2m100-1.2b', {
-							text: bot3.update.inline_query?.query.toString() ?? '',
-							source_lang: 'french',
-							target_lang: 'english',
-						});
+						const translated_text = await fetch(
+							'https://clients5.google.com/translate_a/t?client=at&sl=auto&tl=en&q=' +
+								encodeURIComponent(bot3.update.inline_query?.query.toString() ?? ''),
+						)
+							.then((r) => r.json())
+							.then((json) => (json as [string[]])[0].join(' '));
 						await bot3.reply(translated_text ?? '');
 						break;
 					}
