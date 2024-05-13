@@ -22,8 +22,6 @@ export default class TelegramBot {
 
 	on(event: string, callback: (ctx: ExecutionContext) => Promise<Response>) {
 		if (event !== 'on') {
-			// eslint-disable-next-line
-			// @ts-ignore TS7053
 			this.commands[event] = callback;
 		}
 		return this;
@@ -51,21 +49,18 @@ export default class TelegramBot {
 			this.currentContext = ctx;
 			switch (ctx.update_type) {
 				case 'message': {
-					// @ts-expect-error already checked above
-					args = this.update.message.text.split(' ');
+					args = this.update.message?.text?.split(' ') ?? [];
 					break;
 				}
 				case 'inline': {
-					// @ts-expect-error already checked above
-					args = this.update.inline_query.query.split(' ');
+					args = this.update.inline_query?.query.split(' ') ?? [];
 					break;
 				}
 				default:
 					break;
 			}
 			if (args.at(0)?.startsWith('/')) {
-				// @ts-expect-error already checked above
-				command = args.at(0).slice(1);
+				command = args.at(0)?.slice(1) ?? 'default';
 			}
 			this.commands['any']?.(ctx);
 			if (!this.commands[command]) {
