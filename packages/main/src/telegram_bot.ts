@@ -1,4 +1,4 @@
-import { TelegramInlineQueryResultArticle, TelegramUpdate } from './types';
+import { TelegramUpdate } from './types';
 import ExecutionContext from './ctx';
 import Webhook from './webhook';
 
