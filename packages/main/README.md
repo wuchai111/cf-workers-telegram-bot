@@ -19,7 +19,7 @@ CF workers telegram bot
 <a href="https://www.npmjs.com/package/@codebam/cf-workers-telegram-bot">  <img src="https://img.shields.io/npm/v/@codebam/cf-workers-telegram-bot?style=for-the-badge&logo=npm&color=111111&logoColor=ffffff&labelColor=000000" alt="npm version" /></a>
 </p>
 
-![screenshot of cf-workers-telegram-bot](/screenshot.png)
+![screenshot of cf-workers-telegram-bot](https://raw.githubusercontent.com/codebam/cf-workers-telegram-bot/master/assets/screenshot.png)
 
 ```sh
 npm i @codebam/cf-workers-telegram-bot
