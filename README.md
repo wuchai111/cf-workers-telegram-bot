@@ -19,24 +19,29 @@ CF workers telegram bot
 <a href="https://www.npmjs.com/package/@codebam/cf-workers-telegram-bot">  <img src="https://img.shields.io/npm/v/@codebam/cf-workers-telegram-bot?style=for-the-badge&logo=npm&color=111111&logoColor=ffffff&labelColor=000000" alt="npm version" /></a>
 </p>
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/codebam/cf-workers-telegram-bot)
-
 ![screenshot of cf-workers-telegram-bot](/screenshot.png)
-
-serverless telegram bot on cf workers
-
-To get continuous conversation with AI working make sure you add a database
-to your wrangler.toml and initailize it with the schema.sql
 
 ```sh
 npm i @codebam/cf-workers-telegram-bot
 ```
 
-See `worker.ts` and follow the instructions below.
+See `worker.ts` for an example of what a bot might look like. Just import from `@codebam/cf-workers-telegram-bot`.
+
+- `npm create cloudflare@latest`
+- `npx wrangler login`
+- `npx wrangler secret put SECRET_TELEGRAM_API_TOKEN`, set it to your telegram bot token that you got from `@BotFather`
+- `npx wrangler deploy`
+- Open this url in your browser to set your webhook `https://your-worker.username.workers.dev/SECRET_TELEGRAM_API_TOKEN?command=set`
+
+To set up GitHub actions to deploy when you push, see https://github.com/cloudflare/wrangler-action
 
 ---
 
-To use the deploy button:
+These instructions are for if you want to deploy a copy of the bot along with
+the library. Such as if you need extra API requests that haven't been
+implemented yet.
+
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/codebam/cf-workers-telegram-bot)
 
 - Click the deploy button
 - Navigate to your new **GitHub repository &gt; Settings &gt; Secrets** and add the following secrets:
@@ -50,19 +55,3 @@ To use the deploy button:
   ```
 
 - Push to `master` to trigger a deploy
-
-To fork this repo and use wrangler:
-
-- Click fork
-- `npm i -g wrangler`
-- `wrangler secret put SECRET_TELEGRAM_API_TOKEN` and set it to your telegram
-  bot token
-- `wrangler d1 create llama2`
-- put the database block from the command in your wrangler.toml
-- `wrangler d1 execute --remote llama2 --file ./schema.sql`
-- `wrangler deploy`
-- Done!
-
-## Getting started with cf-workers-telegram-bot
-
-Once you've deployed the bot you can get your Webhook command URL by calling `await bot.webhook.set()`
