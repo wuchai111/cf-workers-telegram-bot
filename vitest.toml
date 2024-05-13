@@ -1,0 +1,9 @@
+name = "cf-workers-telegram-bot-v2"
+main = "packages/worker/dist/worker/src/worker.mjs"
+
+workers_dev = true
+compatibility_date = "2023-10-24"
+node_compat = true
+compatibility_flags = [ "nodejs_compat" ]
+
+build.command = "npm install && npm run build:worker"

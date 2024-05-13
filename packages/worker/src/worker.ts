@@ -1,6 +1,6 @@
 import TelegramBot from '../../main/src/telegram_bot';
 
-interface Environment {
+export interface Environment {
 	SECRET_TELEGRAM_API_TOKEN: string;
 	KV_GET_SET: KVNamespace;
 	KV_UID_DATA: KVNamespace;
@@ -23,7 +23,7 @@ interface Environment {
 }
 
 export default {
-	fetch: async (request: Request, env: Environment) => {
+	fetch: async (request: Request, env: Environment, ctx: ExecutionContext) => {
 		const bot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN);
 		await bot
 			.on('default', async function () {
