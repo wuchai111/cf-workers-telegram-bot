@@ -95,7 +95,7 @@ export default {
 						)
 							.then((r) => r.json())
 							.then((json) => (json as [string[]])[0].slice(0, -1).join(' '));
-						await bot3.reply(translated_text ?? '');
+						await ctx.reply(translated_text ?? '');
 						break;
 					}
 
