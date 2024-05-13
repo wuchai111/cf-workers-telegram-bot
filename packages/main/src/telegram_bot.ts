@@ -10,6 +10,7 @@ export default class TelegramBot {
 	update_type: string;
 
 	commands: Record<string, (ctx: ExecutionContext) => Promise<Response>> = {};
+	currentContext!: ExecutionContext;
 
 	constructor(token: string) {
 		this.token = token;
@@ -26,32 +27,6 @@ export default class TelegramBot {
 			this.commands[event] = callback;
 		}
 		return this;
-	}
-
-	async reply(message: string) {
-		switch (this.update_type) {
-			case 'message': {
-				const request = new URL(this.api + '/sendMessage');
-				const params = new URLSearchParams();
-				params.append('chat_id', this.update.message?.chat.id.toString() ?? '');
-				params.append('reply_to_message_id', this.update.message?.message_id.toString() ?? '');
-				params.append('text', message);
-				console.log(`${request}?${params}`);
-				await fetch(`${request}?${params}`);
-				break;
-			}
-			case 'inline': {
-				const inline_request = new URL(this.api + '/answerInlineQuery');
-				const inline_params = new URLSearchParams();
-				inline_params.append('inline_query_id', this.update.inline_query?.id.toString() ?? '');
-				inline_params.append('results', JSON.stringify([new TelegramInlineQueryResultArticle(message)]));
-				console.log(`${inline_request}?${inline_params}`);
-				await fetch(`${inline_request}?${inline_params}`);
-				break;
-			}
-			default:
-				break;
-		}
 	}
 
 	async handle(request: Request): Promise<Response> {
@@ -73,6 +48,7 @@ export default class TelegramBot {
 			let command = 'default';
 			let args: string[] = [];
 			const ctx = new ExecutionContext(this, this.update);
+			this.currentContext = ctx;
 			switch (ctx.update_type) {
 				case 'message': {
 					// @ts-expect-error already checked above
