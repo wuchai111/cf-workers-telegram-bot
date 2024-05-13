@@ -8,7 +8,7 @@
 		"build:worker": "lerna run build --scope=worker",
 		"test": "lerna run test",
 		"test:worker": "lerna run test --scope=worker",
-		"test:main": "lerna run test --scope=main",
+		"test:main": "lerna run test --scope=@codebam/cf-workers-telegram-bot",
 		"release": "lerna version minor -y",
 		"publish": "lerna publish -y from-git",
 		"lint": "lerna run lint"
