@@ -1,4 +1,4 @@
-import ExecutionContext from '../../main/src/ctx';
+import TelegramExecutionContext from '../../main/src/ctx';
 import TelegramBot from '../../main/src/telegram_bot';
 
 export interface Environment {
@@ -28,7 +28,7 @@ export default {
 	fetch: async (request: Request, env: Environment, ctx: ExecutionContext) => {
 		const bot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN);
 		await bot
-			.on('default', async function (ctx: ExecutionContext) {
+			.on('default', async function (ctx: TelegramExecutionContext) {
 				switch (ctx.update_type) {
 					case 'message': {
 						const messages = [
@@ -67,7 +67,7 @@ export default {
 			.handle(request.clone());
 		const bot2 = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN2);
 		await bot2
-			.on('default', async function (ctx: ExecutionContext) {
+			.on('default', async function (ctx: TelegramExecutionContext) {
 				switch (bot2.update_type) {
 					case 'message': {
 						await ctx.reply('https://duckduckgo.com/?q=' + encodeURIComponent(ctx.update.message?.text?.toString() ?? ''));
@@ -86,7 +86,7 @@ export default {
 			.handle(request.clone());
 		const bot3 = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN3);
 		await bot3
-			.on('default', async function (ctx: ExecutionContext) {
+			.on('default', async function (ctx: TelegramExecutionContext) {
 				switch (bot3.update_type) {
 					case 'inline': {
 						const translated_text = await fetch(
