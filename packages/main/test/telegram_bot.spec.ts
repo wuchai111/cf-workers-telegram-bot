@@ -11,7 +11,7 @@ describe('telegram bot', () => {
 			body: JSON.stringify({ inline_query: { query: 'hello' } }),
 		});
 		expect(await (await bot.handle(request)).text()).toBe('default');
-		expect(bot.update_type).toBe('inline');
+		expect(bot.currentContext.update_type).toBe('inline');
 	});
 	it('message response', async () => {
 		const bot = new TelegramBot('123456789').on('default', async () => {
@@ -22,6 +22,6 @@ describe('telegram bot', () => {
 			body: JSON.stringify({ message: { text: 'hello' } }),
 		});
 		expect(await (await bot.handle(request)).text()).toBe('default');
-		expect(bot.update_type).toBe('message');
+		expect(bot.currentContext.update_type).toBe('message');
 	});
 });
