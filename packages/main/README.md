@@ -1,15 +1,9 @@
 <h3 align="center">
 <img src="https://raw.githubusercontent.com/codebam/cf-workers-telegram-bot/master/assets/logo.png" width="100" />
 <br/>
-CF workers telegram bot
+CF Workers Telegram Bot
 <br/>
 </h3>
-
-<h6 align="center">
-<a href="https://github.com/codebam/cf-workers-telegram-bot/wiki">Wiki</a>
- · 
-<a  href="https://codebam.github.io/cf-workers-telegram-bot-docs/">Docs</a>
-</h6>
 
 <p  align="center">
 <a href="https://github.com/codebam/cf-workers-telegram-bot/stargazers">  <img src="https://img.shields.io/github/stars/codebam/cf-workers-telegram-bot?style=for-the-badge&logo=starship&color=111111&logoColor=ffffff&labelColor=000000" alt="GitHub stars"/></a>
