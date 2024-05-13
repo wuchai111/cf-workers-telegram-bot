@@ -24,7 +24,7 @@ export default class TelegramBot {
 		return this;
 	}
 
-	async handle(request: Request) {
+	async handle(request: Request): Promise<Response> {
 		this.webhook = new Webhook(this.token, request);
 		if (request.method === 'POST') {
 			this.update = await request.json();
