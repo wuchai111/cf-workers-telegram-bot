@@ -67,16 +67,10 @@ export default class TelegramBot {
 				// @ts-expect-error already checked above
 				command = args.at(0).slice(1);
 			}
-			// eslint-disable-next-line
-			// @ts-ignore
 			this.commands['any']?.(ctx);
-			// eslint-disable-next-line
-			// @ts-ignore
 			if (!this.commands[command]) {
 				command = 'default';
 			}
-			// eslint-disable-next-line
-			// @ts-ignore
 			return await this.commands[command]?.(ctx);
 		}
 		return new Response('ok');
