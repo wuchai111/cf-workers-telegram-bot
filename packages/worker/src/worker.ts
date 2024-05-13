@@ -1,3 +1,4 @@
+import ExecutionContext from '../../main/src/ctx';
 import TelegramBot from '../../main/src/telegram_bot';
 
 export interface Environment {
@@ -27,19 +28,19 @@ export default {
 	fetch: async (request: Request, env: Environment, ctx: ExecutionContext) => {
 		const bot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN);
 		await bot
-			.on('default', async function () {
-				switch (bot.update_type) {
+			.on('default', async function (ctx: ExecutionContext) {
+				switch (ctx.update_type) {
 					case 'message': {
 						const messages = [
 							{ role: 'system', content: 'You are a friendly assistant' },
 							{
 								role: 'user',
-								content: bot.update.message?.text?.toString() ?? '',
+								content: ctx.update.message?.text?.toString() ?? '',
 							},
 						];
 						const response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages });
 						if ('response' in response) {
-							await bot.reply(response.response ?? '');
+							await ctx.reply(response.response ?? '');
 						}
 						break;
 					}
@@ -48,12 +49,12 @@ export default {
 							{ role: 'system', content: 'You are a friendly assistant' },
 							{
 								role: 'user',
-								content: bot.update.inline_query?.query.toString() ?? '',
+								content: ctx.update.inline_query?.query.toString() ?? '',
 							},
 						];
 						const inline_response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages: inline_messages, max_tokens: 50 });
 						if ('response' in inline_response) {
-							await bot.reply(inline_response.response ?? '');
+							await ctx.reply(inline_response.response ?? '');
 						}
 						break;
 					}
@@ -66,14 +67,14 @@ export default {
 			.handle(request.clone());
 		const bot2 = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN2);
 		await bot2
-			.on('default', async function () {
+			.on('default', async function (ctx: ExecutionContext) {
 				switch (bot2.update_type) {
 					case 'message': {
-						await bot2.reply('https://duckduckgo.com/?q=' + encodeURIComponent(bot.update.message?.text?.toString() ?? ''));
+						await ctx.reply('https://duckduckgo.com/?q=' + encodeURIComponent(ctx.update.message?.text?.toString() ?? ''));
 						break;
 					}
 					case 'inline': {
-						await bot2.reply('https://duckduckgo.com/?q=' + encodeURIComponent(bot.update.inline_query?.query ?? ''));
+						await ctx.reply('https://duckduckgo.com/?q=' + encodeURIComponent(ctx.update.inline_query?.query ?? ''));
 						break;
 					}
 
@@ -85,7 +86,7 @@ export default {
 			.handle(request.clone());
 		const bot3 = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN3);
 		await bot3
-			.on('default', async function () {
+			.on('default', async function (ctx: ExecutionContext) {
 				switch (bot3.update_type) {
 					case 'inline': {
 						const translated_text = await fetch(
