@@ -6,6 +6,8 @@
 	"scripts": {
 		"build": "lerna run build",
 		"build:worker": "lerna run build --scope=worker",
+		"test": "lerna run test",
+		"test:worker": "lerna run test --scope=worker",
 		"release": "lerna version minor -y",
 		"publish": "lerna publish -y from-git",
 		"lint": "lerna run lint"
