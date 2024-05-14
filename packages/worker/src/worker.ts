@@ -140,7 +140,7 @@ export default {
 							];
 							let response: AiTextGenerationOutput;
 							try {
-								response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages, max_tokens: 50 });
+								response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages, max_tokens: 100 });
 							} catch (e) {
 								console.log(e);
 								return new Response('ok');
