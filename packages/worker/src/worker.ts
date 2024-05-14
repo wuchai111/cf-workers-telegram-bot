@@ -27,6 +27,18 @@ export default {
 		const translatepartybot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN3);
 		await Promise.all([
 			tuxrobot
+				.on(':photo', async function (context: TelegramExecutionContext) {
+					const file_id = context.update.message?.photo?.pop()?.file_id;
+					const blob = await context.getFile(file_id as string);
+					const input = {
+						image: [...new Uint8Array(blob)],
+						prompt: 'Generate a caption for this image',
+						max_tokens: 512,
+					};
+					const { description } = await env.AI.run('@cf/llava-hf/llava-1.5-7b-hf', input);
+					await context.reply(description);
+					return new Response('ok');
+				})
 				.on('photo', async function (context: TelegramExecutionContext) {
 					switch (context.update_type) {
 						case 'message': {
@@ -140,7 +152,7 @@ export default {
 						case 'inline': {
 							const translated_text = await fetch(
 								'https://clients5.google.com/translate_a/t?client=at&sl=auto&tl=en&q=' +
-									encodeURIComponent(bot3.update.inline_query?.query.toString() ?? ''),
+									encodeURIComponent(context.update.inline_query?.query.toString() ?? ''),
 							)
 								.then((r) => r.json())
 								.then((json) => (json as [string[]])[0].slice(0, -1).join(' '));

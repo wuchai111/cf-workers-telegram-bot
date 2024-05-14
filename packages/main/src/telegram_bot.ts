@@ -1,5 +1,5 @@
 import { TelegramUpdate } from './types';
-import ExecutionContext from './ctx';
+import TelegramExecutionContext from './ctx';
 import Webhook from './webhook';
 
 export default class TelegramBot {
@@ -9,8 +9,8 @@ export default class TelegramBot {
 	update: TelegramUpdate;
 	update_type: string;
 
-	commands: Record<string, (ctx: ExecutionContext) => Promise<Response>> = {};
-	currentContext!: ExecutionContext;
+	commands: Record<string, (ctx: TelegramExecutionContext) => Promise<Response>> = {};
+	currentContext!: TelegramExecutionContext;
 
 	constructor(token: string) {
 		this.token = token;
@@ -20,7 +20,7 @@ export default class TelegramBot {
 		this.update_type = '';
 	}
 
-	on(event: string, callback: (ctx: ExecutionContext) => Promise<Response>) {
+	on(event: string, callback: (ctx: TelegramExecutionContext) => Promise<Response>) {
 		if (event !== 'on') {
 			this.commands[event] = callback;
 		}
@@ -45,7 +45,7 @@ export default class TelegramBot {
 			console.log(this.update);
 			let command = 'default';
 			let args: string[] = [];
-			const ctx = new ExecutionContext(this, this.update);
+			const ctx = new TelegramExecutionContext(this, this.update);
 			this.currentContext = ctx;
 			switch (ctx.update_type) {
 				case 'message': {
@@ -54,6 +54,10 @@ export default class TelegramBot {
 				}
 				case 'inline': {
 					args = this.update.inline_query?.query.split(' ') ?? [];
+					break;
+				}
+				case 'photo': {
+					command = ':photo';
 					break;
 				}
 				default:

@@ -14,7 +14,9 @@ export default class TelegramExecutionContext {
 		this.bot = bot;
 		this.update = update;
 
-		if (this.update.message?.text) {
+		if (this.update.message?.photo) {
+			this.update_type = 'photo';
+		} else if (this.update.message?.text) {
 			this.update_type = 'message';
 		} else if (this.update.inline_query?.query) {
 			this.update_type = 'inline';
@@ -62,6 +64,10 @@ export default class TelegramExecutionContext {
 		}
 	}
 
+	async getFile(file_id: string) {
+		return await API.getFile(this.bot.api.toString(), { file_id }, this.bot.token);
+	}
+
 	async replyPhoto(photo: string) {
 		switch (this.update_type) {
 			case 'message':
@@ -84,6 +90,12 @@ export default class TelegramExecutionContext {
 	async reply(message: string) {
 		switch (this.update_type) {
 			case 'message':
+				return await API.sendMessage(this.bot.api.toString(), {
+					chat_id: this.update.message?.chat.id.toString() ?? '',
+					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
+					text: message,
+				});
+			case 'photo':
 				return await API.sendMessage(this.bot.api.toString(), {
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',

@@ -11,6 +11,15 @@ export default class API {
 		return new Request(`${request}?${params}`);
 	}
 
+	static async getFile(botApi: string, data: { file_id: string }, token: string) {
+		const url = this.getApiUrl(botApi, 'getFile', data);
+		const response = await fetch(url);
+		const json = (await response.json()) as { result: { file_path: string } };
+		const file_path = json.result.file_path;
+		const file_response = await fetch(`https://api.telegram.org/file/bot${token}/${file_path}`);
+		return await file_response.arrayBuffer();
+	}
+
 	static async sendMessage(
 		botApi: string,
 		data: {
