@@ -1,6 +1,6 @@
 import API from './api';
 import TelegramBot from './telegram_bot';
-import { SerializableData, TelegramInlineQueryResultArticle, TelegramUpdate } from './types';
+import { SerializableData, TelegramInlineQueryResultArticle, TelegramInlineQueryResultPhoto, TelegramUpdate } from './types';
 
 export default class TelegramExecutionContext {
 	bot: TelegramBot;
@@ -42,6 +42,26 @@ export default class TelegramExecutionContext {
 		return this.data[key];
 	}
 
+	async replyPhoto(photo: string) {
+		switch (this.update_type) {
+			case 'message':
+				return await API.sendPhoto(this.bot.api.toString(), {
+					chat_id: this.update.message?.chat.id.toString() ?? '',
+					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
+					photo,
+				});
+			case 'inline':
+				await API.answerInline(this.bot.api.toString(), {
+					inline_query_id: this.update.inline_query?.id.toString() ?? '',
+					results: [new TelegramInlineQueryResultPhoto(photo)],
+				});
+				break;
+
+			default:
+				break;
+		}
+	}
+
 	async reply(message: string) {
 		switch (this.update_type) {
 			case 'message': {
@@ -64,4 +84,3 @@ export default class TelegramExecutionContext {
 		}
 	}
 }
-

@@ -31,13 +31,39 @@ export default {
 		const bot3 = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN3);
 		await Promise.all([
 			bot
-				.on('clear', async function (ctx: TelegramExecutionContext) {
-					switch (ctx.update_type) {
+				.on('photo', async function (context: TelegramExecutionContext) {
+					switch (context.update_type) {
+						case 'message': {
+							const prompt = context.update.message?.text?.toString() ?? '';
+							const photo = await env.AI.run('@cf/stabilityai/stable-diffusion-xl-base-1.0', { prompt });
+							const photo_file = new File([await new Response(photo).blob()], 'photo');
+							const id = crypto.randomUUID();
+							await env.R2.put(id, photo_file);
+							await context.replyPhoto(`https://r2.seanbehan.ca/${id}`);
+							setTimeout(async () => await env.R2.delete(id), 5000);
+							break;
+						}
+						case 'inline': {
+							const prompt = context.update.inline_query?.query.toString().split(' ').slice(1).join(' ') ?? '';
+							const photo = await env.AI.run('@cf/bytedance/stable-diffusion-xl-lightning', { prompt, num_steps: 5 });
+							const photo_file = new File([await new Response(photo).blob()], 'photo');
+							const id = crypto.randomUUID();
+							await env.R2.put(id, photo_file);
+							await context.replyPhoto(`https://r2.seanbehan.ca/${id}`);
+							setTimeout(async () => await env.R2.delete(id), 5000);
+							break;
+						}
+
+						default:
+							break;
+					}
+					return new Response('ok');
+				})
+				.on('clear', async function (context: TelegramExecutionContext) {
+					switch (context.update_type) {
 						case 'message':
-							await env.DB.prepare('DELETE FROM Messages WHERE userId=?')
-								.bind(ctx.update.inline_query ? ctx.update.inline_query.from.id : ctx.update.message?.from.id)
-								.run();
-							await ctx.reply('history cleared');
+							await env.DB.prepare('DELETE FROM Messages WHERE userId=?').bind(context.update.message?.from.id).run();
+							await context.reply('history cleared');
 							break;
 
 						default:
@@ -45,12 +71,12 @@ export default {
 					}
 					return new Response('ok');
 				})
-				.on('default', async function (ctx: TelegramExecutionContext) {
-					switch (ctx.update_type) {
+				.on('default', async function (context: TelegramExecutionContext) {
+					switch (context.update_type) {
 						case 'message': {
-							const prompt = ctx.update.message?.text?.toString() ?? '';
+							const prompt = context.update.message?.text?.toString() ?? '';
 							const { results } = await env.DB.prepare('SELECT * FROM Messages WHERE userId=?')
-								.bind(ctx.update.inline_query ? ctx.update.inline_query.from.id : ctx.update.message?.from.id)
+								.bind(context.update.inline_query ? context.update.inline_query.from.id : context.update.message?.from.id)
 								.all();
 							const message_history = results.map((col) => ({ role: 'system', content: col.content as string }));
 							const messages = [
@@ -62,12 +88,12 @@ export default {
 							];
 							const response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages });
 							if ('response' in response) {
-								await ctx.reply(response.response ?? '');
+								await context.reply(response.response ?? '');
 							}
 							await env.DB.prepare('INSERT INTO Messages (id, userId, content) VALUES (?, ?, ?)')
 								.bind(
 									crypto.randomUUID(),
-									ctx.update.inline_query ? ctx.update.inline_query.from.id : ctx.update.message?.from.id,
+									context.update.inline_query ? context.update.inline_query.from.id : context.update.message?.from.id,
 									'[INST] ' + prompt + ' [/INST]' + '\n' + response,
 								)
 								.run();
@@ -78,12 +104,12 @@ export default {
 								{ role: 'system', content: 'You are a friendly assistant' },
 								{
 									role: 'user',
-									content: ctx.update.inline_query?.query.toString() ?? '',
+									content: context.update.inline_query?.query.toString() ?? '',
 								},
 							];
 							const inline_response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages: inline_messages, max_tokens: 50 });
 							if ('response' in inline_response) {
-								await ctx.reply(inline_response.response ?? '');
+								await context.reply(inline_response.response ?? '');
 							}
 							break;
 						}
@@ -95,14 +121,14 @@ export default {
 				})
 				.handle(request.clone()),
 			bot2
-				.on('default', async function (ctx: TelegramExecutionContext) {
+				.on('default', async function (context: TelegramExecutionContext) {
 					switch (bot2.update_type) {
 						case 'message': {
-							await ctx.reply('https://duckduckgo.com/?q=' + encodeURIComponent(ctx.update.message?.text?.toString() ?? ''));
+							await context.reply('https://duckduckgo.com/?q=' + encodeURIComponent(context.update.message?.text?.toString() ?? ''));
 							break;
 						}
 						case 'inline': {
-							await ctx.reply('https://duckduckgo.com/?q=' + encodeURIComponent(ctx.update.inline_query?.query ?? ''));
+							await context.reply('https://duckduckgo.com/?q=' + encodeURIComponent(context.update.inline_query?.query ?? ''));
 							break;
 						}
 
@@ -113,7 +139,7 @@ export default {
 				})
 				.handle(request.clone()),
 			bot3
-				.on('default', async function (ctx: TelegramExecutionContext) {
+				.on('default', async function (context: TelegramExecutionContext) {
 					switch (bot3.update_type) {
 						case 'inline': {
 							const translated_text = await fetch(
@@ -122,7 +148,7 @@ export default {
 							)
 								.then((r) => r.json())
 								.then((json) => (json as [string[]])[0].slice(0, -1).join(' '));
-							await ctx.reply(translated_text ?? '');
+							await context.reply(translated_text ?? '');
 							break;
 						}
 

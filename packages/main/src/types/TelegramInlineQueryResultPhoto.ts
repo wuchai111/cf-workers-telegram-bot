@@ -1,4 +1,5 @@
 import TelegramInlineQueryResult from './TelegramInlineQueryResult';
+import TelegramInputMessageContent from './TelegramInputMessageContent';
 
 export default class TelegramInlineQueryResultPhoto extends TelegramInlineQueryResult {
 	photo_url: string; // must be a jpg
@@ -11,7 +12,7 @@ export default class TelegramInlineQueryResultPhoto extends TelegramInlineQueryR
 	parse_mode?: string;
 	caption_entities?: string;
 	// reply_markup?: TelegramInlineKeyboardMarkup;
-	// input_message_content?: TelegramInputMessageContent;
+	input_message_content?: TelegramInputMessageContent;
 	constructor(photo: string) {
 		super('photo');
 		this.photo_url = photo;
