@@ -35,15 +35,27 @@ export default {
 						prompt: 'Generate a caption for this image',
 						max_tokens: 512,
 					};
-					const { description } = await env.AI.run('@cf/llava-hf/llava-1.5-7b-hf', input);
-					await context.replyPhoto(file_id as string, description);
+					let response: AiImageToTextOutput;
+					try {
+						response = await env.AI.run('@cf/llava-hf/llava-1.5-7b-hf', input);
+					} catch (e) {
+						console.log(e);
+						return new Response('ok');
+					}
+					await context.replyPhoto(file_id as string, response.description);
 					return new Response('ok');
 				})
 				.on('photo', async function (context: TelegramExecutionContext) {
 					switch (context.update_type) {
 						case 'message': {
 							const prompt = context.update.message?.text?.toString() ?? '';
-							const photo = await env.AI.run('@cf/lykon/dreamshaper-8-lcm', { prompt });
+							let photo: AiTextToImageOutput;
+							try {
+								photo = await env.AI.run('@cf/lykon/dreamshaper-8-lcm', { prompt });
+							} catch (e) {
+								console.log(e);
+								return new Response('ok');
+							}
 							const photo_file = new File([await new Response(photo).blob()], 'photo');
 							const id = crypto.randomUUID();
 							await env.R2.put(id, photo_file);
@@ -53,7 +65,13 @@ export default {
 						}
 						case 'inline': {
 							const prompt = context.update.inline_query?.query.toString().split(' ').slice(1).join(' ') ?? '';
-							const photo = await env.AI.run('@cf/lykon/dreamshaper-8-lcm', { prompt });
+							let photo: AiTextToImageOutput;
+							try {
+								photo = await env.AI.run('@cf/lykon/dreamshaper-8-lcm', { prompt });
+							} catch (e) {
+								console.log(e);
+								return new Response('ok');
+							}
 							const photo_file = new File([await new Response(photo).blob()], 'photo');
 							const id = crypto.randomUUID();
 							await env.R2.put(id, photo_file);
@@ -94,7 +112,13 @@ export default {
 									content: prompt,
 								},
 							];
-							const response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages });
+							let response: AiTextGenerationOutput;
+							try {
+								response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages });
+							} catch (e) {
+								console.log(e);
+								return new Response('ok');
+							}
 							if ('response' in response) {
 								await context.reply(response.response ?? '');
 							}
@@ -108,15 +132,21 @@ export default {
 							break;
 						}
 						case 'inline': {
-							const inline_messages = [
+							const messages = [
 								{
 									role: 'user',
 									content: context.update.inline_query?.query.toString() ?? '',
 								},
 							];
-							const inline_response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages: inline_messages, max_tokens: 50 });
-							if ('response' in inline_response) {
-								await context.reply(inline_response.response ?? '');
+							let response: AiTextGenerationOutput;
+							try {
+								response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages, max_tokens: 50 });
+							} catch (e) {
+								console.log(e);
+								return new Response('ok');
+							}
+							if ('response' in response) {
+								await context.reply(response.response ?? '');
 							}
 							break;
 						}
