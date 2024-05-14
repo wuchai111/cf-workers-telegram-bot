@@ -50,6 +50,7 @@ export default class API {
 			reply_to_message_id: number | string;
 			chat_id: number | string;
 			photo: string;
+			caption: string;
 		},
 	) {
 		const url = this.getApiUrl(botApi, 'sendPhoto', data);

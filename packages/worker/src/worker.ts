@@ -36,7 +36,7 @@ export default {
 						max_tokens: 512,
 					};
 					const { description } = await env.AI.run('@cf/llava-hf/llava-1.5-7b-hf', input);
-					await context.reply(description);
+					await context.replyPhoto(file_id as string, description);
 					return new Response('ok');
 				})
 				.on('photo', async function (context: TelegramExecutionContext) {

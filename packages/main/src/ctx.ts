@@ -68,13 +68,21 @@ export default class TelegramExecutionContext {
 		return await API.getFile(this.bot.api.toString(), { file_id }, this.bot.token);
 	}
 
-	async replyPhoto(photo: string) {
+	async replyPhoto(photo: string, caption = '') {
 		switch (this.update_type) {
+			case 'photo':
+				return await API.sendPhoto(this.bot.api.toString(), {
+					chat_id: this.update.message?.chat.id.toString() ?? '',
+					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
+					photo,
+					caption,
+				});
 			case 'message':
 				return await API.sendPhoto(this.bot.api.toString(), {
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
 					photo,
+					caption,
 				});
 			case 'inline':
 				return await API.answerInline(this.bot.api.toString(), {
