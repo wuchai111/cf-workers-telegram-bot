@@ -118,7 +118,7 @@ export default {
 				.handle(request.clone()),
 			bot2
 				.on('default', async function (context: TelegramExecutionContext) {
-					switch (bot2.update_type) {
+					switch (context.update_type) {
 						case 'message': {
 							await context.reply('https://duckduckgo.com/?q=' + encodeURIComponent(context.update.message?.text?.toString() ?? ''));
 							break;
@@ -136,7 +136,7 @@ export default {
 				.handle(request.clone()),
 			bot3
 				.on('default', async function (context: TelegramExecutionContext) {
-					switch (bot3.update_type) {
+					switch (context.update_type) {
 						case 'inline': {
 							const translated_text = await fetch(
 								'https://clients5.google.com/translate_a/t?client=at&sl=auto&tl=en&q=' +
