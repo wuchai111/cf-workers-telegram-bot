@@ -1,4 +1,5 @@
 import { SerializableData, TelegramInlineQueryResultArticle, TelegramInlineQueryResultPhoto } from './types';
+import TelegramInlineQueryResultVideo from './types/TelegramInlineQueryResultVideo';
 
 export default class API {
 	static getApiUrl(botApi: string, slug: string, data: Record<string, SerializableData>) {
@@ -22,6 +23,18 @@ export default class API {
 		return await fetch(url);
 	}
 
+	static async sendVideo(
+		botApi: string,
+		data: {
+			reply_to_message_id: number | string;
+			chat_id: number | string;
+			video: string;
+		},
+	) {
+		const url = this.getApiUrl(botApi, 'sendVideo', data);
+		return await fetch(url);
+	}
+
 	static async sendPhoto(
 		botApi: string,
 		data: {
@@ -38,7 +51,7 @@ export default class API {
 		botApi: string,
 		data: {
 			inline_query_id: number | string;
-			results: TelegramInlineQueryResultArticle[] | TelegramInlineQueryResultPhoto[];
+			results: TelegramInlineQueryResultArticle[] | TelegramInlineQueryResultPhoto[] | TelegramInlineQueryResultVideo[];
 		},
 	) {
 		const url = this.getApiUrl(botApi, 'answerInlineQuery', {
@@ -48,4 +61,3 @@ export default class API {
 		return await fetch(url);
 	}
 }
-

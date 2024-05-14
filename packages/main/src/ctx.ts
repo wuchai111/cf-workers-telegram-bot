@@ -1,6 +1,7 @@
 import API from './api';
 import TelegramBot from './telegram_bot';
 import { SerializableData, TelegramInlineQueryResultArticle, TelegramInlineQueryResultPhoto, TelegramUpdate } from './types';
+import TelegramInlineQueryResultVideo from './types/TelegramInlineQueryResultVideo';
 
 export default class TelegramExecutionContext {
 	bot: TelegramBot;
@@ -40,6 +41,26 @@ export default class TelegramExecutionContext {
 
 	getData(key: string) {
 		return this.data[key];
+	}
+
+	async replyVideo(video: string) {
+		switch (this.update_type) {
+			case 'message':
+				return await API.sendVideo(this.bot.api.toString(), {
+					chat_id: this.update.message?.chat.id.toString() ?? '',
+					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
+					video,
+				});
+			case 'inline':
+				await API.answerInline(this.bot.api.toString(), {
+					inline_query_id: this.update.inline_query?.id.toString() ?? '',
+					results: [new TelegramInlineQueryResultVideo(video)],
+				});
+				break;
+
+			default:
+				break;
+		}
 	}
 
 	async replyPhoto(photo: string) {
