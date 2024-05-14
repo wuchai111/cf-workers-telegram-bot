@@ -35,7 +35,7 @@ export default {
 					switch (context.update_type) {
 						case 'message': {
 							const prompt = context.update.message?.text?.toString() ?? '';
-							const photo = await env.AI.run('@cf/stabilityai/stable-diffusion-xl-base-1.0', { prompt });
+							const photo = await env.AI.run('@cf/lykon/dreamshaper-8-lcm', { prompt });
 							const photo_file = new File([await new Response(photo).blob()], 'photo');
 							const id = crypto.randomUUID();
 							await env.R2.put(id, photo_file);
@@ -45,7 +45,7 @@ export default {
 						}
 						case 'inline': {
 							const prompt = context.update.inline_query?.query.toString().split(' ').slice(1).join(' ') ?? '';
-							const photo = await env.AI.run('@cf/bytedance/stable-diffusion-xl-lightning', { prompt, num_steps: 5 });
+							const photo = await env.AI.run('@cf/lykon/dreamshaper-8-lcm', { prompt });
 							const photo_file = new File([await new Response(photo).blob()], 'photo');
 							const id = crypto.randomUUID();
 							await env.R2.put(id, photo_file);
