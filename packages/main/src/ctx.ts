@@ -52,11 +52,10 @@ export default class TelegramExecutionContext {
 					video,
 				});
 			case 'inline':
-				await API.answerInline(this.bot.api.toString(), {
+				return await API.answerInline(this.bot.api.toString(), {
 					inline_query_id: this.update.inline_query?.id.toString() ?? '',
 					results: [new TelegramInlineQueryResultVideo(video)],
 				});
-				break;
 
 			default:
 				break;
@@ -72,11 +71,10 @@ export default class TelegramExecutionContext {
 					photo,
 				});
 			case 'inline':
-				await API.answerInline(this.bot.api.toString(), {
+				return await API.answerInline(this.bot.api.toString(), {
 					inline_query_id: this.update.inline_query?.id.toString() ?? '',
 					results: [new TelegramInlineQueryResultPhoto(photo)],
 				});
-				break;
 
 			default:
 				break;
@@ -85,21 +83,17 @@ export default class TelegramExecutionContext {
 
 	async reply(message: string) {
 		switch (this.update_type) {
-			case 'message': {
-				await API.sendMessage(this.bot.api.toString(), {
+			case 'message':
+				return await API.sendMessage(this.bot.api.toString(), {
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
 					text: message,
 				});
-				break;
-			}
-			case 'inline': {
-				await API.answerInline(this.bot.api.toString(), {
+			case 'inline':
+				return await API.answerInline(this.bot.api.toString(), {
 					inline_query_id: this.update.inline_query?.id.toString() ?? '',
 					results: [new TelegramInlineQueryResultArticle(message)],
 				});
-				break;
-			}
 			default:
 				break;
 		}
