@@ -22,11 +22,11 @@ function wrapPromise<T>(func: promiseFunc<T>, time = 1000) {
 
 export default {
 	fetch: async (request: Request, env: Environment, ctx: ExecutionContext) => {
-		const bot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN);
-		const bot2 = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN2);
-		const bot3 = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN3);
+		const tuxrobot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN);
+		const duckduckbot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN2);
+		const translatepartybot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN3);
 		await Promise.all([
-			bot
+			tuxrobot
 				.on('photo', async function (context: TelegramExecutionContext) {
 					switch (context.update_type) {
 						case 'message': {
@@ -116,7 +116,7 @@ export default {
 					return new Response('ok');
 				})
 				.handle(request.clone()),
-			bot2
+			duckduckbot
 				.on('default', async function (context: TelegramExecutionContext) {
 					switch (context.update_type) {
 						case 'message': {
@@ -134,7 +134,7 @@ export default {
 					return new Response('ok');
 				})
 				.handle(request.clone()),
-			bot3
+			translatepartybot
 				.on('default', async function (context: TelegramExecutionContext) {
 					switch (context.update_type) {
 						case 'inline': {
