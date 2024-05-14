@@ -23,11 +23,9 @@ export interface Environment {
 	CHAT_MODEL: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type promiseFunc<T = any> = (resolve: (result: T) => void, reject: (e?: Error) => void) => any;
+type promiseFunc<T> = (resolve: (result: T) => void, reject: (e?: Error) => void) => Promise<T>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function wrapPromise<T = any>(func: promiseFunc<T>, time = 1000) {
+function wrapPromise<T>(func: promiseFunc<T>, time = 1000) {
 	return new Promise((resolve, reject) => {
 		return setTimeout(() => {
 			func(resolve, reject);
