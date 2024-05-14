@@ -109,7 +109,6 @@ export default {
 						}
 						case 'inline': {
 							const inline_messages = [
-								{ role: 'system', content: 'You are a friendly assistant' },
 								{
 									role: 'user',
 									content: context.update.inline_query?.query.toString() ?? '',
@@ -168,7 +167,6 @@ export default {
 				})
 				.handle(request.clone()),
 		]);
-
 		return new Response('ok');
 	},
 };
