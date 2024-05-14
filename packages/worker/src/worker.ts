@@ -23,8 +23,19 @@ export interface Environment {
 	CHAT_MODEL: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type promiseFunc<T = any> = (resolve: (result: T) => void, reject: (e?: Error) => void) => any;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function wrapPromise<T = any>(func: promiseFunc<T>, time = 1000) {
+	return new Promise((resolve, reject) => {
+		return setTimeout(() => {
+			func(resolve, reject);
+		}, time);
+	});
+}
+
 export default {
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	fetch: async (request: Request, env: Environment, ctx: ExecutionContext) => {
 		const bot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN);
 		const bot2 = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN2);
@@ -40,7 +51,7 @@ export default {
 							const id = crypto.randomUUID();
 							await env.R2.put(id, photo_file);
 							await context.replyPhoto(`https://r2.seanbehan.ca/${id}`);
-							setTimeout(async () => await env.R2.delete(id), 5000);
+							ctx.waitUntil(wrapPromise(async () => await env.R2.delete(id), 5000));
 							break;
 						}
 						case 'inline': {
@@ -50,7 +61,7 @@ export default {
 							const id = crypto.randomUUID();
 							await env.R2.put(id, photo_file);
 							await context.replyPhoto(`https://r2.seanbehan.ca/${id}`);
-							setTimeout(async () => await env.R2.delete(id), 5000);
+							ctx.waitUntil(wrapPromise(async () => await env.R2.delete(id), 5000));
 							break;
 						}
 
