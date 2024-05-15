@@ -29,7 +29,7 @@ export default {
 			tuxrobot
 				.on('code', async function (context: TelegramExecutionContext) {
 					switch (context.update_type) {
-						case 'message':
+						case 'message': {
 							const prompt = context.update.message?.text?.toString().split(' ').slice(1).join(' ') ?? '';
 							const messages = [{ role: 'user', content: prompt }];
 							let response: AiTextGenerationOutput;
@@ -44,6 +44,7 @@ export default {
 								await context.reply(response.response ?? '');
 							}
 							break;
+						}
 
 						default:
 							break;
