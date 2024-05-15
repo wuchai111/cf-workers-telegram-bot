@@ -33,21 +33,21 @@ export default {
 		const translatepartybot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN3);
 		await Promise.all([
 			tuxrobot
-				.on('code', async function (context: TelegramExecutionContext) {
-					switch (context.update_type) {
+				.on('code', async function (bot: TelegramExecutionContext) {
+					switch (bot.update_type) {
 						case 'message': {
-							const prompt = context.update.message?.text?.toString().split(' ').slice(1).join(' ') ?? '';
+							const prompt = bot.update.message?.text?.toString().split(' ').slice(1).join(' ') ?? '';
 							const messages = [{ role: 'user', content: prompt }];
 							let response: AiTextGenerationOutput;
 							try {
 								response = await env.AI.run('@hf/thebloke/deepseek-coder-6.7b-instruct-awq', { messages });
 							} catch (e) {
 								console.log(e);
-								await context.reply(`Error: ${e}`);
+								await bot.reply(`Error: ${e}`);
 								return new Response('ok');
 							}
 							if ('response' in response) {
-								await context.reply(await markdown_to_html(response.response ?? ''), 'HTML');
+								await bot.reply(await markdown_to_html(response.response ?? ''), 'HTML');
 							}
 							break;
 						}
@@ -57,9 +57,9 @@ export default {
 					}
 					return new Response('ok');
 				})
-				.on(':photo', async function (context: TelegramExecutionContext) {
-					const file_id = context.update.message?.photo?.pop()?.file_id;
-					const blob = await context.getFile(file_id as string);
+				.on(':photo', async function (bot: TelegramExecutionContext) {
+					const file_id = bot.update.message?.photo?.pop()?.file_id;
+					const blob = await bot.getFile(file_id as string);
 					const input = {
 						image: [...new Uint8Array(blob)],
 						prompt: 'Generate a caption for this image',
@@ -70,46 +70,46 @@ export default {
 						response = await env.AI.run('@cf/llava-hf/llava-1.5-7b-hf', input);
 					} catch (e) {
 						console.log(e);
-						await context.reply(`Error: ${e}`);
+						await bot.reply(`Error: ${e}`);
 						return new Response('ok');
 					}
-					await context.replyPhoto(file_id as string, response.description);
+					await bot.replyPhoto(file_id as string, response.description);
 					return new Response('ok');
 				})
-				.on('photo', async function (context: TelegramExecutionContext) {
-					switch (context.update_type) {
+				.on('photo', async function (bot: TelegramExecutionContext) {
+					switch (bot.update_type) {
 						case 'message': {
-							const prompt = context.update.message?.text?.toString() ?? '';
+							const prompt = bot.update.message?.text?.toString() ?? '';
 							let photo: AiTextToImageOutput;
 							try {
 								photo = await env.AI.run('@cf/lykon/dreamshaper-8-lcm', { prompt });
 							} catch (e) {
 								console.log(e);
-								await context.reply(`Error: ${e}`);
+								await bot.reply(`Error: ${e}`);
 								return new Response('ok');
 							}
 							const photo_file = new File([await new Response(photo).blob()], 'photo');
 							const id = crypto.randomUUID();
 							await env.R2.put(id, photo_file);
-							await context.replyPhoto(`https://r2.seanbehan.ca/${id}`);
-							ctx.waitUntil(wrapPromise(async () => await env.R2.delete(id), 5000));
+							await bot.replyPhoto(`https://r2.seanbehan.ca/${id}`);
+							ctx.waitUntil(wrapPromise(async () => await env.R2.delete(id), 500));
 							break;
 						}
 						case 'inline': {
-							const prompt = context.update.inline_query?.query.toString().split(' ').slice(1).join(' ') ?? '';
+							const prompt = bot.update.inline_query?.query.toString().split(' ').slice(1).join(' ') ?? '';
 							let photo: AiTextToImageOutput;
 							try {
 								photo = await env.AI.run('@cf/lykon/dreamshaper-8-lcm', { prompt });
 							} catch (e) {
 								console.log(e);
-								await context.reply(`Error: ${e}`);
+								await bot.reply(`Error: ${e}`);
 								return new Response('ok');
 							}
 							const photo_file = new File([await new Response(photo).blob()], 'photo');
 							const id = crypto.randomUUID();
 							await env.R2.put(id, photo_file);
-							await context.replyPhoto(`https://r2.seanbehan.ca/${id}`);
-							ctx.waitUntil(wrapPromise(async () => await env.R2.delete(id), 5000));
+							await bot.replyPhoto(`https://r2.seanbehan.ca/${id}`);
+							ctx.waitUntil(wrapPromise(async () => await env.R2.delete(id), 500));
 							break;
 						}
 
@@ -118,11 +118,11 @@ export default {
 					}
 					return new Response('ok');
 				})
-				.on('clear', async function (context: TelegramExecutionContext) {
-					switch (context.update_type) {
+				.on('clear', async function (bot: TelegramExecutionContext) {
+					switch (bot.update_type) {
 						case 'message':
-							await env.DB.prepare('DELETE FROM Messages WHERE userId=?').bind(context.update.message?.from.id).run();
-							await context.reply('history cleared');
+							await env.DB.prepare('DELETE FROM Messages WHERE userId=?').bind(bot.update.message?.from.id).run();
+							await bot.reply('history cleared');
 							break;
 
 						default:
@@ -130,12 +130,12 @@ export default {
 					}
 					return new Response('ok');
 				})
-				.on('default', async function (context: TelegramExecutionContext) {
-					switch (context.update_type) {
+				.on('default', async function (bot: TelegramExecutionContext) {
+					switch (bot.update_type) {
 						case 'message': {
-							const prompt = context.update.message?.text?.toString() ?? '';
+							const prompt = bot.update.message?.text?.toString() ?? '';
 							const { results } = await env.DB.prepare('SELECT * FROM Messages WHERE userId=?')
-								.bind(context.update.inline_query ? context.update.inline_query.from.id : context.update.message?.from.id)
+								.bind(bot.update.inline_query ? context.update.inline_query.from.id : context.update.message?.from.id)
 								.all();
 							const message_history = results.map((col) => ({ role: 'system', content: col.content as string }));
 							const messages = [
@@ -150,16 +150,16 @@ export default {
 								response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages, max_tokens: 150 });
 							} catch (e) {
 								console.log(e);
-								await context.reply(`Error: ${e}`);
+								await bot.reply(`Error: ${e}`);
 								return new Response('ok');
 							}
 							if ('response' in response) {
-								await context.reply(await markdown_to_html(response.response ?? ''), 'HTML');
+								await bot.reply(await markdown_to_html(response.response ?? ''), 'HTML');
 							}
 							await env.DB.prepare('INSERT INTO Messages (id, userId, content) VALUES (?, ?, ?)')
 								.bind(
 									crypto.randomUUID(),
-									context.update.inline_query ? context.update.inline_query.from.id : context.update.message?.from.id,
+									bot.update.inline_query ? context.update.inline_query.from.id : context.update.message?.from.id,
 									`'[INST] ${prompt} [/INST] \n ${response}`,
 								)
 								.run();
@@ -169,7 +169,7 @@ export default {
 							const messages = [
 								{
 									role: 'user',
-									content: context.update.inline_query?.query.toString() ?? '',
+									content: bot.update.inline_query?.query.toString() ?? '',
 								},
 							];
 							let response: AiTextGenerationOutput;
@@ -177,11 +177,11 @@ export default {
 								response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages, max_tokens: 100 });
 							} catch (e) {
 								console.log(e);
-								await context.reply(`Error: ${e}`);
+								await bot.reply(`Error: ${e}`);
 								return new Response('ok');
 							}
 							if ('response' in response) {
-								await context.reply(response.response ?? '');
+								await bot.reply(response.response ?? '');
 							}
 							break;
 						}
@@ -193,14 +193,14 @@ export default {
 				})
 				.handle(request.clone()),
 			duckduckbot
-				.on('default', async function (context: TelegramExecutionContext) {
-					switch (context.update_type) {
+				.on('default', async function (bot: TelegramExecutionContext) {
+					switch (bot.update_type) {
 						case 'message': {
-							await context.reply('https://duckduckgo.com/?q=' + encodeURIComponent(context.update.message?.text?.toString() ?? ''));
+							await bot.reply('https://duckduckgo.com/?q=' + encodeURIComponent(context.update.message?.text?.toString() ?? ''));
 							break;
 						}
 						case 'inline': {
-							await context.reply('https://duckduckgo.com/?q=' + encodeURIComponent(context.update.inline_query?.query ?? ''));
+							await bot.reply('https://duckduckgo.com/?q=' + encodeURIComponent(context.update.inline_query?.query ?? ''));
 							break;
 						}
 
@@ -211,20 +211,20 @@ export default {
 				})
 				.handle(request.clone()),
 			translatepartybot
-				.on('default', async function (context: TelegramExecutionContext) {
-					switch (context.update_type) {
+				.on('default', async function (bot: TelegramExecutionContext) {
+					switch (bot.update_type) {
 						case 'inline': {
 							const translated_text = await fetch(
 								'https://clients5.google.com/translate_a/t?client=at&sl=auto&tl=en&q=' +
-									encodeURIComponent(context.update.inline_query?.query.toString() ?? ''),
+									encodeURIComponent(bot.update.inline_query?.query.toString() ?? ''),
 							)
 								.then((r) => r.json())
 								.then((json) => (json as [string[]])[0].slice(0, -1).join(' '));
-							await context.reply(translated_text ?? '');
+							await bot.reply(translated_text ?? '');
 							break;
 						}
 						case 'message':
-							await context.reply('Use me in inline mode by typing @TranslatePartyBot and the text you want to translate.');
+							await bot.reply('Use me in inline mode by typing @TranslatePartyBot and the text you want to translate.');
 							break;
 
 						default:
