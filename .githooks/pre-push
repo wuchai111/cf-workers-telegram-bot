@@ -24,7 +24,8 @@ do
 		# Check that tests and lints run
 		npm run build && npm run lint && CI=true npm run test:main
 		if [ $? -ne 0 ]; then
-			echo "npm run lint && npm run test:main failed with exit status $?"
+			echo "pre-push hook failed with exit status $?"
+			exit 1
 		fi
 	fi
 done
