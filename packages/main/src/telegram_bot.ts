@@ -19,7 +19,7 @@ export default class TelegramBot {
 	}
 
 	on(event: string, callback: (ctx: TelegramExecutionContext) => Promise<Response>) {
-		if (event !== 'on') {
+		if (['on', 'handle'].indexOf(event) === -1) {
 			this.commands[event] = callback;
 		}
 		return this;
