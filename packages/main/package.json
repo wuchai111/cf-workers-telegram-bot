@@ -2,9 +2,9 @@
 	"name": "@codebam/cf-workers-telegram-bot",
 	"version": "7.11.0",
 	"description": "serverless telegram bot on cf workers",
-	"main": "./dist/main/src/main.js",
-	"module": "./dist/main/src/main.js",
-	"types": "./dist/main/src/types.d.ts",
+	"main": "./dist/main.js",
+	"module": "./dist/main.js",
+	"types": "./dist/types.d.ts",
 	"files": [
 		"dist",
 		"LICENSE",
