@@ -19,7 +19,9 @@ CF Workers Telegram Bot
 npm i @codebam/cf-workers-telegram-bot
 ```
 
-See `worker.ts` for an example of what a bot might look like. Just import from `@codebam/cf-workers-telegram-bot`.
+See [cwtb-consumer](https://github.com/codebam/cwtb-consumer) for an example of what a bot might look like. Just import from `@codebam/cf-workers-telegram-bot`.
+
+See [my blog post](https://seanbehan.ca/posts/cf-workers-telegram-bot) for a more in-depth guide for how to set up a bot.
 
 - `npm create cloudflare@latest`
 - `npx wrangler login`
