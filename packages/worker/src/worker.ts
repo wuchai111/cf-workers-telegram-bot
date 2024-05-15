@@ -196,11 +196,11 @@ export default {
 				.on('default', async function (bot: TelegramExecutionContext) {
 					switch (bot.update_type) {
 						case 'message': {
-							await bot.reply('https://duckduckgo.com/?q=' + encodeURIComponent(context.update.message?.text?.toString() ?? ''));
+							await bot.reply('https://duckduckgo.com/?q=' + encodeURIComponent(bot.update.message?.text?.toString() ?? ''));
 							break;
 						}
 						case 'inline': {
-							await bot.reply('https://duckduckgo.com/?q=' + encodeURIComponent(context.update.inline_query?.query ?? ''));
+							await bot.reply('https://duckduckgo.com/?q=' + encodeURIComponent(bot.update.inline_query?.query ?? ''));
 							break;
 						}
 
