@@ -160,7 +160,7 @@ export default {
 								.bind(
 									crypto.randomUUID(),
 									context.update.inline_query ? context.update.inline_query.from.id : context.update.message?.from.id,
-									'[INST] ' + prompt + ' [/INST]' + '\n' + response,
+									`'[INST] ${prompt} [/INST] \n ${response}`,
 								)
 								.run();
 							break;
