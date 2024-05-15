@@ -4,7 +4,7 @@
 	"description": "serverless telegram bot on cf workers",
 	"main": "./dist/main/src/main.js",
 	"module": "./dist/main/src/main.js",
-	"types": "./dist/main/src/types.js",
+	"types": "./dist/main/src/types.d.ts",
 	"files": [
 		"dist",
 		"LICENSE",
