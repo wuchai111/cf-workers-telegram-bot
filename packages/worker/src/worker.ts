@@ -40,6 +40,7 @@ export default {
 						response = await env.AI.run('@cf/llava-hf/llava-1.5-7b-hf', input);
 					} catch (e) {
 						console.log(e);
+						await context.reply(`Error: ${e}`);
 						return new Response('ok');
 					}
 					await context.replyPhoto(file_id as string, response.description);
@@ -54,6 +55,7 @@ export default {
 								photo = await env.AI.run('@cf/lykon/dreamshaper-8-lcm', { prompt });
 							} catch (e) {
 								console.log(e);
+								await context.reply(`Error: ${e}`);
 								return new Response('ok');
 							}
 							const photo_file = new File([await new Response(photo).blob()], 'photo');
@@ -70,6 +72,7 @@ export default {
 								photo = await env.AI.run('@cf/lykon/dreamshaper-8-lcm', { prompt });
 							} catch (e) {
 								console.log(e);
+								await context.reply(`Error: ${e}`);
 								return new Response('ok');
 							}
 							const photo_file = new File([await new Response(photo).blob()], 'photo');
@@ -114,9 +117,10 @@ export default {
 							];
 							let response: AiTextGenerationOutput;
 							try {
-								response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages });
+								response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages, max_tokens: 150 });
 							} catch (e) {
 								console.log(e);
+								await context.reply(`Error: ${e}`);
 								return new Response('ok');
 							}
 							if ('response' in response) {
@@ -143,6 +147,7 @@ export default {
 								response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages, max_tokens: 100 });
 							} catch (e) {
 								console.log(e);
+								await context.reply(`Error: ${e}`);
 								return new Response('ok');
 							}
 							if ('response' in response) {
