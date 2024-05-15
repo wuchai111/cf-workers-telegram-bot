@@ -1,3 +1,7 @@
+import TelegramBot from './telegram_bot';
+import TelegramExecutionContext from './ctx';
+import API from './api';
+import Webhook from './webhook';
 import TelegramCommand from './types/TelegramCommand';
 import Kv from './types/Kv';
 import localhost from './types/localhost';
@@ -25,7 +29,12 @@ import ChatPermissions from './types/ChatPermissions';
 import Kanye from './types/Kanye';
 import SerializableData from './types/SerializableData';
 
+export default TelegramBot;
 export {
+	TelegramBot,
+	TelegramExecutionContext,
+	API,
+	Webhook,
 	TelegramCommand,
 	Kv,
 	localhost,
