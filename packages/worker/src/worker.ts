@@ -135,7 +135,7 @@ export default {
 						case 'message': {
 							const prompt = bot.update.message?.text?.toString() ?? '';
 							const { results } = await env.DB.prepare('SELECT * FROM Messages WHERE userId=?')
-								.bind(bot.update.inline_query ? context.update.inline_query.from.id : context.update.message?.from.id)
+								.bind(bot.update.inline_query ? bot.update.inline_query.from.id : bot.update.message?.from.id)
 								.all();
 							const message_history = results.map((col) => ({ role: 'system', content: col.content as string }));
 							const messages = [
@@ -159,7 +159,7 @@ export default {
 							await env.DB.prepare('INSERT INTO Messages (id, userId, content) VALUES (?, ?, ?)')
 								.bind(
 									crypto.randomUUID(),
-									bot.update.inline_query ? context.update.inline_query.from.id : context.update.message?.from.id,
+									bot.update.inline_query ? bot.update.inline_query.from.id : bot.update.message?.from.id,
 									`'[INST] ${prompt} [/INST] \n ${response}`,
 								)
 								.run();
