@@ -215,11 +215,11 @@ export default {
 					switch (bot.update_type) {
 						case 'inline': {
 							const translated_text = await fetch(
-								'https://clients5.google.com/translate_a/t?client=at&sl=auto&tl=en&q=' +
+								'https://translate.googleapis.com/translate_a/single?sl=auto&tl=en&dt=t&dj=1&prev=input&ie=utf-8&oe=utf-8&client=gtx&q=' +
 									encodeURIComponent(bot.update.inline_query?.query.toString() ?? ''),
 							)
 								.then((r) => r.json())
-								.then((json) => (json as [string[]])[0].slice(0, -1).join(' '));
+								.then((json) => (json as { sentences: [{ trans: string; orig: string; backend: number }] }).sentences[0].trans);
 							await bot.reply(translated_text ?? '');
 							break;
 						}
