@@ -1,5 +1,5 @@
 import { TelegramUpdate } from './types';
-import TelegramExecutionContext from './ctx';
+import TelegramExecutionContext from './telegram_execution_context';
 import Webhook from './webhook';
 
 export default class TelegramBot {

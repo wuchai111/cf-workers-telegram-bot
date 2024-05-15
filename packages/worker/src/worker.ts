@@ -1,4 +1,4 @@
-import TelegramExecutionContext from '../../main/src/ctx';
+import TelegramExecutionContext from '../../main/src/telegram_execution_context';
 import TelegramBot from '../../main/src/telegram_bot';
 import { marked } from 'marked';
 

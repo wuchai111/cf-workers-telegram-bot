@@ -1,7 +1,7 @@
 import { SerializableData, TelegramInlineQueryResultArticle, TelegramInlineQueryResultPhoto } from './types';
 import TelegramInlineQueryResultVideo from './types/TelegramInlineQueryResultVideo';
 
-export default class API {
+export default class TelegramApi {
 	static getApiUrl(botApi: string, slug: string, data: Record<string, SerializableData>) {
 		const request = new URL(botApi + (slug.startsWith('/') || botApi.endsWith('/') ? '' : '/') + slug);
 		const params = new URLSearchParams();
