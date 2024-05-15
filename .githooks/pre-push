@@ -22,7 +22,7 @@ do
 		fi
 
 		# Check that tests and lints run
-		npm run lint && CI=true npm run test:main
+		npm run build && npm run lint && CI=true npm run test:main
 		if [ $? -ne 0 ]; then
 			echo "npm run lint && npm run test:main failed with exit status $?"
 		fi
