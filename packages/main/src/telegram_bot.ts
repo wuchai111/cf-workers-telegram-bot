@@ -7,7 +7,6 @@ export default class TelegramBot {
 	webhook: Webhook;
 	api: URL;
 	update: TelegramUpdate;
-	update_type: string;
 
 	commands: Record<string, (ctx: TelegramExecutionContext) => Promise<Response>> = {};
 	currentContext!: TelegramExecutionContext;
@@ -17,7 +16,6 @@ export default class TelegramBot {
 		this.webhook = new Webhook('', new Request('http://127.0.0.1'));
 		this.api = new URL('https://api.telegram.org/bot' + token);
 		this.update = new TelegramUpdate({});
-		this.update_type = '';
 	}
 
 	on(event: string, callback: (ctx: TelegramExecutionContext) => Promise<Response>) {
