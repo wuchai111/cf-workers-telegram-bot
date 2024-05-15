@@ -1,7 +1,7 @@
 import TelegramBot from './telegram_bot';
 import TelegramExecutionContext from './telegram_execution_context';
-import TelegramApi from './telegram_api';
 import Webhook from './webhook';
+import TelegramApi from './telegram_api';
 import TelegramCommand from './types/TelegramCommand';
 import Kv from './types/Kv';
 import localhost from './types/localhost';
@@ -33,8 +33,8 @@ export default TelegramBot;
 export {
 	TelegramBot,
 	TelegramExecutionContext,
-	TelegramApi,
 	Webhook,
+	TelegramApi,
 	TelegramCommand,
 	Kv,
 	localhost,
