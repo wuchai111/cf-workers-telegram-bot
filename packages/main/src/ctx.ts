@@ -95,19 +95,21 @@ export default class TelegramExecutionContext {
 		}
 	}
 
-	async reply(message: string) {
+	async reply(message: string, parse_mode = '') {
 		switch (this.update_type) {
 			case 'message':
 				return await API.sendMessage(this.bot.api.toString(), {
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
 					text: message,
+					parse_mode,
 				});
 			case 'photo':
 				return await API.sendMessage(this.bot.api.toString(), {
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
 					text: message,
+					parse_mode,
 				});
 			case 'inline':
 				return await API.answerInline(this.bot.api.toString(), {

@@ -1,5 +1,6 @@
 import TelegramExecutionContext from '../../main/src/ctx';
 import TelegramBot from '../../main/src/telegram_bot';
+import { marked } from 'marked';
 
 export interface Environment {
 	SECRET_TELEGRAM_API_TOKEN: string;
@@ -18,6 +19,11 @@ function wrapPromise<T>(func: promiseFunc<T>, time = 1000) {
 			func(resolve, reject);
 		}, time);
 	});
+}
+
+async function markdown_to_html(s: string) {
+	const parsed = await marked.parse(s);
+	return parsed.replace(/<p>/g, '').replace(/<\/p>/g, '');
 }
 
 export default {
@@ -41,7 +47,7 @@ export default {
 								return new Response('ok');
 							}
 							if ('response' in response) {
-								await context.reply(response.response ?? '');
+								await context.reply(await markdown_to_html(response.response ?? ''), 'HTML');
 							}
 							break;
 						}
@@ -148,7 +154,7 @@ export default {
 								return new Response('ok');
 							}
 							if ('response' in response) {
-								await context.reply(response.response ?? '');
+								await context.reply(await markdown_to_html(response.response ?? ''), 'HTML');
 							}
 							await env.DB.prepare('INSERT INTO Messages (id, userId, content) VALUES (?, ?, ?)')
 								.bind(

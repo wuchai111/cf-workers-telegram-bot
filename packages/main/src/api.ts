@@ -26,6 +26,7 @@ export default class API {
 			reply_to_message_id: number | string;
 			chat_id: number | string;
 			text: string;
+			parse_mode: string;
 		},
 	) {
 		const url = this.getApiUrl(botApi, 'sendMessage', data);
