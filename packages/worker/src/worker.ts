@@ -27,6 +27,29 @@ export default {
 		const translatepartybot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN3);
 		await Promise.all([
 			tuxrobot
+				.on('code', async function (context: TelegramExecutionContext) {
+					switch (context.update_type) {
+						case 'message':
+							const prompt = context.update.message?.text?.toString().split(' ').slice(1).join(' ') ?? '';
+							const messages = [{ role: 'user', content: prompt }];
+							let response: AiTextGenerationOutput;
+							try {
+								response = await env.AI.run('@hf/thebloke/deepseek-coder-6.7b-instruct-awq', { messages });
+							} catch (e) {
+								console.log(e);
+								await context.reply(`Error: ${e}`);
+								return new Response('ok');
+							}
+							if ('response' in response) {
+								await context.reply(response.response ?? '');
+							}
+							break;
+
+						default:
+							break;
+					}
+					return new Response('ok');
+				})
 				.on(':photo', async function (context: TelegramExecutionContext) {
 					const file_id = context.update.message?.photo?.pop()?.file_id;
 					const blob = await context.getFile(file_id as string);
