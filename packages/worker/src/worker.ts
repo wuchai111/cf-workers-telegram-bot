@@ -223,6 +223,9 @@ export default {
 							await context.reply(translated_text ?? '');
 							break;
 						}
+						case 'message':
+							await context.reply('Use me in inline mode by typing @TranslatePartyBot and the text you want to translate.');
+							break;
 
 						default:
 							break;
