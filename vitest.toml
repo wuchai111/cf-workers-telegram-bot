@@ -1,5 +1,5 @@
 name = "cf-workers-telegram-bot-v2"
-main = "packages/worker/dist/worker/src/worker.mjs"
+main = "packages/worker/src/worker.ts"
 
 workers_dev = true
 compatibility_date = "2023-10-24"
