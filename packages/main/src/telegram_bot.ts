@@ -1,4 +1,4 @@
-import { TelegramUpdate } from './types.js';
+import TelegramUpdate from './types/TelegramUpdate.js';
 import TelegramExecutionContext from './telegram_execution_context.js';
 import Webhook from './webhook.js';
 

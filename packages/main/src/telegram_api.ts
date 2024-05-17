@@ -1,4 +1,6 @@
-import { SerializableData, TelegramInlineQueryResultArticle, TelegramInlineQueryResultPhoto } from './types.js';
+import SerializableData from './types/SerializableData.js';
+import TelegramInlineQueryResultArticle from './types/TelegramInlineQueryResultArticle.js';
+import TelegramInlineQueryResultPhoto from './types/TelegramInlineQueryResultPhoto.js';
 import TelegramInlineQueryResultVideo from './types/TelegramInlineQueryResultVideo.js';
 
 export default class TelegramApi {

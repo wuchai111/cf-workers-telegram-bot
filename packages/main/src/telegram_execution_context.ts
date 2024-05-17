@@ -1,6 +1,9 @@
 import TelegramApi from './telegram_api.js';
 import TelegramBot from './telegram_bot.js';
-import { SerializableData, TelegramInlineQueryResultArticle, TelegramInlineQueryResultPhoto, TelegramUpdate } from './types.js';
+import SerializableData from './types/SerializableData.js';
+import TelegramInlineQueryResultArticle from './types/TelegramInlineQueryResultArticle.js';
+import TelegramInlineQueryResultPhoto from './types/TelegramInlineQueryResultPhoto.js';
+import TelegramUpdate from './types/TelegramUpdate.js';
 import TelegramInlineQueryResultVideo from './types/TelegramInlineQueryResultVideo.js';
 
 export default class TelegramExecutionContext {
