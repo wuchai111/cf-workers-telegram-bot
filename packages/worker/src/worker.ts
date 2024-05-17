@@ -1,5 +1,4 @@
-import TelegramExecutionContext from '../../main/src/telegram_execution_context';
-import TelegramBot from '../../main/src/telegram_bot';
+import TelegramBot, { TelegramExecutionContext } from '../../main/src/main';
 import { marked } from 'marked';
 
 export interface Environment {
