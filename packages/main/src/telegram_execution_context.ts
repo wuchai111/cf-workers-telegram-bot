@@ -45,16 +45,18 @@ export default class TelegramExecutionContext {
 		return this.data[key];
 	}
 
-	async replyVideo(video: string) {
+	async replyVideo(video: string, options: Record<string, SerializableData> = {}) {
 		switch (this.update_type) {
 			case 'message':
 				return await TelegramApi.sendVideo(this.bot.api.toString(), {
+					...options,
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
 					video,
 				});
 			case 'inline':
 				return await TelegramApi.answerInline(this.bot.api.toString(), {
+					...options,
 					inline_query_id: this.update.inline_query?.id.toString() ?? '',
 					results: [new TelegramInlineQueryResultVideo(video)],
 				});
@@ -68,10 +70,11 @@ export default class TelegramExecutionContext {
 		return await TelegramApi.getFile(this.bot.api.toString(), { file_id }, this.bot.token);
 	}
 
-	async replyPhoto(photo: string, caption = '') {
+	async replyPhoto(photo: string, caption = '', options: Record<string, SerializableData> = {}) {
 		switch (this.update_type) {
 			case 'photo':
 				return await TelegramApi.sendPhoto(this.bot.api.toString(), {
+					...options,
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
 					photo,
@@ -79,6 +82,7 @@ export default class TelegramExecutionContext {
 				});
 			case 'message':
 				return await TelegramApi.sendPhoto(this.bot.api.toString(), {
+					...options,
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
 					photo,
@@ -95,21 +99,23 @@ export default class TelegramExecutionContext {
 		}
 	}
 
-	async reply(message: string, parse_mode = '') {
+	async reply(message: string, parse_mode = '', options: Record<string, SerializableData> = {}) {
 		switch (this.update_type) {
 			case 'message':
 				return await TelegramApi.sendMessage(this.bot.api.toString(), {
+					...options,
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
 					text: message,
-					parse_mode,
+					parse_mode
 				});
 			case 'photo':
 				return await TelegramApi.sendMessage(this.bot.api.toString(), {
+					...options,
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
 					text: message,
-					parse_mode,
+					parse_mode
 				});
 			case 'inline':
 				return await TelegramApi.answerInline(this.bot.api.toString(), {
