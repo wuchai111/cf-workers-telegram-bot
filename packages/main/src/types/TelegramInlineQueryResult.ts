@@ -1,4 +1,4 @@
-import TelegramInlineQueryType from './TelegramInlineQueryType';
+import TelegramInlineQueryType from './TelegramInlineQueryType.js';
 
 export default class TelegramInlineQueryResult {
 	type: TelegramInlineQueryType;

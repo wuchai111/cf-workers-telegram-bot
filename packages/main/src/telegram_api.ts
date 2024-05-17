@@ -1,5 +1,5 @@
-import { SerializableData, TelegramInlineQueryResultArticle, TelegramInlineQueryResultPhoto } from './types';
-import TelegramInlineQueryResultVideo from './types/TelegramInlineQueryResultVideo';
+import { SerializableData, TelegramInlineQueryResultArticle, TelegramInlineQueryResultPhoto } from './types.js';
+import TelegramInlineQueryResultVideo from './types/TelegramInlineQueryResultVideo.js';
 
 export default class TelegramApi {
 	static getApiUrl(botApi: string, slug: string, data: Record<string, SerializableData>) {

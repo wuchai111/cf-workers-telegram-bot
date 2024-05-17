@@ -1,5 +1,5 @@
-import TelegramInlineQueryResult from './TelegramInlineQueryResult';
-import TelegramInputMessageContent from './TelegramInputMessageContent';
+import TelegramInlineQueryResult from './TelegramInlineQueryResult.js';
+import TelegramInputMessageContent from './TelegramInputMessageContent.js';
 
 export default class TelegramInlineQueryResultVideo extends TelegramInlineQueryResult {
 	video_url: string;

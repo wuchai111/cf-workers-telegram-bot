@@ -1,7 +1,7 @@
-import TelegramApi from './telegram_api';
-import TelegramBot from './telegram_bot';
-import { SerializableData, TelegramInlineQueryResultArticle, TelegramInlineQueryResultPhoto, TelegramUpdate } from './types';
-import TelegramInlineQueryResultVideo from './types/TelegramInlineQueryResultVideo';
+import TelegramApi from './telegram_api.js';
+import TelegramBot from './telegram_bot.js';
+import { SerializableData, TelegramInlineQueryResultArticle, TelegramInlineQueryResultPhoto, TelegramUpdate } from './types.js';
+import TelegramInlineQueryResultVideo from './types/TelegramInlineQueryResultVideo.js';
 
 export default class TelegramExecutionContext {
 	bot: TelegramBot;
@@ -107,7 +107,7 @@ export default class TelegramExecutionContext {
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
 					text: message,
-					parse_mode
+					parse_mode,
 				});
 			case 'photo':
 				return await TelegramApi.sendMessage(this.bot.api.toString(), {
@@ -115,7 +115,7 @@ export default class TelegramExecutionContext {
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
 					text: message,
-					parse_mode
+					parse_mode,
 				});
 			case 'inline':
 				return await TelegramApi.answerInline(this.bot.api.toString(), {

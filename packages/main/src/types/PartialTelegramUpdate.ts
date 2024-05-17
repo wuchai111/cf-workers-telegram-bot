@@ -1,5 +1,5 @@
-import TelegramInlineQuery from './TelegramInlineQuery';
-import TelegramMessage from './TelegramMessage';
+import TelegramInlineQuery from './TelegramInlineQuery.js';
+import TelegramMessage from './TelegramMessage.js';
 
 type PartialTelegramUpdate = {
 	update_id?: number;

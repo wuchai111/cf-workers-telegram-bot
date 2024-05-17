@@ -1,7 +1,7 @@
-import TelegramInlineQuery from './TelegramInlineQuery';
-import TelegramMessage from './TelegramMessage';
-import Update from './Update';
-import PartialTelegramUpdate from './PartialTelegramUpdate';
+import TelegramInlineQuery from './TelegramInlineQuery.js';
+import TelegramMessage from './TelegramMessage.js';
+import Update from './Update.js';
+import PartialTelegramUpdate from './PartialTelegramUpdate.js';
 
 export default class TelegramUpdate extends Update {
 	update_id: number;

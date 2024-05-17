@@ -1,6 +1,6 @@
-import { TelegramUpdate } from './types';
-import TelegramExecutionContext from './telegram_execution_context';
-import Webhook from './webhook';
+import { TelegramUpdate } from './types.js';
+import TelegramExecutionContext from './telegram_execution_context.js';
+import Webhook from './webhook.js';
 
 export default class TelegramBot {
 	token: string;

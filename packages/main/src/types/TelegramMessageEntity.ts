@@ -1,4 +1,4 @@
-import TelegramUser from './TelegramUser';
+import TelegramUser from './TelegramUser.js';
 
 type TelegramMessageEntity = {
 	type: string;

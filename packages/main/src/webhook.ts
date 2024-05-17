@@ -1,5 +1,3 @@
-
-
 export default class Webhook {
 	api: URL;
 	webhook: URL;

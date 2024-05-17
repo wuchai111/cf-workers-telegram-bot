@@ -1,4 +1,4 @@
-import TelegramFrom from './TelegramFrom';
+import TelegramFrom from './TelegramFrom.js';
 
 type TelegramInlineQuery = {
 	chat_type: 'sender' | 'private' | 'group' | 'supergroup' | 'channel';
