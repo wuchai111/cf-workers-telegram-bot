@@ -1,4 +1,4 @@
-#!/nix/store/dy2z01kpnxn7dn2kgfdxs4fm8xy9mb89-bash-5.2p26/bin/bash
+#!/usr/bin/env bash
 
 remote="$1"
 url="$2"
