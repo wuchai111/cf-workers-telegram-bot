@@ -23,7 +23,7 @@
 		"esbuild": "^0.21.3",
 		"esbuild-plugin-babel": "^0.2.3",
 		"esbuild-plugin-glob": "^2.2.3",
-		"eslint": "^9.2.0",
+		"eslint": "^9.3.0",
 		"eslint-config-prettier": "^9.1.0",
 		"globals": "^15.2.0",
 		"lerna": "^8.1.2",
