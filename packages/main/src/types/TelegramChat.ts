@@ -1,6 +1,6 @@
 import TelegramMessage from './TelegramMessage.js';
 
-type TelegramChat = {
+interface TelegramChat {
 	id: number;
 	type: string;
 	title?: string;
@@ -20,5 +20,5 @@ type TelegramChat = {
 	sticker_set_name?: string;
 	can_set_sticker_set?: boolean;
 	linked_chat_id?: number;
-};
+}
 export default TelegramChat;

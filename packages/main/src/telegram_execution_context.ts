@@ -10,6 +10,7 @@ export default class TelegramExecutionContext {
 	bot: TelegramBot;
 	update: TelegramUpdate;
 	update_type = '';
+	api = new TelegramApi();
 
 	private data: Record<string, SerializableData> = {};
 
@@ -39,11 +40,6 @@ export default class TelegramExecutionContext {
 		return this;
 	}
 
-	deleteData(key: string) {
-		delete this.data[key];
-		return this;
-	}
-
 	getData(key: string) {
 		return this.data[key];
 	}
@@ -51,14 +47,14 @@ export default class TelegramExecutionContext {
 	async replyVideo(video: string, options: Record<string, SerializableData> = {}) {
 		switch (this.update_type) {
 			case 'message':
-				return await TelegramApi.sendVideo(this.bot.api.toString(), {
+				return await this.api.sendVideo(this.bot.api.toString(), {
 					...options,
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
 					video,
 				});
 			case 'inline':
-				return await TelegramApi.answerInline(this.bot.api.toString(), {
+				return await this.api.answerInline(this.bot.api.toString(), {
 					...options,
 					inline_query_id: this.update.inline_query?.id.toString() ?? '',
 					results: [new TelegramInlineQueryResultVideo(video)],
@@ -70,13 +66,13 @@ export default class TelegramExecutionContext {
 	}
 
 	async getFile(file_id: string) {
-		return await TelegramApi.getFile(this.bot.api.toString(), { file_id }, this.bot.token);
+		return await this.api.getFile(this.bot.api.toString(), { file_id }, this.bot.token);
 	}
 
 	async replyPhoto(photo: string, caption = '', options: Record<string, SerializableData> = {}) {
 		switch (this.update_type) {
 			case 'photo':
-				return await TelegramApi.sendPhoto(this.bot.api.toString(), {
+				return await this.api.sendPhoto(this.bot.api.toString(), {
 					...options,
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
@@ -84,7 +80,7 @@ export default class TelegramExecutionContext {
 					caption,
 				});
 			case 'message':
-				return await TelegramApi.sendPhoto(this.bot.api.toString(), {
+				return await this.api.sendPhoto(this.bot.api.toString(), {
 					...options,
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
@@ -92,7 +88,7 @@ export default class TelegramExecutionContext {
 					caption,
 				});
 			case 'inline':
-				return await TelegramApi.answerInline(this.bot.api.toString(), {
+				return await this.api.answerInline(this.bot.api.toString(), {
 					inline_query_id: this.update.inline_query?.id.toString() ?? '',
 					results: [new TelegramInlineQueryResultPhoto(photo)],
 				});
@@ -105,7 +101,7 @@ export default class TelegramExecutionContext {
 	async reply(message: string, parse_mode = '', options: Record<string, SerializableData> = {}) {
 		switch (this.update_type) {
 			case 'message':
-				return await TelegramApi.sendMessage(this.bot.api.toString(), {
+				return await this.api.sendMessage(this.bot.api.toString(), {
 					...options,
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
@@ -113,7 +109,7 @@ export default class TelegramExecutionContext {
 					parse_mode,
 				});
 			case 'photo':
-				return await TelegramApi.sendMessage(this.bot.api.toString(), {
+				return await this.api.sendMessage(this.bot.api.toString(), {
 					...options,
 					chat_id: this.update.message?.chat.id.toString() ?? '',
 					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
@@ -121,7 +117,7 @@ export default class TelegramExecutionContext {
 					parse_mode,
 				});
 			case 'inline':
-				return await TelegramApi.answerInline(this.bot.api.toString(), {
+				return await this.api.answerInline(this.bot.api.toString(), {
 					inline_query_id: this.update.inline_query?.id.toString() ?? '',
 					results: [new TelegramInlineQueryResultArticle(message)],
 				});

@@ -1,4 +1,4 @@
-type Bored = {
+interface Bored {
 	activity: string;
 	type: string;
 	participants: number;
@@ -6,5 +6,5 @@ type Bored = {
 	link: string;
 	key: string;
 	accessibility: 0;
-};
+}
 export default Bored;

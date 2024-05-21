@@ -4,7 +4,7 @@ import TelegramInlineQueryResultPhoto from './types/TelegramInlineQueryResultPho
 import TelegramInlineQueryResultVideo from './types/TelegramInlineQueryResultVideo.js';
 
 export default class TelegramApi {
-	static getApiUrl(botApi: string, slug: string, data: Record<string, SerializableData>) {
+	getApiUrl(botApi: string, slug: string, data: Record<string, SerializableData>) {
 		const request = new URL(botApi + (slug.startsWith('/') || botApi.endsWith('/') ? '' : '/') + slug);
 		const params = new URLSearchParams();
 		for (const i in data) {
@@ -13,7 +13,7 @@ export default class TelegramApi {
 		return new Request(`${request}?${params}`);
 	}
 
-	static async getFile(botApi: string, data: { file_id: string }, token: string) {
+	async getFile(botApi: string, data: { file_id: string }, token: string) {
 		const url = this.getApiUrl(botApi, 'getFile', data);
 		const response = await fetch(url);
 		const json = (await response.json()) as { result: { file_path: string } };
@@ -22,7 +22,7 @@ export default class TelegramApi {
 		return await file_response.arrayBuffer();
 	}
 
-	static async sendMessage(
+	async sendMessage(
 		botApi: string,
 		data: {
 			reply_to_message_id: number | string;
@@ -35,7 +35,7 @@ export default class TelegramApi {
 		return await fetch(url);
 	}
 
-	static async sendVideo(
+	async sendVideo(
 		botApi: string,
 		data: {
 			reply_to_message_id: number | string;
@@ -47,7 +47,7 @@ export default class TelegramApi {
 		return await fetch(url);
 	}
 
-	static async sendPhoto(
+	async sendPhoto(
 		botApi: string,
 		data: {
 			reply_to_message_id: number | string;
@@ -60,7 +60,7 @@ export default class TelegramApi {
 		return await fetch(url);
 	}
 
-	static async answerInline(
+	async answerInline(
 		botApi: string,
 		data: {
 			inline_query_id: number | string;

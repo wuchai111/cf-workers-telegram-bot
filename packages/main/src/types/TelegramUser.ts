@@ -1,4 +1,4 @@
-type TelegramUser = {
+interface TelegramUser {
 	id: number;
 	is_bot: boolean;
 	first_name: string;
@@ -8,5 +8,5 @@ type TelegramUser = {
 	can_join_groups?: boolean;
 	can_read_all_group_messages?: boolean;
 	supports_inline_queries: boolean;
-};
+}
 export default TelegramUser;

@@ -4,7 +4,7 @@ import TelegramMessageEntity from './TelegramMessageEntity.js';
 import TelegramPhotoSize from './TelegramPhotoSize.js';
 import TelegramUser from './TelegramUser.js';
 
-type TelegramMessage = {
+interface TelegramMessage {
 	message_id: number;
 	from: TelegramFrom;
 	sender_chat?: TelegramChat;
@@ -56,5 +56,5 @@ type TelegramMessage = {
 	// invoice?: TelegramInvoice;
 	// successful_payment?: TelegramSuccessfulPayment;
 	connected_website?: string;
-};
+}
 export default TelegramMessage;

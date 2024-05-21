@@ -1,4 +1,4 @@
-type Kanye = {
+interface Kanye {
 	quote: string;
-};
+}
 export default Kanye;

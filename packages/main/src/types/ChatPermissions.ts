@@ -1,4 +1,4 @@
-type ChatPermissions = {
+interface ChatPermissions {
 	can_send_messages?: boolean;
 	can_send_audios?: boolean;
 	can_send_documents?: boolean;
@@ -13,5 +13,5 @@ type ChatPermissions = {
 	can_invite_users?: boolean;
 	can_pin_messages?: boolean;
 	can_manage_topics?: boolean;
-};
+}
 export default ChatPermissions;

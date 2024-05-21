@@ -1,4 +1,4 @@
-type Joke = {
+interface Joke {
 	error: boolean;
 	category: string;
 	type: string;
@@ -16,5 +16,5 @@ type Joke = {
 	id: number;
 	safe: boolean;
 	lang: string;
-};
+}
 export default Joke;
