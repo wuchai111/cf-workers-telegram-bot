@@ -56,7 +56,6 @@ export default class TelegramBot {
 					if (!(command in this.commands)) {
 						command = 'default';
 					}
-					console.log(command);
 					return await this.commands[command](ctx);
 				}
 				case 'GET': {
