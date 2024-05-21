@@ -15,7 +15,9 @@ type promiseFunc<T> = (resolve: (result: T) => void, reject: (e?: Error) => void
 function wrapPromise<T>(func: promiseFunc<T>, time = 1000) {
 	return new Promise((resolve, reject) => {
 		return setTimeout(() => {
-			func(resolve, reject);
+			func(resolve, reject).catch((e: unknown) => {
+				console.log(e);
+			});
 		}, time);
 	});
 }
@@ -42,7 +44,7 @@ export default {
 								response = await env.AI.run('@hf/thebloke/deepseek-coder-6.7b-instruct-awq', { messages });
 							} catch (e) {
 								console.log(e);
-								await bot.reply(`Error: ${e}`);
+								await bot.reply(`Error: ${e as string}`);
 								return new Response('ok');
 							}
 							if ('response' in response) {
@@ -57,8 +59,8 @@ export default {
 					return new Response('ok');
 				})
 				.on(':photo', async function (bot: TelegramExecutionContext) {
-					const file_id = bot.update.message?.photo?.pop()?.file_id;
-					const blob = await bot.getFile(file_id as string);
+					const file_id: string = bot.update.message?.photo?.pop()?.file_id ?? '';
+					const blob = await bot.getFile(file_id);
 					const input = {
 						image: [...new Uint8Array(blob)],
 						prompt: 'Generate a caption for this image',
@@ -69,10 +71,10 @@ export default {
 						response = await env.AI.run('@cf/llava-hf/llava-1.5-7b-hf', input);
 					} catch (e) {
 						console.log(e);
-						await bot.reply(`Error: ${e}`);
+						await bot.reply(`Error: ${e as string}`);
 						return new Response('ok');
 					}
-					await bot.replyPhoto(file_id as string, response.description);
+					await bot.replyPhoto(file_id, response.description);
 					return new Response('ok');
 				})
 				.on('photo', async function (bot: TelegramExecutionContext) {
@@ -84,14 +86,18 @@ export default {
 								photo = await env.AI.run('@cf/lykon/dreamshaper-8-lcm', { prompt });
 							} catch (e) {
 								console.log(e);
-								await bot.reply(`Error: ${e}`);
+								await bot.reply(`Error: ${e as string}`);
 								return new Response('ok');
 							}
 							const photo_file = new File([await new Response(photo).blob()], 'photo');
 							const id = crypto.randomUUID();
 							await env.R2.put(id, photo_file);
 							await bot.replyPhoto(`https://r2.seanbehan.ca/${id}`);
-							ctx.waitUntil(wrapPromise(async () => await env.R2.delete(id), 500));
+							ctx.waitUntil(
+								wrapPromise(async () => {
+									await env.R2.delete(id);
+								}, 500),
+							);
 							break;
 						}
 						case 'inline': {
@@ -101,14 +107,18 @@ export default {
 								photo = await env.AI.run('@cf/lykon/dreamshaper-8-lcm', { prompt });
 							} catch (e) {
 								console.log(e);
-								await bot.reply(`Error: ${e}`);
+								await bot.reply(`Error: ${e as string}`);
 								return new Response('ok');
 							}
 							const photo_file = new File([await new Response(photo).blob()], 'photo');
 							const id = crypto.randomUUID();
 							await env.R2.put(id, photo_file);
 							await bot.replyPhoto(`https://r2.seanbehan.ca/${id}`);
-							ctx.waitUntil(wrapPromise(async () => await env.R2.delete(id), 500));
+							ctx.waitUntil(
+								wrapPromise(async () => {
+									await env.R2.delete(id);
+								}, 500),
+							);
 							break;
 						}
 
@@ -149,19 +159,21 @@ export default {
 								response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages, max_tokens: 150 });
 							} catch (e) {
 								console.log(e);
-								await bot.reply(`Error: ${e}`);
+								await bot.reply(`Error: ${e as string}`);
 								return new Response('ok');
 							}
 							if ('response' in response) {
-								await bot.reply(await markdown_to_html(response.response ?? ''), 'HTML');
+								if (response.response) {
+									await bot.reply(await markdown_to_html(response.response ?? ''), 'HTML');
+									await env.DB.prepare('INSERT INTO Messages (id, userId, content) VALUES (?, ?, ?)')
+										.bind(
+											crypto.randomUUID(),
+											bot.update.inline_query ? bot.update.inline_query.from.id : bot.update.message?.from.id,
+											`'[INST] ${prompt} [/INST] \n ${response.response}`,
+										)
+										.run();
+								}
 							}
-							await env.DB.prepare('INSERT INTO Messages (id, userId, content) VALUES (?, ?, ?)')
-								.bind(
-									crypto.randomUUID(),
-									bot.update.inline_query ? bot.update.inline_query.from.id : bot.update.message?.from.id,
-									`'[INST] ${prompt} [/INST] \n ${response}`,
-								)
-								.run();
 							break;
 						}
 						case 'inline': {
@@ -176,7 +188,7 @@ export default {
 								response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages, max_tokens: 100 });
 							} catch (e) {
 								console.log(e);
-								await bot.reply(`Error: ${e}`);
+								await bot.reply(`Error: ${e as string}`);
 								return new Response('ok');
 							}
 							if ('response' in response) {
@@ -219,7 +231,7 @@ export default {
 							)
 								.then((r) => r.json())
 								.then((json) => (json as { sentences: [{ trans: string; orig: string; backend: number }] }).sentences[0].trans);
-							await bot.reply(translated_text ?? '');
+							await bot.reply(translated_text);
 							break;
 						}
 						case 'message':

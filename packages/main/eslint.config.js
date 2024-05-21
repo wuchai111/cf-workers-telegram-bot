@@ -5,6 +5,14 @@ import tseslint from 'typescript-eslint';
 export default [
 	{ languageOptions: { globals: globals.browser } },
 	eslint.configs.recommended,
-	...tseslint.configs.strict,
-	...tseslint.configs.stylistic,
+	...tseslint.configs.strictTypeChecked,
+	...tseslint.configs.stylisticTypeChecked,
+	{
+		languageOptions: {
+			parserOptions: {
+				project: true,
+				tsconfigRootDir: import.meta.dirname,
+			},
+		},
+	},
 ];

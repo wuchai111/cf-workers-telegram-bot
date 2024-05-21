@@ -21,7 +21,7 @@ export default class TelegramUpdate extends Update {
 	// chat_join_request: TelegramChatJoinRequest;
 	constructor(update: PartialTelegramUpdate) {
 		super();
-		this.update_id = update.update_id || 0;
+		this.update_id = update.update_id ?? 0;
 		this.message = update.message;
 		this.edited_message = update.edited_message;
 		this.channel_post = update.channel_post;

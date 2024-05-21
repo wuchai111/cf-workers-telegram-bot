@@ -28,7 +28,7 @@ export default class TelegramExecutionContext {
 	}
 
 	getText() {
-		return this.update.message?.text || this.update.inline_query?.query || '';
+		return this.update.message?.text ?? this.update.inline_query?.query ?? '';
 	}
 
 	next() {

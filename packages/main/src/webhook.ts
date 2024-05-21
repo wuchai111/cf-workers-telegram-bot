@@ -14,6 +14,6 @@ export default class Webhook {
 		params.append('max_connections', '100');
 		params.append('allowed_updates', JSON.stringify(['message', 'inline_query']));
 		params.append('drop_pending_updates', 'true');
-		return await fetch(`${url}?${params}`);
+		return await fetch(`${url.toString()}?${params.toString()}`);
 	}
 }
