@@ -16,7 +16,7 @@ export default class TelegramBot {
 	}
 
 	on(event: string, callback: (ctx: TelegramExecutionContext) => Promise<Response>) {
-		if (['on', 'handle'].includes(event)) {
+		if (!['on', 'handle'].includes(event)) {
 			this.commands[event] = callback;
 		}
 		return this;
@@ -53,10 +53,10 @@ export default class TelegramBot {
 					if (args.at(0)?.startsWith('/')) {
 						command = args.at(0)?.slice(1) ?? 'default';
 					}
-					await this.commands.any(ctx);
 					if (!(command in this.commands)) {
 						command = 'default';
 					}
+					console.log(command);
 					return await this.commands[command](ctx);
 				}
 				case 'GET': {
