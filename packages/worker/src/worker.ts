@@ -34,6 +34,17 @@ export default {
 		const translatepartybot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN3);
 		await Promise.all([
 			tuxrobot
+				.on('start', async (bot: TelegramExecutionContext) => {
+					switch (bot.update_type) {
+						case 'message':
+							await bot.reply('Send me a message to talk to llama3. Use /clear to wipe history. Use /photo to generate a photo. Use /code to generate code.');
+							break;
+
+						default:
+							break;
+					}
+					return new Response('ok');
+				})
 				.on('code', async (bot: TelegramExecutionContext) => {
 					switch (bot.update_type) {
 						case 'message': {
