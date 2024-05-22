@@ -34,7 +34,7 @@ export default {
 		const translatepartybot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN3);
 		await Promise.all([
 			tuxrobot
-				.on('code', async function (bot: TelegramExecutionContext) {
+				.on('code', async (bot: TelegramExecutionContext) => {
 					switch (bot.update_type) {
 						case 'message': {
 							const prompt = bot.update.message?.text?.toString().split(' ').slice(1).join(' ') ?? '';
@@ -58,7 +58,7 @@ export default {
 					}
 					return new Response('ok');
 				})
-				.on(':photo', async function (bot: TelegramExecutionContext) {
+				.on(':photo', async (bot: TelegramExecutionContext) => {
 					const file_id: string = bot.update.message?.photo?.pop()?.file_id ?? '';
 					const blob = await bot.getFile(file_id);
 					const input = {
@@ -77,7 +77,7 @@ export default {
 					await bot.replyPhoto(file_id, response.description);
 					return new Response('ok');
 				})
-				.on('photo', async function (bot: TelegramExecutionContext) {
+				.on('photo', async (bot: TelegramExecutionContext) => {
 					switch (bot.update_type) {
 						case 'message': {
 							const prompt = bot.update.message?.text?.toString() ?? '';
@@ -127,7 +127,7 @@ export default {
 					}
 					return new Response('ok');
 				})
-				.on('clear', async function (bot: TelegramExecutionContext) {
+				.on('clear', async (bot: TelegramExecutionContext) => {
 					switch (bot.update_type) {
 						case 'message':
 							await env.DB.prepare('DELETE FROM Messages WHERE userId=?').bind(bot.update.message?.from.id).run();
@@ -139,7 +139,7 @@ export default {
 					}
 					return new Response('ok');
 				})
-				.on('default', async function (bot: TelegramExecutionContext) {
+				.on('default', async (bot: TelegramExecutionContext) => {
 					switch (bot.update_type) {
 						case 'message': {
 							const prompt = bot.update.message?.text?.toString() ?? '';
@@ -204,7 +204,7 @@ export default {
 				})
 				.handle(request.clone()),
 			duckduckbot
-				.on('default', async function (bot: TelegramExecutionContext) {
+				.on('default', async (bot: TelegramExecutionContext) => {
 					switch (bot.update_type) {
 						case 'message': {
 							await bot.reply('https://duckduckgo.com/?q=' + encodeURIComponent(bot.update.message?.text?.toString() ?? ''));
@@ -222,12 +222,12 @@ export default {
 				})
 				.handle(request.clone()),
 			translatepartybot
-				.on('default', async function (bot: TelegramExecutionContext) {
+				.on('default', async (bot: TelegramExecutionContext) => {
 					switch (bot.update_type) {
 						case 'inline': {
 							const translated_text = await fetch(
 								'https://translate.googleapis.com/translate_a/single?sl=auto&tl=en&dt=t&dj=1&prev=input&ie=utf-8&oe=utf-8&client=gtx&q=' +
-									encodeURIComponent(bot.update.inline_query?.query.toString() ?? ''),
+								encodeURIComponent(bot.update.inline_query?.query.toString() ?? ''),
 							)
 								.then((r) => r.json())
 								.then((json) => (json as { sentences: [{ trans: string; orig: string; backend: number }] }).sentences[0].trans);
