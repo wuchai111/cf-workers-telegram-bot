@@ -22,7 +22,7 @@ export default class TelegramApi {
 			file_path = json.result.file_path;
 		} catch (e) {
 			console.log(`Error: ${e as string}`);
-			return new Response('ok');
+			return new Response('cant read file_path. is the file too large?');
 		}
 		return await fetch(`https://api.telegram.org/file/bot${token}/${file_path}`);
 	}
