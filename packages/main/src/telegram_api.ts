@@ -17,7 +17,13 @@ export default class TelegramApi {
 		const url = this.getApiUrl(botApi, 'getFile', data);
 		const response = await fetch(url);
 		const json: { result: { file_path: string } } = await response.json();
-		const file_path = json.result.file_path;
+		let file_path: string;
+		try {
+			file_path = json.result.file_path;
+		} catch (e) {
+			console.log(`Error: ${e as string}`);
+			return new Response('ok');
+		}
 		return await fetch(`https://api.telegram.org/file/bot${token}/${file_path}`);
 	}
 
