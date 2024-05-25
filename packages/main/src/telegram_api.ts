@@ -18,8 +18,7 @@ export default class TelegramApi {
 		const response = await fetch(url);
 		const json: { result: { file_path: string } } = await response.json();
 		const file_path = json.result.file_path;
-		const file_response = await fetch(`https://api.telegram.org/file/bot${token}/${file_path}`);
-		return await file_response.arrayBuffer();
+		return await fetch(`https://api.telegram.org/file/bot${token}/${file_path}`);
 	}
 
 	async sendMessage(

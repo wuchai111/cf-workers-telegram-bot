@@ -47,6 +47,10 @@ export default class TelegramBot {
 							command = ':photo';
 							break;
 						}
+						case 'document': {
+							command = ':document';
+							break;
+						}
 						default:
 							break;
 					}

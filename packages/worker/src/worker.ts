@@ -34,6 +34,14 @@ export default {
 		const translatepartybot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN3);
 		await Promise.all([
 			tuxrobot
+				.on(':document', async (bot: TelegramExecutionContext) => {
+					const file_id: string = bot.update.message?.document?.file_id ?? '';
+					const file_response = await bot.getFile(file_id);
+					const id = crypto.randomUUID().slice(0, 5);
+					await env.R2.put(id, await file_response.arrayBuffer());
+					await bot.reply(`https://r2.seanbehan.ca/${id}`);
+					return new Response('ok');
+				})
 				.on('epoch', async (bot: TelegramExecutionContext) => {
 					switch (bot.update_type) {
 						case 'message':
@@ -84,7 +92,8 @@ export default {
 				})
 				.on(':photo', async (bot: TelegramExecutionContext) => {
 					const file_id: string = bot.update.message?.photo?.pop()?.file_id ?? '';
-					const blob = await bot.getFile(file_id);
+					const file_response = await bot.getFile(file_id);
+					const blob = await file_response.arrayBuffer();
 					const input = {
 						image: [...new Uint8Array(blob)],
 						prompt: 'Generate a caption for this image',

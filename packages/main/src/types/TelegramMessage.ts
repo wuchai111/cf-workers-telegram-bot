@@ -1,4 +1,5 @@
 import TelegramChat from './TelegramChat.js';
+import { TelegramDocument } from './TelegramDocument.js';
 import TelegramFrom from './TelegramFrom.js';
 import TelegramMessageEntity from './TelegramMessageEntity.js';
 import TelegramPhotoSize from './TelegramPhotoSize.js';
@@ -27,7 +28,7 @@ interface TelegramMessage {
 	entities?: TelegramMessageEntity[];
 	// animation?: TelegramAnimation;
 	// audio?: TelegramAudio;
-	// document?: TelegramDocument;
+	document?: TelegramDocument;
 	photo?: TelegramPhotoSize[];
 	// sticker?: TelegramSticker;
 	// video?: TelegramVideo;

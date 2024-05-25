@@ -24,6 +24,8 @@ export default class TelegramExecutionContext {
 			this.update_type = 'message';
 		} else if (this.update.inline_query?.query) {
 			this.update_type = 'inline';
+		} else if (this.update.message?.document) {
+			this.update_type = 'document';
 		}
 	}
 
@@ -120,6 +122,14 @@ export default class TelegramExecutionContext {
 				return await this.api.answerInline(this.bot.api.toString(), {
 					inline_query_id: this.update.inline_query?.id.toString() ?? '',
 					results: [new TelegramInlineQueryResultArticle(message)],
+				});
+			case 'document':
+				return await this.api.sendMessage(this.bot.api.toString(), {
+					...options,
+					chat_id: this.update.message?.chat.id.toString() ?? '',
+					reply_to_message_id: this.update.message?.message_id.toString() ?? '',
+					text: message,
+					parse_mode,
 				});
 			default:
 				break;
