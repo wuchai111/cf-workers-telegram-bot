@@ -34,6 +34,17 @@ export default {
 		const translatepartybot = new TelegramBot(env.SECRET_TELEGRAM_API_TOKEN3);
 		await Promise.all([
 			tuxrobot
+				.on('epoch', async (bot: TelegramExecutionContext) => {
+					switch (bot.update_type) {
+						case 'message':
+							await bot.reply(Math.floor(Date.now() / 1000).toString());
+							break;
+
+						default:
+							break;
+					}
+					return new Response('ok');
+				})
 				.on('start', async (bot: TelegramExecutionContext) => {
 					switch (bot.update_type) {
 						case 'message':
