@@ -7,7 +7,7 @@
 	"module": "./dist/worker.mjs",
 	"type": "module",
 	"scripts": {
-		"build": "tsc --project tsconfig.json && node esbuild.config.js",
+		"build": "tsc --project tsconfig.json",
 		"lint": "eslint src",
 		"test": "vitest --config vitest.config.js"
 	},
