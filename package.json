@@ -4,11 +4,11 @@
 	"author": "codebam",
 	"license": "Apache-2.0",
 	"scripts": {
-		"build": "lerna run build",
-		"build:worker": "lerna run build --scope=worker",
-		"test": "lerna run test",
-		"test:worker": "lerna run test --scope=worker",
-		"test:main": "lerna run test --scope=@codebam/cf-workers-telegram-bot",
+		"build": "npm run build --workspace=packages",
+		"build:worker": "npm run build --workspace=packages/worker",
+		"test": "npm run test --workspace=packages",
+		"test:worker": "npm run test --workspace=packages/worker",
+		"test:main": "npm run test --workspace=packages/main",
 		"release": "lerna version minor -y",
 		"publish": "lerna publish -y from-git",
 		"lint": "lerna run lint"
