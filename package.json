@@ -4,14 +4,12 @@
 	"author": "codebam",
 	"license": "Apache-2.0",
 	"scripts": {
-		"build": "npm run build --workspace=packages",
-		"build:worker": "npm run build --workspace=packages/worker",
-		"test": "npm run test --workspace=packages",
-		"test:worker": "npm run test --workspace=packages/worker",
-		"test:main": "npm run test --workspace=packages/main",
-		"release": "lerna version minor -y",
-		"publish": "lerna publish -y from-git",
-		"lint": "lerna run lint"
+		"build": "npm run build --workspaces",
+		"build:worker": "npm run build --workspace=worker",
+		"test": "npm run test --workspaces",
+		"test:worker": "npm run test --workspace=worker",
+		"test:main": "npm run test --workspace=main",
+		"lint": "npm run lint --workspaces"
 	},
 	"workspaces": [
 		"packages/main",
