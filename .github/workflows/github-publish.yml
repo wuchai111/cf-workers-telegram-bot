@@ -27,6 +27,6 @@ jobs:
       - run: npm ci
       - run: npm run lint --workspace=packages
       - run: npm run build --workspace=packages
-      - run: npm publish --workspace=main
+      - run: npm publish --workspace=packages/main
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}

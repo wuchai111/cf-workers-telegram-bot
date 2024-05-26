@@ -5,10 +5,10 @@
 	"license": "Apache-2.0",
 	"scripts": {
 		"build": "npm run build --workspaces",
-		"build:worker": "npm run build --workspace=worker",
+		"build:worker": "npm run build --workspace=packages/worker",
 		"test": "npm run test --workspaces",
-		"test:worker": "npm run test --workspace=worker",
-		"test:main": "npm run test --workspace=main",
+		"test:worker": "npm run test --workspace=packages/worker",
+		"test:main": "npm run test --workspace=packages/main",
 		"lint": "npm run lint --workspaces"
 	},
 	"workspaces": [
