@@ -212,6 +212,7 @@ export default {
 						}
 						case 'inline': {
 							const messages = [
+								{ role: 'system', content: 'You are a friendly assistant named TuxRobot. Use lots of emojis in your responses.' },
 								{
 									role: 'user',
 									content: bot.update.inline_query?.query.toString() ?? '',
