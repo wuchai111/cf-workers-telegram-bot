@@ -3,11 +3,7 @@ import TelegramExecutionContext from './telegram_execution_context.js';
 import Webhook from './webhook.js';
 import TelegramApi from './telegram_api.js';
 import TelegramCommand from './types/TelegramCommand.js';
-import localhost from './types/localhost.js';
 import WebhookCommands from './types/WebhookCommands.js';
-import Joke from './types/Joke.js';
-import Bored from './types/Bored.js';
-import Balance from './types/Balance.js';
 import TelegramFrom from './types/TelegramFrom.js';
 import TelegramChat from './types/TelegramChat.js';
 import TelegramUser from './types/TelegramUser.js';
@@ -23,9 +19,7 @@ import TelegramInlineQueryType from './types/TelegramInlineQueryType.js';
 import TelegramInlineQueryResult from './types/TelegramInlineQueryResult.js';
 import TelegramInlineQueryResultPhoto from './types/TelegramInlineQueryResultPhoto.js';
 import TelegramInlineQueryResultArticle from './types/TelegramInlineQueryResultArticle.js';
-import DDGQueryResponse from './types/DDGQueryResponse.js';
 import ChatPermissions from './types/ChatPermissions.js';
-import Kanye from './types/Kanye.js';
 import SerializableData from './types/SerializableData.js';
 
 export default TelegramBot;
@@ -35,11 +29,7 @@ export {
 	Webhook,
 	TelegramApi,
 	TelegramCommand,
-	localhost,
 	WebhookCommands,
-	Joke,
-	Bored,
-	Balance,
 	TelegramFrom,
 	TelegramChat,
 	TelegramUser,
@@ -55,8 +45,6 @@ export {
 	TelegramInlineQueryResult,
 	TelegramInlineQueryResultPhoto,
 	TelegramInlineQueryResultArticle,
-	DDGQueryResponse,
 	ChatPermissions,
-	Kanye,
 	SerializableData,
 };
