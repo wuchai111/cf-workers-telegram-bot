@@ -5,14 +5,22 @@ import TelegramInlineQueryResultPhoto from './types/TelegramInlineQueryResultPho
 import TelegramUpdate from './types/TelegramUpdate.js';
 import TelegramInlineQueryResultVideo from './types/TelegramInlineQueryResultVideo.js';
 
+/** Class representing the context of execution */
 export default class TelegramExecutionContext {
+	/** an instance of the telegram bot */
 	bot: TelegramBot;
+	/** an instance of the telegram update */
 	update: TelegramUpdate;
+	/** string representing the type of update that was sent */
 	update_type = '';
+	/** reference to TelegramApi class */
 	api = new TelegramApi();
 
-	private data: Record<string, number | string | boolean> = {};
-
+	/**
+	 * Create a telegram execution context
+	 * @param bot - the telegram bot
+	 * @param update - the telegram update
+	 */
 	constructor(bot: TelegramBot, update: TelegramUpdate) {
 		this.bot = bot;
 		this.update = update;
@@ -28,23 +36,11 @@ export default class TelegramExecutionContext {
 		}
 	}
 
-	getText() {
-		return this.update.message?.text ?? this.update.inline_query?.query ?? '';
-	}
-
-	next() {
-		return new Response('ok');
-	}
-
-	setData(key: string, value: number | string | boolean) {
-		this.data[key] = value;
-		return this;
-	}
-
-	getData(key: string) {
-		return this.data[key];
-	}
-
+	/**
+	 * Reply to the last message with a video
+	 * @param video - string to a video on the internet or a file_id on telegram
+	 * @param options - any additional options to pass to sendVideo
+	 */
 	async replyVideo(video: string, options: Record<string, number | string | boolean> = {}) {
 		switch (this.update_type) {
 			case 'message':
@@ -66,10 +62,20 @@ export default class TelegramExecutionContext {
 		}
 	}
 
+	/**
+	 * Get File from telegram file_id
+	 * @param file_id - telegram file_id
+	 */
 	async getFile(file_id: string) {
 		return await this.api.getFile(this.bot.api.toString(), { file_id }, this.bot.token);
 	}
 
+	/**
+	 * Reply to the last message with a photo
+	 * @param photo - url or file_id to photo
+	 * @param caption - photo caption
+	 * @param options - any additional options to pass to sendPhoto
+	 */
 	async replyPhoto(photo: string, caption = '', options: Record<string, number | string | boolean> = {}) {
 		switch (this.update_type) {
 			case 'photo':
@@ -99,6 +105,12 @@ export default class TelegramExecutionContext {
 		}
 	}
 
+	/**
+	 * Reply to the last message with text
+	 * @param message - text to reply with
+	 * @param parse_mode - one of HTML, MarkdownV2, Markdown, or an empty string for ascii
+	 * @param options - any additional options to pass to sendMessage
+	 */
 	async reply(message: string, parse_mode = '', options: Record<string, number | string | boolean> = {}) {
 		switch (this.update_type) {
 			case 'message':
