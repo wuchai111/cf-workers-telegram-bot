@@ -1,10 +1,9 @@
-import SerializableData from './types/SerializableData.js';
 import TelegramInlineQueryResultArticle from './types/TelegramInlineQueryResultArticle.js';
 import TelegramInlineQueryResultPhoto from './types/TelegramInlineQueryResultPhoto.js';
 import TelegramInlineQueryResultVideo from './types/TelegramInlineQueryResultVideo.js';
 
 export default class TelegramApi {
-	getApiUrl(botApi: string, slug: string, data: Record<string, SerializableData>) {
+	getApiUrl(botApi: string, slug: string, data: Record<string, number | string | boolean>) {
 		const request = new URL(botApi + (slug.startsWith('/') || botApi.endsWith('/') ? '' : '/') + slug);
 		const params = new URLSearchParams();
 		for (const i in data) {

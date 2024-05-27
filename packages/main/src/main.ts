@@ -20,7 +20,6 @@ import TelegramInlineQueryResult from './types/TelegramInlineQueryResult.js';
 import TelegramInlineQueryResultPhoto from './types/TelegramInlineQueryResultPhoto.js';
 import TelegramInlineQueryResultArticle from './types/TelegramInlineQueryResultArticle.js';
 import ChatPermissions from './types/ChatPermissions.js';
-import SerializableData from './types/SerializableData.js';
 
 export default TelegramBot;
 export {
@@ -46,5 +45,4 @@ export {
 	TelegramInlineQueryResultPhoto,
 	TelegramInlineQueryResultArticle,
 	ChatPermissions,
-	SerializableData,
 };

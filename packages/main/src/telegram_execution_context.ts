@@ -1,6 +1,5 @@
 import TelegramApi from './telegram_api.js';
 import TelegramBot from './telegram_bot.js';
-import SerializableData from './types/SerializableData.js';
 import TelegramInlineQueryResultArticle from './types/TelegramInlineQueryResultArticle.js';
 import TelegramInlineQueryResultPhoto from './types/TelegramInlineQueryResultPhoto.js';
 import TelegramUpdate from './types/TelegramUpdate.js';
@@ -12,7 +11,7 @@ export default class TelegramExecutionContext {
 	update_type = '';
 	api = new TelegramApi();
 
-	private data: Record<string, SerializableData> = {};
+	private data: Record<string, number | string | boolean> = {};
 
 	constructor(bot: TelegramBot, update: TelegramUpdate) {
 		this.bot = bot;
@@ -37,7 +36,7 @@ export default class TelegramExecutionContext {
 		return new Response('ok');
 	}
 
-	setData(key: string, value: SerializableData) {
+	setData(key: string, value: number | string | boolean) {
 		this.data[key] = value;
 		return this;
 	}
@@ -46,7 +45,7 @@ export default class TelegramExecutionContext {
 		return this.data[key];
 	}
 
-	async replyVideo(video: string, options: Record<string, SerializableData> = {}) {
+	async replyVideo(video: string, options: Record<string, number | string | boolean> = {}) {
 		switch (this.update_type) {
 			case 'message':
 				return await this.api.sendVideo(this.bot.api.toString(), {
@@ -71,7 +70,7 @@ export default class TelegramExecutionContext {
 		return await this.api.getFile(this.bot.api.toString(), { file_id }, this.bot.token);
 	}
 
-	async replyPhoto(photo: string, caption = '', options: Record<string, SerializableData> = {}) {
+	async replyPhoto(photo: string, caption = '', options: Record<string, number | string | boolean> = {}) {
 		switch (this.update_type) {
 			case 'photo':
 				return await this.api.sendPhoto(this.bot.api.toString(), {
@@ -100,7 +99,7 @@ export default class TelegramExecutionContext {
 		}
 	}
 
-	async reply(message: string, parse_mode = '', options: Record<string, SerializableData> = {}) {
+	async reply(message: string, parse_mode = '', options: Record<string, number | string | boolean> = {}) {
 		switch (this.update_type) {
 			case 'message':
 				return await this.api.sendMessage(this.bot.api.toString(), {
