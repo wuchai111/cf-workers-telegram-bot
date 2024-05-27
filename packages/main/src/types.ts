@@ -3,7 +3,6 @@ import TelegramExecutionContext from './telegram_execution_context.js';
 import Webhook from './webhook.js';
 import TelegramApi from './telegram_api.js';
 import TelegramCommand from './types/TelegramCommand.js';
-import Kv from './types/Kv.js';
 import localhost from './types/localhost.js';
 import WebhookCommands from './types/WebhookCommands.js';
 import Joke from './types/Joke.js';
@@ -36,7 +35,6 @@ export {
 	Webhook,
 	TelegramApi,
 	TelegramCommand,
-	Kv,
 	localhost,
 	WebhookCommands,
 	Joke,
