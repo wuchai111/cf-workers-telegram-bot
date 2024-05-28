@@ -16,10 +16,10 @@
 	"devDependencies": {
 		"@babel/preset-env": "^7.24.6",
 		"@cloudflare/vitest-pool-workers": "^0.2.12",
-		"@cloudflare/workers-types": "^4.20240512.0",
+		"@cloudflare/workers-types": "^4.20240524.0",
 		"@eslint/js": "^9.3.0",
-		"@typescript-eslint/eslint-plugin": "^7.10.0",
-		"@typescript-eslint/parser": "^7.10.0",
+		"@typescript-eslint/eslint-plugin": "^7.11.0",
+		"@typescript-eslint/parser": "^7.11.0",
 		"esbuild": "^0.21.4",
 		"esbuild-plugin-babel": "^0.2.3",
 		"esbuild-plugin-glob": "^2.2.3",
@@ -28,7 +28,7 @@
 		"globals": "^15.3.0",
 		"prettier": "^3.2.5",
 		"typescript": "^5.4.5",
-		"typescript-eslint": "^7.10.0",
+		"typescript-eslint": "^7.11.0",
 		"vitest": "1.6.0"
 	}
 }
