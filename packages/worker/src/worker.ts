@@ -115,8 +115,7 @@ export default {
 								await env.R2.delete(id);
 							}, 500),
 						);
-					}
-					else {
+					} else {
 						const input = {
 							image: [...new Uint8Array(blob)],
 							prompt: 'Generate a caption for this image',
