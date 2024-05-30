@@ -94,20 +94,44 @@ export default {
 					const file_id: string = bot.update.message?.photo?.pop()?.file_id ?? '';
 					const file_response = await bot.getFile(file_id);
 					const blob = await file_response.arrayBuffer();
-					const input = {
-						image: [...new Uint8Array(blob)],
-						prompt: 'Generate a caption for this image',
-						max_tokens: 512,
-					};
-					let response: AiImageToTextOutput;
-					try {
-						response = await env.AI.run('@cf/llava-hf/llava-1.5-7b-hf', input);
-					} catch (e) {
-						console.log(e);
-						await bot.reply(`Error: ${e as string}`);
-						return new Response('ok');
+					if (bot.update.message?.caption) {
+						const inputs = {
+							prompt: bot.update.message.caption,
+							image: [...new Uint8Array(blob)],
+						};
+						let response;
+						try {
+							response = await env.AI.run('@cf/runwayml/stable-diffusion-v1-5-img2img', inputs);
+						} catch (e) {
+							console.log(e);
+							await bot.reply(`Error: ${e as string}`);
+							return new Response('ok');
+						}
+						const id = crypto.randomUUID();
+						await env.R2.put(id, response);
+						await bot.replyPhoto(`https://r2.seanbehan.ca/${id}`);
+						ctx.waitUntil(
+							wrapPromise(async () => {
+								await env.R2.delete(id);
+							}, 500),
+						);
 					}
-					await bot.replyPhoto(file_id, response.description);
+					else {
+						const input = {
+							image: [...new Uint8Array(blob)],
+							prompt: 'Generate a caption for this image',
+							max_tokens: 512,
+						};
+						let response: AiImageToTextOutput;
+						try {
+							response = await env.AI.run('@cf/llava-hf/llava-1.5-7b-hf', input);
+						} catch (e) {
+							console.log(e);
+							await bot.reply(`Error: ${e as string}`);
+							return new Response('ok');
+						}
+						await bot.replyPhoto(file_id, response.description);
+					}
 					return new Response('ok');
 				})
 				.on('photo', async (bot: TelegramExecutionContext) => {
