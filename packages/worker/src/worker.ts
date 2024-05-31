@@ -12,6 +12,10 @@ export interface Environment {
 
 type promiseFunc<T> = (resolve: (result: T) => void, reject: (e?: Error) => void) => Promise<T>;
 
+/**
+ * Wrap setTimeout in a Promise
+ * @param func - function to call after setTimeout
+ */
 function wrapPromise<T>(func: promiseFunc<T>, time = 1000) {
 	return new Promise((resolve, reject) => {
 		return setTimeout(() => {
@@ -22,6 +26,10 @@ function wrapPromise<T>(func: promiseFunc<T>, time = 1000) {
 	});
 }
 
+/**
+ * Convert markdown to html that Telegram can parse
+ * @param s - the string containing markdown
+ */
 async function markdown_to_html(s: string) {
 	const parsed = await marked.parse(s);
 	return parsed.replace(/<p>/g, '').replace(/<\/p>/g, '');
