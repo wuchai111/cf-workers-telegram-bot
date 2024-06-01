@@ -15,6 +15,7 @@
           nodePackages_latest.typescript-language-server
           nodePackages_latest.prettier
           vscode-langservers-extracted
+          nodePackages_latest.bash-language-server
         ];
       };
     }
