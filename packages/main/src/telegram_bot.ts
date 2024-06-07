@@ -50,7 +50,7 @@ export default class TelegramBot {
 				case 'POST': {
 					this.update = await request.json();
 					console.log(this.update);
-					let command = 'default';
+					let command = ':message';
 					let args: string[] = [];
 					const ctx = new TelegramExecutionContext(this, this.update);
 					this.currentContext = ctx;
@@ -75,10 +75,10 @@ export default class TelegramBot {
 							break;
 					}
 					if (args.at(0)?.startsWith('/')) {
-						command = args.at(0)?.slice(1) ?? 'default';
+						command = args.at(0)?.slice(1) ?? ':message';
 					}
 					if (!(command in this.commands)) {
-						command = 'default';
+						command = ':message';
 					}
 					return await this.commands[command](ctx);
 				}

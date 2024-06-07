@@ -203,7 +203,7 @@ export default {
 					}
 					return new Response('ok');
 				})
-				.on('default', async (bot: TelegramExecutionContext) => {
+				.on(':message', async (bot: TelegramExecutionContext) => {
 					switch (bot.update_type) {
 						case 'message': {
 							const prompt = bot.update.message?.text?.toString() ?? '';
