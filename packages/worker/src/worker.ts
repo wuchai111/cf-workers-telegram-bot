@@ -270,7 +270,7 @@ export default {
 				})
 				.handle(request.clone()),
 			duckduckbot
-				.on('default', async (bot: TelegramExecutionContext) => {
+				.on(':message', async (bot: TelegramExecutionContext) => {
 					switch (bot.update_type) {
 						case 'message': {
 							await bot.reply('https://duckduckgo.com/?q=' + encodeURIComponent(bot.update.message?.text?.toString() ?? ''));
@@ -288,7 +288,7 @@ export default {
 				})
 				.handle(request.clone()),
 			translatepartybot
-				.on('default', async (bot: TelegramExecutionContext) => {
+				.on(':message', async (bot: TelegramExecutionContext) => {
 					switch (bot.update_type) {
 						case 'inline': {
 							const translated_text = await fetch(
