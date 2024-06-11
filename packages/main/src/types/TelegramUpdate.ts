@@ -1,9 +1,8 @@
 import TelegramInlineQuery from './TelegramInlineQuery.js';
 import TelegramMessage from './TelegramMessage.js';
-import Update from './Update.js';
 import PartialTelegramUpdate from './PartialTelegramUpdate.js';
 
-export default class TelegramUpdate extends Update {
+export default class TelegramUpdate {
 	update_id: number;
 	message?: TelegramMessage;
 	edited_message?: TelegramMessage;
@@ -20,7 +19,6 @@ export default class TelegramUpdate extends Update {
 	// chat_member?: TelegramChatMemberUpdated;
 	// chat_join_request: TelegramChatJoinRequest;
 	constructor(update: PartialTelegramUpdate) {
-		super();
 		this.update_id = update.update_id ?? 0;
 		this.message = update.message;
 		this.edited_message = update.edited_message;
