@@ -81,6 +81,7 @@ export default {
 							const messages = [{ role: 'user', content: prompt }];
 							let response: AiTextGenerationOutput;
 							try {
+								// @ts-expect-error broken bindings
 								response = await env.AI.run('@hf/thebloke/deepseek-coder-6.7b-instruct-awq', { messages });
 							} catch (e) {
 								console.log(e);
@@ -221,6 +222,7 @@ export default {
 							];
 							let response: AiTextGenerationOutput;
 							try {
+								// @ts-expect-error broken bindings
 								response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages, max_tokens: 150 });
 							} catch (e) {
 								console.log(e);
@@ -251,6 +253,7 @@ export default {
 							];
 							let response: AiTextGenerationOutput;
 							try {
+								// @ts-expect-error broken bindings
 								response = await env.AI.run('@cf/meta/llama-3-8b-instruct', { messages, max_tokens: 100 });
 							} catch (e) {
 								console.log(e);
