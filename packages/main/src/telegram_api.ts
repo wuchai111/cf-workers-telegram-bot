@@ -47,13 +47,15 @@ export default class TelegramApi {
 	async sendMessage(
 		botApi: string,
 		data: {
-			reply_to_message_id: number | string;
+			reply_to_message_id?: number | string;
 			chat_id: number | string;
 			text: string;
 			parse_mode: string;
+			business_connection_id?: number | string;
 		},
 	) {
 		const url = this.getApiUrl(botApi, 'sendMessage', data);
+		console.log(url.url);
 		return await fetch(url);
 	}
 
@@ -110,7 +112,6 @@ export default class TelegramApi {
 		});
 		return await fetch(url);
 	}
-
 
 	/**
 	 * Send an callback response to a given botApi

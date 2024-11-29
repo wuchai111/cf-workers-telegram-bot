@@ -35,6 +35,8 @@ export default class TelegramExecutionContext {
 			this.update_type = 'document';
 		} else if (this.update.callback_query?.id) {
 			this.update_type = 'callback';
+		} else if (this.update.business_message?.text) {
+			this.update_type = 'business_message';
 		}
 	}
 
@@ -125,10 +127,9 @@ export default class TelegramExecutionContext {
 				});
 			case 'business_message':
 				return await this.api.sendMessage(this.bot.api.toString(), {
-					...options,
 					chat_id: this.update.business_message?.chat.id.toString() ?? '',
-					reply_to_message_id: this.update.business_message?.message_id.toString() ?? '',
 					text: message,
+					business_connection_id: this.update.business_message?.business_connection_id.toString(),
 					parse_mode,
 				});
 			case 'photo':
