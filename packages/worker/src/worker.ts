@@ -278,7 +278,7 @@ export default {
 								.all();
 							const message_history = results.map((col) => ({ role: 'system', content: col.content as string }));
 							const messages = [
-								{ role: 'system', content: 'You are a friendly assistant named Sean. Use lots of emojis in your responses.' },
+								{ role: 'system', content: 'You are a friendly assistant named Sean.' },
 								...message_history,
 								{
 									role: 'user',
