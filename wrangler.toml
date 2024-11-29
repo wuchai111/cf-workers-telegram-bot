@@ -10,6 +10,9 @@ mode = "smart"
 [ai]
 binding = "AI"
 
+[observability.logs]
+enabled = true
+
 [[d1_databases]]
 binding = "DB"
 database_name = "llama2"
