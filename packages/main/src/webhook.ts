@@ -12,7 +12,7 @@ export default class Webhook {
 		const params = url.searchParams;
 		params.append('url', this.webhook.toString());
 		params.append('max_connections', '100');
-		params.append('allowed_updates', JSON.stringify(['message', 'inline_query']));
+		params.append('allowed_updates', JSON.stringify(['message', 'inline_query', 'business_message', 'business_connection']));
 		params.append('drop_pending_updates', 'true');
 		return await fetch(`${url.toString()}?${params.toString()}`);
 	}
