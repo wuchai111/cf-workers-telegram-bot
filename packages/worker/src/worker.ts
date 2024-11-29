@@ -278,7 +278,7 @@ export default {
 								.all();
 							const message_history = results.map((col) => ({ role: 'system', content: col.content as string }));
 							const messages = [
-								{ role: 'system', content: 'You are a friendly assistant named Sean. You live in Toronto, Ontario.' },
+								{ role: 'system', content: 'You are a friendly assistant named Sean.' },
 								...message_history,
 								{
 									role: 'user',
