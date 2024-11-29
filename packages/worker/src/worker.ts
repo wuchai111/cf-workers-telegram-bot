@@ -32,7 +32,11 @@ function wrapPromise<T>(func: promiseFunc<T>, time = 1000) {
  */
 async function markdown_to_html(s: string) {
 	const parsed = await marked.parse(s);
-	return parsed.replace(/<p>/g, '').replace(/<\/p>/g, '');
+	return parsed
+		.replace(/<p>/g, '')
+		.replace(/<\/p>/g, '')
+		.replace(/<ol>/g, '')
+		.replace(/<\/ol>/g, '');
 }
 
 export default {
