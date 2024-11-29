@@ -284,47 +284,49 @@ export default {
 						case 'business_message': {
 							await bot.sendTyping();
 							const prompt = bot.update.business_message?.text?.toString() ?? '';
-							const { results } = await env.DB.prepare('SELECT * FROM Messages WHERE userId=?')
-								.bind(
-									bot.update.inline_query
-										? bot.update.inline_query.from.id
-										: bot.update.business_message
-											? bot.update.business_message.from.id
-											: bot.update.message?.from.id,
-								)
-								.all();
-							const message_history = results.map((col) => ({ role: 'system', content: col.content as string }));
-							const messages = [
-								{ role: 'system', content: 'You are a friendly assistant named Sean.' },
-								...message_history,
-								{
-									role: 'user',
-									content: prompt,
-								},
-							];
-							let response: AiTextGenerationOutput;
-							try {
-								// @ts-expect-error broken bindings
-								response = await env.AI.run('@cf/meta/llama-3.1-70b-instruct', { messages });
-							} catch (e) {
-								console.log(e);
-								await bot.reply(`Error: ${e as string}`);
-								return new Response('ok');
-							}
-							if ('response' in response) {
-								if (response.response) {
-									await bot.reply(await markdown_to_html(response.response ?? ''), 'HTML');
-									await env.DB.prepare('INSERT INTO Messages (id, userId, content) VALUES (?, ?, ?)')
-										.bind(
-											crypto.randomUUID(),
-											bot.update.inline_query
-												? bot.update.inline_query.from.id
-												: bot.update.business_message
-													? bot.update.business_message.from.id
-													: bot.update.message?.from.id,
-											`'[INST] ${prompt} [/INST] \n ${response.response}`,
-										)
-										.run();
+							if (bot.update.business_message?.from.id !== 69148517) {
+								const { results } = await env.DB.prepare('SELECT * FROM Messages WHERE userId=?')
+									.bind(
+										bot.update.inline_query
+											? bot.update.inline_query.from.id
+											: bot.update.business_message
+												? bot.update.business_message.from.id
+												: bot.update.message?.from.id,
+									)
+									.all();
+								const message_history = results.map((col) => ({ role: 'system', content: col.content as string }));
+								const messages = [
+									{ role: 'system', content: 'You are a friendly assistant named Sean.' },
+									...message_history,
+									{
+										role: 'user',
+										content: prompt,
+									},
+								];
+								let response: AiTextGenerationOutput;
+								try {
+									// @ts-expect-error broken bindings
+									response = await env.AI.run('@cf/meta/llama-3.1-70b-instruct', { messages });
+								} catch (e) {
+									console.log(e);
+									await bot.reply(`Error: ${e as string}`);
+									return new Response('ok');
+								}
+								if ('response' in response) {
+									if (response.response) {
+										await bot.reply(await markdown_to_html(response.response ?? ''), 'HTML');
+										await env.DB.prepare('INSERT INTO Messages (id, userId, content) VALUES (?, ?, ?)')
+											.bind(
+												crypto.randomUUID(),
+												bot.update.inline_query
+													? bot.update.inline_query.from.id
+													: bot.update.business_message
+														? bot.update.business_message.from.id
+														: bot.update.message?.from.id,
+												`'[INST] ${prompt} [/INST] \n ${response.response}`,
+											)
+											.run();
+									}
 								}
 							}
 							break;
