@@ -40,7 +40,13 @@ async function markdown_to_html(s: string) {
 		.replace(/<ul>/g, '')
 		.replace(/<\/ul>/g, '')
 		.replace(/<li>/g, '')
-		.replace(/<\/li>/g, '');
+		.replace(/<\/li>/g, '')
+		.replace(/<h1>/g, '')
+		.replace(/<\/h1>/g, '')
+		.replace(/<h2>/g, '')
+		.replace(/<\/h2>/g, '')
+		.replace(/<h3>/g, '')
+		.replace(/<\/h3>/g, '');
 }
 
 export default {
