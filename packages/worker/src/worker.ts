@@ -81,6 +81,7 @@ export default {
 				.on('code', async (bot: TelegramExecutionContext) => {
 					switch (bot.update_type) {
 						case 'message': {
+							await bot.sendTyping();
 							const prompt = bot.update.message?.text?.toString().split(' ').slice(1).join(' ') ?? '';
 							const messages = [{ role: 'user', content: prompt }];
 							let response: AiTextGenerationOutput;
@@ -211,6 +212,7 @@ export default {
 				.on(':message', async (bot: TelegramExecutionContext) => {
 					switch (bot.update_type) {
 						case 'message': {
+							await bot.sendTyping();
 							const prompt = bot.update.message?.text?.toString() ?? '';
 							const { results } = await env.DB.prepare('SELECT * FROM Messages WHERE userId=?')
 								.bind(bot.update.inline_query ? bot.update.inline_query.from.id : bot.update.message?.from.id)
@@ -270,6 +272,7 @@ export default {
 							break;
 						}
 						case 'business_message': {
+							await bot.sendTyping();
 							const prompt = bot.update.business_message?.text?.toString() ?? '';
 							const { results } = await env.DB.prepare('SELECT * FROM Messages WHERE userId=?')
 								.bind(

@@ -109,6 +109,24 @@ export default class TelegramExecutionContext {
 		}
 	}
 
+	async sendTyping() {
+		switch (this.update_type) {
+			case 'message':
+				return await this.api.sendChatAction(this.bot.api.toString(), {
+					chat_id: this.update.message?.chat.id.toString() ?? '',
+					action: 'typing',
+				});
+			case 'business_message':
+				return await this.api.sendChatAction(this.bot.api.toString(), {
+					business_connection_id: this.update.business_message?.business_connection_id.toString(),
+					chat_id: this.update.business_message?.chat.id.toString() ?? '',
+					action: 'typing',
+				});
+			default:
+				break;
+		}
+	}
+
 	/**
 	 * Reply to the last message with text
 	 * @param message - text to reply with
@@ -118,10 +136,6 @@ export default class TelegramExecutionContext {
 	async reply(message: string, parse_mode = '', options: Record<string, number | string | boolean> = {}) {
 		switch (this.update_type) {
 			case 'message':
-				await this.api.sendChatAction(this.bot.api.toString(), {
-					chat_id: this.update.message?.chat.id.toString() ?? '',
-					action: 'typing',
-				});
 				return await this.api.sendMessage(this.bot.api.toString(), {
 					...options,
 					chat_id: this.update.message?.chat.id.toString() ?? '',
@@ -130,11 +144,6 @@ export default class TelegramExecutionContext {
 					parse_mode,
 				});
 			case 'business_message':
-				await this.api.sendChatAction(this.bot.api.toString(), {
-					business_connection_id: this.update.business_message?.business_connection_id.toString(),
-					chat_id: this.update.business_message?.chat.id.toString() ?? '',
-					action: 'typing',
-				});
 				return await this.api.sendMessage(this.bot.api.toString(), {
 					chat_id: this.update.business_message?.chat.id.toString() ?? '',
 					text: message,
