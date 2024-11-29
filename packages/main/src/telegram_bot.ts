@@ -59,6 +59,10 @@ export default class TelegramBot {
 							args = this.update.message?.text?.split(' ') ?? [];
 							break;
 						}
+						case 'business_message': {
+							args = this.update.message?.text?.split(' ') ?? [];
+							break;
+						}
 						case 'inline': {
 							args = this.update.inline_query?.query.split(' ') ?? [];
 							break;
