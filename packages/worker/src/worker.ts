@@ -265,7 +265,43 @@ export default {
 							}
 							break;
 						}
-
+						case 'business_message': {
+							const prompt = bot.update.business_message?.text?.toString() ?? '';
+							const { results } = await env.DB.prepare('SELECT * FROM Messages WHERE userId=?')
+								.bind(bot.update.inline_query ? bot.update.inline_query.from.id : bot.update.message?.from.id)
+								.all();
+							const message_history = results.map((col) => ({ role: 'system', content: col.content as string }));
+							const messages = [
+								{ role: 'system', content: 'You are a friendly assistant named TuxRobot. Use lots of emojis in your responses.' },
+								...message_history,
+								{
+									role: 'user',
+									content: prompt,
+								},
+							];
+							let response: AiTextGenerationOutput;
+							try {
+								// @ts-expect-error broken bindings
+								response = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', { messages, max_tokens: 150 });
+							} catch (e) {
+								console.log(e);
+								await bot.reply(`Error: ${e as string}`);
+								return new Response('ok');
+							}
+							if ('response' in response) {
+								if (response.response) {
+									await bot.reply(await markdown_to_html(response.response ?? ''), 'HTML');
+									await env.DB.prepare('INSERT INTO Messages (id, userId, content) VALUES (?, ?, ?)')
+										.bind(
+											crypto.randomUUID(),
+											bot.update.inline_query ? bot.update.inline_query.from.id : bot.update.message?.from.id,
+											`'[INST] ${prompt} [/INST] \n ${response.response}`,
+										)
+										.run();
+								}
+							}
+							break;
+						}
 						default:
 							break;
 					}
