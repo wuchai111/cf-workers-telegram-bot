@@ -227,7 +227,7 @@ export default {
 							let response: AiTextGenerationOutput;
 							try {
 								// @ts-expect-error broken bindings
-								response = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', { messages, max_tokens: 150 });
+								response = await env.AI.run('@cf/meta/llama-3.1-70b-instruct', { messages, max_tokens: 150 });
 							} catch (e) {
 								console.log(e);
 								await bot.reply(`Error: ${e as string}`);
@@ -258,7 +258,7 @@ export default {
 							let response: AiTextGenerationOutput;
 							try {
 								// @ts-expect-error broken bindings
-								response = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', { messages, max_tokens: 100 });
+								response = await env.AI.run('@cf/meta/llama-3.1-70b-instruct', { messages, max_tokens: 100 });
 							} catch (e) {
 								console.log(e);
 								await bot.reply(`Error: ${e as string}`);
@@ -292,7 +292,7 @@ export default {
 							let response: AiTextGenerationOutput;
 							try {
 								// @ts-expect-error broken bindings
-								response = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', { messages, max_tokens: 150 });
+								response = await env.AI.run('@cf/meta/llama-3.1-70b-instruct', { messages, max_tokens: 150 });
 							} catch (e) {
 								console.log(e);
 								await bot.reply(`Error: ${e as string}`);
