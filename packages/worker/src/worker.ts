@@ -38,7 +38,9 @@ async function markdown_to_html(s: string) {
 		.replace(/<ol>/g, '')
 		.replace(/<\/ol>/g, '')
 		.replace(/<ul>/g, '')
-		.replace(/<\/ul>/g, '');
+		.replace(/<\/ul>/g, '')
+		.replace(/<li>/g, '')
+		.replace(/<\/li>/g, '');
 }
 
 export default {
