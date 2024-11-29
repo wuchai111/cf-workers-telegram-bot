@@ -106,7 +106,7 @@ export default {
 					if (bot.update.message?.caption) {
 						const inputs = {
 							prompt: bot.update.message.caption,
-							image: [...new Uint8Array(blob)],
+							image: [...new Uint8Array(blob as ArrayBuffer)],
 						};
 						let response;
 						try {
@@ -126,7 +126,7 @@ export default {
 						);
 					} else {
 						const input = {
-							image: [...new Uint8Array(blob)],
+							image: [...new Uint8Array(blob as ArrayBuffer)],
 							prompt: 'Generate a caption for this image',
 							max_tokens: 512,
 						};

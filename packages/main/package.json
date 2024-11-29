@@ -31,16 +31,16 @@
 		"url": "https://github.com/codebam/cf-workers-telegram-bot.git"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20241112.0",
+		"@cloudflare/workers-types": "^4.20241127.0",
 		"@eslint/js": "^9.15.0",
-		"@typescript-eslint/eslint-plugin": "^8.15.0",
-		"@typescript-eslint/parser": "^8.15.0",
+		"@typescript-eslint/eslint-plugin": "^8.16.0",
+		"@typescript-eslint/parser": "^8.16.0",
 		"eslint": "^9.15.0",
 		"eslint-config-prettier": "^9.1.0",
 		"globals": "^15.12.0",
-		"prettier": "^3.3.3",
+		"prettier": "^3.4.1",
 		"typescript": "^5.7.2",
-		"typescript-eslint": "^8.15.0",
-		"vitest": "^2.1.5"
+		"typescript-eslint": "^8.16.0",
+		"vitest": "^2.1.6"
 	}
 }
