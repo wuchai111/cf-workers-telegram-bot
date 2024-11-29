@@ -36,6 +36,7 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          wranglerVersion: "3.91.0"
           preCommands: |
             # wrangler kv:namespace create KV_GET_SET
             # wrangler kv:namespace create KV_UID_DATA
