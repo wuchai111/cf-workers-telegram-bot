@@ -19,6 +19,12 @@ export default class TelegramApi {
 		return new Request(`${request.toString()}?${params.toString()}`);
 	}
 
+	async sendChatAction(botApi: string, data: { business_connection_id?: string; chat_id: number | string; action: string }) {
+		const url = this.getApiUrl(botApi, 'sendChatAction', data);
+		const response = await fetch(url);
+		return response;
+	}
+
 	/**
 	 * Get a file with a given file_id
 	 * @param botApi - full URL to the telegram API without slug
