@@ -123,6 +123,14 @@ export default class TelegramExecutionContext {
 					text: message,
 					parse_mode,
 				});
+			case 'business_message':
+				return await this.api.sendMessage(this.bot.api.toString(), {
+					...options,
+					chat_id: this.update.business_message?.chat.id.toString() ?? '',
+					reply_to_message_id: this.update.business_message?.message_id.toString() ?? '',
+					text: message,
+					parse_mode,
+				});
 			case 'photo':
 				return await this.api.sendMessage(this.bot.api.toString(), {
 					...options,
