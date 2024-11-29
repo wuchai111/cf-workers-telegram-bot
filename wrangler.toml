@@ -2,7 +2,7 @@ name = "cf-workers-telegram-bot-v2"
 main = "packages/worker/src/worker.ts"
 
 workers_dev = true
-compatibility_date = "2024-05-13"
+compatibility_date = "2024-11-11"
 
 [ai]
 binding = "AI"
