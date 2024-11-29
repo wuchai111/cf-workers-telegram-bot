@@ -4,9 +4,6 @@ main = "packages/worker/src/worker.ts"
 workers_dev = true
 compatibility_date = "2024-05-13"
 
-[placement]
-mode = "smart"
-
 [ai]
 binding = "AI"
 
