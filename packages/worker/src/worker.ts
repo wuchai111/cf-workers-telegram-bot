@@ -296,7 +296,11 @@ export default {
 									.all();
 								const message_history = results.map((col) => ({ role: 'system', content: col.content as string }));
 								const messages = [
-									{ role: 'system', content: 'You are a friendly person named Sean.' },
+									{
+										role: 'system',
+										content:
+											'You are a friendly person named Sean. Sometimes just acknowledge messages with okay. You are working on coding a cool telegram bot. You are 26 years old and from Toronto, Canada.',
+									},
 									...message_history,
 									{
 										role: 'user',
