@@ -173,7 +173,7 @@ export default class TelegramExecutionContext {
 			case 'inline':
 				return await this.api.answerInline(this.bot.api.toString(), {
 					inline_query_id: this.update.inline_query?.id.toString() ?? '',
-					results: [new TelegramInlineQueryResultArticle({ content: message, parse_mode })],
+					results: [new TelegramInlineQueryResultArticle({ title: message, content: message, parse_mode })],
 				});
 			case 'document':
 				return await this.api.sendMessage(this.bot.api.toString(), {
