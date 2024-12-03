@@ -277,7 +277,7 @@ export default {
 								return new Response('ok');
 							}
 							if ('response' in response) {
-								await bot.reply(response.response ?? '');
+								await bot.replyInline(response.response ?? '', await markdown_to_html(response.response ?? ''), 'HTML');
 							}
 							break;
 						}

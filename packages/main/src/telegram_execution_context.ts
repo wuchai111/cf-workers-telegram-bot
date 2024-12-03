@@ -127,6 +127,18 @@ export default class TelegramExecutionContext {
 		}
 	}
 
+	async replyInline(title: string, message: string, parse_mode = '') {
+		switch (this.update_type) {
+			case 'inline':
+				return await this.api.answerInline(this.bot.api.toString(), {
+					inline_query_id: this.update.inline_query?.id.toString() ?? '',
+					results: [new TelegramInlineQueryResultArticle({ content: message, title, parse_mode })],
+				});
+			default:
+				break;
+		}
+	}
+
 	/**
 	 * Reply to the last message with text
 	 * @param message - text to reply with
@@ -161,7 +173,7 @@ export default class TelegramExecutionContext {
 			case 'inline':
 				return await this.api.answerInline(this.bot.api.toString(), {
 					inline_query_id: this.update.inline_query?.id.toString() ?? '',
-					results: [new TelegramInlineQueryResultArticle(message)],
+					results: [new TelegramInlineQueryResultArticle({ content: message, parse_mode })],
 				});
 			case 'document':
 				return await this.api.sendMessage(this.bot.api.toString(), {
