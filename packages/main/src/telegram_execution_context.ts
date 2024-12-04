@@ -35,7 +35,7 @@ export default class TelegramExecutionContext {
 			this.update_type = 'document';
 		} else if (this.update.callback_query?.id) {
 			this.update_type = 'callback';
-		} else if (this.update.business_message?.text) {
+		} else if (this.update.business_message) {
 			this.update_type = 'business_message';
 		}
 	}

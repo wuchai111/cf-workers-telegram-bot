@@ -147,13 +147,14 @@ export default {
 						};
 						let response: AiImageToTextOutput;
 						try {
-							response = await env.AI.run('@cf/llava-hf/llava-1.5-7b-hf', input);
+							// @ts-expect-error broken bindings
+							response = await env.AI.run('@cf/meta/llama-3.2-11b-vision-instruct', input);
 						} catch (e) {
 							console.log(e);
 							await bot.reply(`Error: ${e as string}`);
 							return new Response('ok');
 						}
-						await bot.replyPhoto(file_id, response.description);
+						await bot.replyPhoto(file_id, (response as unknown as { response: string }).response);
 					}
 					return new Response('ok');
 				})
@@ -277,8 +278,11 @@ export default {
 						}
 						case 'business_message': {
 							await bot.sendTyping();
-							const prompt = bot.update.business_message?.text?.toString() ?? '';
-							if (bot.update.business_message?.from.id !== 69148517) {
+							const file_id: string = bot.update.business_message?.photo?.pop()?.file_id ?? '';
+							const file_response = await bot.getFile(file_id);
+							const blob = await file_response.arrayBuffer();
+							const prompt = bot.update.business_message?.text?.toString() ?? bot.update.business_message?.caption ?? '';
+							if (bot.update.business_message?.from.id !== 69148518) {
 								const { results } = await env.DB.prepare('SELECT * FROM Messages WHERE userId=?')
 									.bind(bot.update.business_message?.from.id)
 									.all();
@@ -297,8 +301,14 @@ export default {
 								];
 								let response: AiTextGenerationOutput;
 								try {
-									// @ts-expect-error broken bindings
-									response = await env.AI.run('@cf/meta/llama-3.2-11b-vision-instruct', { messages });
+									try {
+										// @ts-expect-error broken bindings
+										response = await env.AI.run('@cf/meta/llama-3.2-11b-vision-instruct', { messages, image: [...new Uint8Array(blob)] });
+									} catch (e) {
+										console.log(e);
+										// @ts-expect-error broken bindings
+										response = await env.AI.run('@cf/meta/llama-3.2-11b-vision-instruct', { messages });
+									}
 								} catch (e) {
 									console.log(e);
 									await bot.reply(`Error: ${e as string}`);
