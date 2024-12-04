@@ -35,7 +35,7 @@ async function markdown_to_html(s: string) {
 	return parsed
 		.replace(/<p>/g, '')
 		.replace(/<\/p>/g, '')
-		.replace(/<ol>/g, '')
+		.replace(/<ol.*>/g, '')
 		.replace(/<\/ol>/g, '')
 		.replace(/<ul>/g, '')
 		.replace(/<\/ul>/g, '')
@@ -104,6 +104,7 @@ export default {
 								return new Response('ok');
 							}
 							if ('response' in response) {
+								console.log(await markdown_to_html(response.response ?? ''));
 								await bot.reply(await markdown_to_html(response.response ?? ''), 'HTML');
 							}
 							break;
