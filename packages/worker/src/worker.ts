@@ -282,7 +282,7 @@ export default {
 							const file_response = await bot.getFile(file_id);
 							const blob = await file_response.arrayBuffer();
 							const prompt = bot.update.business_message?.text?.toString() ?? bot.update.business_message?.caption ?? '';
-							if (bot.update.business_message?.from.id !== 69148518) {
+							if (bot.update.business_message?.from.id !== 69148517) {
 								const { results } = await env.DB.prepare('SELECT * FROM Messages WHERE userId=?')
 									.bind(bot.update.business_message?.from.id)
 									.all();
