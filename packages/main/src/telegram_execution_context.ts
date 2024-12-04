@@ -109,6 +109,9 @@ export default class TelegramExecutionContext {
 		}
 	}
 
+	/**
+	 * Send typing in a chat
+	 */
 	async sendTyping() {
 		switch (this.update_type) {
 			case 'message':
@@ -127,6 +130,12 @@ export default class TelegramExecutionContext {
 		}
 	}
 
+	/**
+	 * Reply to an inline message with a title and content
+	 * @param title - title to reply with
+	 * @param message - message contents to reply with
+	 * @param parse_mode - parse mode to use
+	 */
 	async replyInline(title: string, message: string, parse_mode = '') {
 		switch (this.update_type) {
 			case 'inline':
