@@ -162,17 +162,22 @@ export default {
 						case 'message': {
 							await bot.sendTyping();
 							const prompt = bot.update.message?.text?.toString() ?? '';
-							let photo: AiTextToImageOutput;
+							let photo: { image: string };
 							try {
-								photo = await env.AI.run('@cf/stabilityai/stable-diffusion-xl-base-1.0', { prompt });
+								// @ts-expect-error broken bindings
+								photo = await env.AI.run('@cf/black-forest-labs/flux-1-schnell', { prompt, steps: 8 });
 							} catch (e) {
 								console.log(e);
 								await bot.reply(`Error: ${e as string}`);
 								return new Response('ok');
 							}
-							const photo_file = new File([await new Response(photo).blob()], 'photo');
+							const binaryString = atob(photo.image);
+							// @ts-expect-error broken bindings
+							const img = Uint8Array.from(binaryString, (m) => m.codePointAt(0));
+							const photo_file = new File([await new Response(img).blob()], 'photo');
 							const id = crypto.randomUUID();
 							await env.R2.put(id, photo_file);
+							console.log(`https://r2.seanbehan.ca/${id}`);
 							await bot.replyPhoto(`https://r2.seanbehan.ca/${id}`);
 							ctx.waitUntil(
 								wrapPromise(async () => {
