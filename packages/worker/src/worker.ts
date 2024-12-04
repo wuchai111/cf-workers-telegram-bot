@@ -300,7 +300,6 @@ export default {
 									},
 								];
 								let response: AiTextGenerationOutput;
-								console.log(blob.byteLength);
 								try {
 									if (blob.byteLength === 0) {
 										// @ts-expect-error broken bindings
