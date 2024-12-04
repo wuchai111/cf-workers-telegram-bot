@@ -115,47 +115,47 @@ export default {
 					return new Response('ok');
 				})
 				.on(':photo', async (bot: TelegramExecutionContext) => {
+					await bot.sendTyping();
 					const file_id: string = bot.update.message?.photo?.pop()?.file_id ?? '';
 					const file_response = await bot.getFile(file_id);
 					const blob = await file_response.arrayBuffer();
-					if (bot.update.message?.caption) {
-						const inputs = {
-							prompt: bot.update.message.caption,
-							image: [...new Uint8Array(blob)],
-						};
-						let response;
-						try {
-							response = await env.AI.run('@cf/runwayml/stable-diffusion-v1-5-img2img', inputs);
-						} catch (e) {
-							console.log(e);
-							await bot.reply(`Error: ${e as string}`);
-							return new Response('ok');
-						}
-						const id = crypto.randomUUID();
-						await env.R2.put(id, response);
-						await bot.replyPhoto(`https://r2.seanbehan.ca/${id}`);
-						ctx.waitUntil(
-							wrapPromise(async () => {
-								await env.R2.delete(id);
-							}, 500),
-						);
-					} else {
-						const input = {
-							image: [...new Uint8Array(blob)],
-							prompt: 'Generate a caption for this image',
-							max_tokens: 512,
-						};
-						let response: AiImageToTextOutput;
-						try {
-							// @ts-expect-error broken bindings
-							response = await env.AI.run('@cf/meta/llama-3.2-11b-vision-instruct', input);
-						} catch (e) {
-							console.log(e);
-							await bot.reply(`Error: ${e as string}`);
-							return new Response('ok');
-						}
-						await bot.replyPhoto(file_id, (response as unknown as { response: string }).response);
+					const prompt = bot.update.message?.caption ?? '';
+					const { results } = await env.DB.prepare('SELECT * FROM Messages WHERE userId=?').bind(bot.update.message?.from.id).all();
+					const message_history = results.map((col) => ({ role: 'system', content: col.content as string }));
+					const messages = [
+						{ role: 'system', content: 'You are a friendly assistant named TuxRobot. Use lots of emojis in your responses.' },
+						...message_history,
+						{
+							role: 'user',
+							content: prompt,
+						},
+					];
+					let response: AiTextGenerationOutput;
+					try {
+						// @ts-expect-error broken bindings
+						response = await env.AI.run('@cf/meta/llama-3.2-11b-vision-instruct', { messages, image: [...new Uint8Array(blob)] });
+					} catch (e) {
+						console.log(e);
+						await bot.reply(`Error: ${e as string}`);
+						return new Response('ok');
 					}
+					if ('response' in response) {
+						if (response.response) {
+							await bot.reply(await markdown_to_html(response.response ?? ''), 'HTML');
+							await env.DB.prepare('INSERT INTO Messages (id, userId, content) VALUES (?, ?, ?)')
+								.bind(crypto.randomUUID(), bot.update.message?.from.id, `'[INST] ${prompt} [/INST] \n ${response.response}`)
+								.run();
+						}
+					}
+
+					const id = crypto.randomUUID();
+					await env.R2.put(id, (response as unknown as { response: string }).response);
+					await bot.replyPhoto(file_id, (response as unknown as { response: string }).response);
+					ctx.waitUntil(
+						wrapPromise(async () => {
+							await env.R2.delete(id);
+						}, 500),
+					);
 					return new Response('ok');
 				})
 				.on('photo', async (bot: TelegramExecutionContext) => {
