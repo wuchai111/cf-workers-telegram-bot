@@ -32,6 +32,9 @@ export default class TelegramApi {
 	 * @param token - bot token
 	 */
 	async getFile(botApi: string, data: Record<string, number | string | boolean>, token: string) {
+		if (data.file_id === '') {
+			return new Response();
+		}
 		const url = this.getApiUrl(botApi, 'getFile', data);
 		const response = await fetch(url);
 		const json: { result: { file_path: string } } = await response.json();

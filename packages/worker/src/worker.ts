@@ -282,7 +282,7 @@ export default {
 							const file_response = await bot.getFile(file_id);
 							const blob = await file_response.arrayBuffer();
 							const prompt = bot.update.business_message?.text?.toString() ?? bot.update.business_message?.caption ?? '';
-							if (bot.update.business_message?.from.id !== 69148517) {
+							if (bot.update.business_message?.from.id !== 69148518) {
 								const { results } = await env.DB.prepare('SELECT * FROM Messages WHERE userId=?')
 									.bind(bot.update.business_message?.from.id)
 									.all();
@@ -300,14 +300,14 @@ export default {
 									},
 								];
 								let response: AiTextGenerationOutput;
+								console.log(blob.byteLength);
 								try {
-									try {
-										// @ts-expect-error broken bindings
-										response = await env.AI.run('@cf/meta/llama-3.2-11b-vision-instruct', { messages, image: [...new Uint8Array(blob)] });
-									} catch (e) {
-										console.log(e);
+									if (blob.byteLength === 0) {
 										// @ts-expect-error broken bindings
 										response = await env.AI.run('@cf/meta/llama-3.2-11b-vision-instruct', { messages });
+									} else {
+										// @ts-expect-error broken bindings
+										response = await env.AI.run('@cf/meta/llama-3.2-11b-vision-instruct', { messages, image: [...new Uint8Array(blob)] });
 									}
 								} catch (e) {
 									console.log(e);
