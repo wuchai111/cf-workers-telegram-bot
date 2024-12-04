@@ -160,10 +160,11 @@ export default {
 				.on('photo', async (bot: TelegramExecutionContext) => {
 					switch (bot.update_type) {
 						case 'message': {
+							await bot.sendTyping();
 							const prompt = bot.update.message?.text?.toString() ?? '';
 							let photo: AiTextToImageOutput;
 							try {
-								photo = await env.AI.run('@cf/lykon/dreamshaper-8-lcm', { prompt });
+								photo = await env.AI.run('@cf/stabilityai/stable-diffusion-xl-base-1.0', { prompt });
 							} catch (e) {
 								console.log(e);
 								await bot.reply(`Error: ${e as string}`);
@@ -184,7 +185,7 @@ export default {
 							const prompt = bot.update.inline_query?.query.toString().split(' ').slice(1).join(' ') ?? '';
 							let photo: AiTextToImageOutput;
 							try {
-								photo = await env.AI.run('@cf/lykon/dreamshaper-8-lcm', { prompt });
+								photo = await env.AI.run('@cf/stabilityai/stable-diffusion-xl-base-1.0', { prompt });
 							} catch (e) {
 								console.log(e);
 								await bot.reply(`Error: ${e as string}`);
