@@ -141,7 +141,6 @@ export default {
 					}
 					if ('response' in response) {
 						if (response.response) {
-							await bot.reply(await markdown_to_html(response.response ?? ''), 'HTML');
 							await env.DB.prepare('INSERT INTO Messages (id, userId, content) VALUES (?, ?, ?)')
 								.bind(crypto.randomUUID(), bot.update.message?.from.id, `'[INST] ${prompt} [/INST] \n ${response.response}`)
 								.run();
