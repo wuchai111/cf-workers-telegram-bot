@@ -147,14 +147,14 @@ export default {
 						}
 					}
 
-					const id = crypto.randomUUID();
-					await env.R2.put(id, (response as unknown as { response: string }).response);
-					await bot.replyPhoto(file_id, (response as unknown as { response: string }).response);
-					ctx.waitUntil(
-						wrapPromise(async () => {
-							await env.R2.delete(id);
-						}, 500),
-					);
+					// const id = crypto.randomUUID();
+					// await env.R2.put(id, (response as unknown as { response: string }).response);
+					await bot.reply((response as unknown as { response: string }).response);
+					// ctx.waitUntil(
+					// 	wrapPromise(async () => {
+					// 		await env.R2.delete(id);
+					// 	}, 500),
+					// );
 					return new Response('ok');
 				})
 				.on('photo', async (bot: TelegramExecutionContext) => {
