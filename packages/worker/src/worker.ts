@@ -96,7 +96,6 @@ export default {
 							const messages = [{ role: 'user', content: prompt }];
 							let response: AiTextGenerationOutput;
 							try {
-								// @ts-expect-error broken bindings
 								response = await env.AI.run('@hf/thebloke/deepseek-coder-6.7b-instruct-awq', { messages });
 							} catch (e) {
 								console.log(e);
