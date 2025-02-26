@@ -33,45 +33,22 @@ function wrapPromise<T>(func: promiseFunc<T>, time = 1000) {
  * @returns HTML formatted string compatible with Telegram
  */
 async function markdownToHtml(s: string) {
-  // Configure marked to use GFM (GitHub Flavored Markdown)
-  marked.setOptions({
-    gfm: true,
-    breaks: true,
-  });
-
   const parsed = await marked.parse(s);
-
-  // Define HTML elements to remove (unsupported by Telegram)
-  const elementsToRemove = ['p', 'ol', 'ul', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'section', 'article'];
-
-  let result = parsed;
-
-  // Remove opening and closing tags for each element
-  for (const element of elementsToRemove) {
-    // Handle tags with attributes (like <ol start="1">)
-    const openTagRegex = new RegExp(`<${element}[^>]*>`, 'g');
-    const closeTagRegex = new RegExp(`</${element}>`, 'g');
-
-    result = result.replace(openTagRegex, '').replace(closeTagRegex, '');
-  }
-
-  // Properly format code blocks for Telegram
-  // First handle fenced code blocks with language specification
-  result = result.replace(/<pre><code class="language-([^"]+)">/g, '<pre><code>');
-
-  // Ensure code blocks have proper spacing
-  result = result.replace(/<\/code><\/pre>/g, '</code></pre>\n');
-
-  // Replace consecutive newlines with a single newline to avoid excessive spacing
-  result = result.replace(/\n{3,}/g, '\n\n');
-
-  // Convert links to Telegram-supported format
-  result = result.replace(/<a href="([^"]+)"[^>]*>([^<]+)<\/a>/g, '<a href="$1">$2</a>');
-
-  // Handle special characters that Telegram might interpret incorrectly
-  result = result.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
-
-  return result;
+  return parsed
+    .replace(/<p>/g, '')
+    .replace(/<\/p>/g, '')
+    .replace(/<ol>/g, '')
+    .replace(/<\/ol>/g, '')
+    .replace(/<ul>/g, '')
+    .replace(/<\/ul>/g, '')
+    .replace(/<li>/g, '')
+    .replace(/<\/li>/g, '')
+    .replace(/<h1>/g, '')
+    .replace(/<\/h1>/g, '')
+    .replace(/<h2>/g, '')
+    .replace(/<\/h2>/g, '')
+    .replace(/<h3>/g, '')
+    .replace(/<\/h3>/g, '');
 }
 
 // Constants for system prompts
