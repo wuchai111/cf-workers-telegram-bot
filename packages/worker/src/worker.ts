@@ -188,9 +188,8 @@ export default {
 
 						case 'business_message': {
 							await bot.sendTyping();
-							const fileId: string = bot.update.business_message?.photo?.pop()?.file_id ?? '';
-							const fileResponse = await bot.getFile(fileId);
-							const blob = await fileResponse.arrayBuffer();
+							const photo = bot.update.business_message?.photo;
+							const fileId: string = photo ? photo[photo.length - 1]?.file_id ?? '' : '';
 							const prompt = bot.update.business_message?.text?.toString() ?? bot.update.business_message?.caption ?? '';
 
 							if (bot.update.business_message?.from.id !== 69148517) {
@@ -199,22 +198,30 @@ export default {
 									.all();
 
 								const messageHistory = results.map((col) => ({ role: 'system', content: col.content as string }));
-
 								const messages = [{ role: 'system', content: SYSTEM_PROMPTS.SEAN }, ...messageHistory, { role: 'user', content: prompt }];
 
 								try {
 									let response;
-
-									if (blob.byteLength === 0) {
-										// @ts-expect-error broken bindings
-										response = await env.AI.run(AI_MODELS.LLAMA, { messages });
-									} else {
+									
+									if (fileId) {
+										const fileResponse = await bot.getFile(fileId);
+										const blob = await fileResponse.arrayBuffer();
 										// @ts-expect-error broken bindings
 										response = await env.AI.run(AI_MODELS.LLAMA, { messages, image: [...new Uint8Array(blob)] });
+									} else {
+										// @ts-expect-error broken bindings
+										response = await env.AI.run(AI_MODELS.LLAMA, { messages });
 									}
 
 									if ('response' in response && response.response) {
-										await bot.reply(await markdownToHtml(typeof response.response === 'string' ? response.response : ''), 'HTML');
+										await bot.reply(
+											await markdownToHtml(
+												typeof response.response === 'string' 
+													? response.response 
+													: JSON.stringify(response.response)
+											), 
+											'HTML'
+										);
 
 										await env.DB.prepare('INSERT INTO Messages (id, userId, content) VALUES (?, ?, ?)')
 											.bind(
