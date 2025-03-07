@@ -27,7 +27,8 @@ export default class Webhook {
    * @throws Will throw an error if the fetch request fails
    */
   async set(): Promise<Response> {
-    const url = new URL(`${this.api.toString()}setWebhook`);
+    const baseUrl = this.api.toString();
+    const url = new URL(`${baseUrl}${baseUrl.endsWith('/') ? '' : '/'}setWebhook`);
 
     // Configure webhook parameters
     const params = new URLSearchParams({
@@ -52,7 +53,8 @@ export default class Webhook {
    * @throws Will throw an error if the fetch request fails
    */
   async delete(): Promise<Response> {
-    const url = new URL(`${this.api.toString()}deleteWebhook`);
+    const baseUrl = this.api.toString();
+    const url = new URL(`${baseUrl}${baseUrl.endsWith('/') ? '' : '/'}deleteWebhook`);
 
     try {
       return await fetch(url.toString());
