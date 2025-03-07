@@ -32,12 +32,13 @@ function wrapPromise<T>(func: promiseFunc<T>, time = 1000) {
  * @param s - the string containing markdown
  * @returns HTML formatted string compatible with Telegram
  */
-async function markdownToHtml(s: string) {
+async function markdownToHtml(s: string): Promise<string> {
 	marked.setOptions(marked.getDefaults());
-	const parsed = await marked.parse(s);
+	const parsed = await marked.parse(s) as string | { toString(): string };
+	const parsedString = typeof parsed === 'string' ? parsed : parsed.toString();
 	const tagsToRemove = ['p', 'ol', 'ul', 'li', 'h1', 'h2', 'h3'];
 	const tagPattern = new RegExp(tagsToRemove.map((tag) => `<${tag}>|</${tag}>`).join('|'), 'g');
-	return parsed.replace(tagPattern, '');
+	return parsedString.replace(tagPattern, '');
 }
 
 // Constants for system prompts
@@ -95,7 +96,14 @@ export default {
 							const response = await env.AI.run(AI_MODELS.CODER, { messages });
 
 							if ('response' in response) {
-								await bot.reply(await markdownToHtml(response.response ?? ''), 'HTML');
+								await bot.reply(
+									await markdownToHtml(
+										typeof response.response === 'string' 
+											? response.response 
+											: JSON.stringify(response.response)
+									), 
+									'HTML'
+								);
 							}
 						} catch (e) {
 							console.error('Error in code handler:', e);
@@ -130,10 +138,21 @@ export default {
 								const response = await env.AI.run(AI_MODELS.LLAMA, { messages });
 
 								if ('response' in response && response.response) {
-									await bot.reply(await markdownToHtml(response.response), 'HTML');
+									await bot.reply(
+										await markdownToHtml(
+											typeof response.response === 'string' 
+												? response.response 
+												: JSON.stringify(response.response)
+										), 
+										'HTML'
+									);
 
 									await env.DB.prepare('INSERT INTO Messages (id, userId, content) VALUES (?, ?, ?)')
-										.bind(crypto.randomUUID(), bot.update.message?.from.id, `'[INST] ${prompt} [/INST] \n ${response.response}`)
+										.bind(
+											crypto.randomUUID(), 
+											bot.update.message?.from.id, 
+											`'[INST] ${prompt} [/INST] \n ${typeof response.response === 'string' ? response.response : JSON.stringify(response.response)}'`
+										)
 										.run();
 								}
 							} catch (e) {
@@ -154,7 +173,11 @@ export default {
 								const response = await env.AI.run(AI_MODELS.LLAMA, { messages, max_tokens: 100 });
 
 								if ('response' in response) {
-									await bot.replyInline(response.response ?? '', await markdownToHtml(response.response ?? ''), 'HTML');
+									await bot.replyInline(
+										(typeof response.response === 'string' ? response.response : ''),
+										await markdownToHtml(typeof response.response === 'string' ? response.response : ''),
+										'HTML'
+									);
 								}
 							} catch (e) {
 								console.error('Error in inline handler:', e);
@@ -191,10 +214,14 @@ export default {
 									}
 
 									if ('response' in response && response.response) {
-										await bot.reply(await markdownToHtml(response.response), 'HTML');
+										await bot.reply(await markdownToHtml(typeof response.response === 'string' ? response.response : ''), 'HTML');
 
 										await env.DB.prepare('INSERT INTO Messages (id, userId, content) VALUES (?, ?, ?)')
-											.bind(crypto.randomUUID(), bot.update.business_message?.from.id, `'[INST] ${prompt} [/INST] \n ${response.response}`)
+											.bind(
+												crypto.randomUUID(), 
+												bot.update.business_message?.from.id, 
+												`'[INST] ${prompt} [/INST] \n ${typeof response.response === 'string' ? response.response : JSON.stringify(response.response)}'`
+											)
 											.run();
 									}
 								} catch (e) {
