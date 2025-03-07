@@ -124,7 +124,10 @@ export default {
 						case 'message': {
 							await bot.sendTyping();
 							const prompt = bot.update.message?.text?.toString() ?? '';
-							const { results } = await env.DB.prepare('SELECT * FROM Messages WHERE userId=?').bind(bot.update.message?.from.id).all();
+
+							const { results } = await env.DB.prepare('SELECT * FROM Messages WHERE userId=?')
+								.bind(bot.update.message?.from.id)
+								.all();
 							const messageHistory = results.map((col) => ({ role: 'system', content: col.content as string }));
 
 							const messages = [
@@ -134,6 +137,7 @@ export default {
 							];
 
 							try {
+								console.log('Processing text message:', prompt);
 								// @ts-expect-error broken bindings
 								const response = await env.AI.run(AI_MODELS.LLAMA, { messages });
 
@@ -158,6 +162,59 @@ export default {
 							} catch (e) {
 								console.error('Error in message handler:', e);
 								await bot.reply(`Error: ${e as string}`);
+							}
+							break;
+						}
+
+						case 'photo': {
+							await bot.sendTyping();
+							const photo = bot.update.message?.photo;
+							const fileId: string = photo ? photo[photo.length - 1]?.file_id ?? '' : '';
+							const prompt = bot.update.message?.caption ?? 'Please describe this image';
+
+							console.log('Processing photo:', { fileId, prompt });
+
+							const { results } = await env.DB.prepare('SELECT * FROM Messages WHERE userId=?')
+								.bind(bot.update.message?.from.id)
+								.all();
+							const messageHistory = results.map((col) => ({ role: 'system', content: col.content as string }));
+
+							const messages = [
+								{ role: 'system', content: SYSTEM_PROMPTS.TUX_ROBOT },
+								...messageHistory,
+								{ role: 'user', content: prompt },
+							];
+
+							try {
+								const fileResponse = await bot.getFile(fileId);
+								const blob = await fileResponse.arrayBuffer();
+								// @ts-expect-error broken bindings
+								const response = await env.AI.run(AI_MODELS.LLAMA, { 
+									messages, 
+									image: [...new Uint8Array(blob)] 
+								});
+
+								if ('response' in response && response.response) {
+									await bot.reply(
+										await markdownToHtml(
+											typeof response.response === 'string' 
+												? response.response 
+												: JSON.stringify(response.response)
+										), 
+										'HTML'
+									);
+
+									await env.DB.prepare('INSERT INTO Messages (id, userId, content) VALUES (?, ?, ?)')
+										.bind(
+											crypto.randomUUID(), 
+											bot.update.message?.from.id, 
+											`'[INST] ${prompt} [/INST] \n ${typeof response.response === 'string' ? response.response : JSON.stringify(response.response)}'`
+										)
+										.run();
+								}
+							} catch (e) {
+								console.error('Error in photo handler:', e);
+								await bot.reply(`Error processing image: ${e as string}`);
 							}
 							break;
 						}
