@@ -220,9 +220,21 @@ export default {
 						}
 
 						case 'inline': {
+							const query = bot.update.inline_query?.query.toString() ?? '';
+							
+							// Check if query ends with proper punctuation
+							if (!query.endsWith('.') && !query.endsWith('?')) {
+								await bot.replyInline(
+									"Please complete your sentence",
+									"End your sentence with a period (.) or question mark (?) to get an AI response",
+									'HTML'
+								);
+								break;
+							}
+
 							const messages = [
 								{ role: 'system', content: SYSTEM_PROMPTS.TUX_ROBOT },
-								{ role: 'user', content: bot.update.inline_query?.query.toString() ?? '' },
+								{ role: 'user', content: query },
 							];
 
 							try {
