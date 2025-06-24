@@ -29,11 +29,6 @@
 
     in
     rec {
-      # 'rec' allows self-reference if needed, e.g., devShells = devShell;
-
-      # This will create devShell.x86_64-linux, devShell.aarch64-linux, etc.
-      # `nix develop` on a supported system (e.g., x86_64-linux) will pick up
-      # devShell.x86_64-linux automatically.
       devShell = forAllSystems (
         pkgs:
         pkgs.mkShell {
@@ -57,16 +52,28 @@
 
       devShells = devShell;
 
-      # If you had other outputs like packages or apps, they would go here:
-      # packages = forAllSystems (pkgs: {
-      #   default = pkgs.hello; # Example
-      # });
-      #
-      # apps = forAllSystems (pkgs: {
-      #   default = {
-      #     type = "app";
-      #    program = "${self.packages.${pkgs.system}.default}/bin/hello";
-      #  };
-      # });
+      packages = forAllSystems (pkgs: {
+        default = pkgs.buildNpmPackage {
+          name = "cf-workers-telegram-bot";
+          src = ./.;
+          npmDepsHash = "sha256-tlxWjtGMnTTMS4or/hZuWEoe+DI6eZRHbOKLsXx/LIY=";
+          installPhase = ''
+            runHook preInstall
+            mkdir -p $out
+            cp -r dist/* $out/
+            runHook postInstall
+          '';
+        };
+      });
+
+      apps = forAllSystems (pkgs: {
+        default = {
+          type = "app";
+          program = "${pkgs.writeScriptBin "run-worker" ''
+            #!/bin/sh
+            ${pkgs.nodejs_latest}/bin/node ${self.packages.${pkgs.system}.default}/worker.js "$@"
+          ''}/bin/run-worker";
+        };
+      });
     };
 }

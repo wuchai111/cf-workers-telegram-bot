@@ -14,3 +14,4 @@ lerna-debug.log
 .tmp/
 .wrangler/
 .direnv/
+result
