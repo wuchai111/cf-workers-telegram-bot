@@ -14,5 +14,11 @@ const worker :Workerd.Worker = (
         (name = "worker", esModule = embed "index.js"),
     ],
     compatibilityDate = "2024-11-11",
+      bindings = [
+    (
+      name = "SECRET_TELEGRAM_API_TOKEN",
+      text = "put your token here before building your docker image"
+    ),
+  ],
 );
 
