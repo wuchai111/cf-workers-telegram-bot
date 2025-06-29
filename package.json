@@ -9,15 +9,17 @@
 		"test": "npm run test --workspaces",
 		"test:worker": "npm run test --workspace=packages/worker",
 		"test:main": "npm run test --workspace=packages/main",
-		"lint": "npm run lint --workspaces"
+		"lint": "npm run lint --workspaces",
+		"ncu": "ncu --workspaces --root -u"
 	},
 	"workspaces": [
 		"packages/main",
 		"packages/worker"
 	],
 	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "^8.34.1",
-		"typedoc": "^0.28.5"
+		"@typescript-eslint/eslint-plugin": "^8.35.0",
+		"npm-check-updates": "^18.0.1",
+		"typedoc": "^0.28.6"
 	},
 	"version": ""
 }
