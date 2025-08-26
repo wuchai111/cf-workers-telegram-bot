@@ -1,52 +1,54 @@
-interface Env {
-    BOT_TOKEN: string;
-    TARGET_ID: string;
-    ADMIN_ID: string;
-}
+// We are hardcoding variables for the final test.
+const BOT_TOKEN = "YOUR_BOT_TOKEN_HERE";
+const ADMIN_ID = "YOUR_ADMIN_ID_HERE";
+const TARGET_ID = "YOUR_TARGET_ID_HERE";
 
-// Helper function to send a message back to the admin
-async function sendMessage(token: string, chatId: string, text: string) {
-    const url = `https://api.telegram.org/bot${token}/sendMessage`;
-    const payload = {
-        chat_id: chatId,
-        text: `[Worker Status]\n${text}`,
-    };
-    await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-    });
-}
+// Define interfaces for Telegram updates
+interface User { id: number; }
+interface Message { message_id: number; from: User; }
+interface Update { message?: Message; }
 
 export default {
-    async fetch(request: Request, env: Env): Promise<Response> {
-        // This script ONLY checks variables and sends a status report.
+    async fetch(request: Request): Promise<Response> {
+        try {
+            if (request.method !== 'POST') {
+                return new Response('Expected POST', { status: 405 });
+            }
 
-        let report = "";
+            const body = await request.json<Update>();
+            if (!body.message || !body.message.from) {
+                return new Response('OK', { status: 200 });
+            }
 
-        if (env.BOT_TOKEN) {
-            report += "✅ BOT_TOKEN is loaded.\n";
-        } else {
-            report += "❌ ERROR: BOT_TOKEN is MISSING!\n";
+            const message = body.message;
+            const senderId = message.from.id;
+
+            // Authorization check using the hardcoded ADMIN_ID
+            if (String(senderId) !== ADMIN_ID) {
+                return new Response('Forbidden', { status: 403 });
+            }
+
+            // Forward the original message using the hardcoded variables
+            const forwardUrl = `https://api.telegram.org/bot${BOT_TOKEN}/forwardMessage`;
+            const forwardPayload = {
+                chat_id: TARGET_ID,
+                from_chat_id: senderId,
+                message_id: message.message_id,
+            };
+
+            await fetch(forwardUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(forwardPayload),
+            });
+
+        } catch (e: any) {
+            // If there's an error, it will be caught here.
+            // We will return a response containing the error message.
+            return new Response(`Error: ${e.toString()}`, { status: 500 });
         }
 
-        if (env.ADMIN_ID) {
-            report += `✅ ADMIN_ID is loaded. Value: ${env.ADMIN_ID}\n`;
-        } else {
-            report += "❌ ERROR: ADMIN_ID is MISSING!\n";
-        }
-
-        if (env.TARGET_ID) {
-            report += `✅ TARGET_ID is loaded. Value: ${env.TARGET_ID}\n`;
-        } else {
-            report += "❌ ERROR: TARGET_ID is MISSING!\n";
-        }
-
-        // Try to send the report to the configured ADMIN_ID
-        if (env.BOT_TOKEN && env.ADMIN_ID) {
-            await sendMessage(env.BOT_TOKEN, env.ADMIN_ID, report);
-        }
-
-        return new Response('Variable check complete.', { status: 200 });
+        // Always return a 200 OK to Telegram
+        return new Response('OK', { status: 200 });
     },
 };
